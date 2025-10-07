@@ -1,0 +1,36 @@
+## 1st Level
+- **Domains**
+- **Piety**
+	- Praying for Piety
+		- roll 1d3 and gain additional piety at the start of your turn in combat
+		- if roll a 3, activate a "Prayer Effect" for your domain below
+	- *Domain Piety*: ways to gain piety in combat based on your domain
+		- should have a reminder of these piety conditions
+	- *Prayer Effect*: when rolling a 3, select one prayer effect from your domains to use
+- **Domain Feature**
+	- Love: *Blessing of Compassion*
+		- impacts negotiations
+	- Knowledge: *Blessing of Comprehension*
+		- impacts downtime projects
+	- Storm: *Blessing of Fortunate Weather*
+		- allows selecting a weather type when finishing a respite
+	- Nature: *Faithful Friend*
+		- grants the **Faithful Friend** ability
+	- Death: *Grave Speech*
+		- grants the **Grave Speech** ability
+	- Creation: *Hands of the Maker*
+		- grants the **Hands of the Maker** ability
+	- Sun: *Inner Light*
+		- allows selecting self or an ally for a +1 bonus to saving throws until you finish another respite
+	- Trickery: *Inspired Deception*
+		- allows using **Presence** for skills from the *intrigue* skill group
+	- Fate: *Oracular Visions*
+		- adds a new *Fate* resource used to grant an edge to tests
+	- Protection: *Protective Circle*
+	- Life: *Revitalizing Ritual*
+		- select yourself or an ally when finishing a respite. This individual gains a bonus to their recovery value equal to your level until you finish another respite.
+	- War: *Sanctified Weapon*
+		- adds a +1 bonus to rolled damage made with a weapon
+		- **Modifications**
+			- *Improved Sanctified Weapon* Domain Feature
+				- adds a +3 bonus to damage instead

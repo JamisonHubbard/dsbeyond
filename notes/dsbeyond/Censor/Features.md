@@ -1,0 +1,199 @@
+## 1st Level
+- **Judgment**
+	- grants the **Judgment** ability
+- **My Life For Yours**
+	- grants the **My Life For Yours** ability
+	- **Modifications**
+		- *Font of Grace* domain ability
+			- when you use this ability, you gain 1 wrath that can only be spent on that ability during the same turn. The target gains 10 temporary Stamina
+		- *Word of Death Deferred* domain ability
+			- can cause an ally within range to fall unconscious when they're dying as a free triggered action
+- **Domain Feature**
+	- Love: *Blessing of Compassion*
+		- impacts negotiations
+	- Knowledge: *Blessing of Comprehension*
+		- impacts downtime projects
+	- Storm: *Blessing of Fortunate Weather*
+		- allows selecting a weather type when finishing a respite
+	- Nature: *Faithful Friend*
+		- grants the **Faithful Friend** ability
+	- Death: *Grave Speech*
+		- grants the **Grave Speech** ability
+	- Creation: *Hands of the Maker*
+		- grants the **Hands of the Maker** ability
+	- Sun: *Inner Light*
+		- allows selecting self or an ally for a +1 bonus to saving throws until you finish another respite
+	- Trickery: *Inspired Deception*
+		- allows using **Presence** for skills from the *intrigue* skill group
+	- Fate: *Oracular Visions*
+		- adds a new *Fate* resource used to grant an edge to tests
+	- Protection: *Protective Circle*
+	- Life: *Revitalizing Ritual*
+		- select yourself or an ally when finishing a respite. This individual gains a bonus to their recovery value equal to your level until you finish another respite.
+	- War: *Sanctified Weapon*
+		- adds a +1 bonus to rolled damage made with a weapon
+		- **Modifications**
+			- *Improved Sanctified Weapon* Domain Feature
+				- adds a +3 bonus to damage instead
+## 2nd Level
+- **Perk**
+- **Order Feature**
+	- *Exorcist*
+		- **Saint's Vigilance**
+			- impacts the **Judgment** ability
+				- allows using it as a free triggered action against hidden creatures you find
+				- creatures you have judged cannot use the *Hide* maneuver
+		- **A Sense for Truth**
+	- *Oracle*
+		- **It Was Foretold**
+			- impacts montage tests
+		- **Judge of Character**
+			- effects tests, allows *Censor* to use *Presence* instead of *Intuition* for tests
+	- *Paragon*
+		- **Lead By Example**
+		- **Stalwart Icon**
+## 3rd Level
+- **Look On My Work and Despair**
+	- modifies the **Judgment** ability
+## 4th Level
+- **Domain Feature**
+	- Life: *Blessing of Life*
+		- modifies *My Life For Yours* feature
+	- Trickery: *Blessing of Secrets*
+		- grants the **Blessing of Secrets** ability
+	- Protection: *Impervious Touch*
+		- grants the **Impervious Touch** maneuver
+		- allows a number of objects to be protected, up to your Presence score
+		- additionally can be used on one larger object like a vehicle or building at a time
+	- Creation: *Improved Hands of the Maker*
+		- modifies **Hands of the Maker**
+	- War: *Improved Sanctified Weapon*
+		- modifies *Sanctified Weapon*
+	- Love: *Invocation of the Heart*
+		- grants the **Invocation of the Heart** main action
+		- can maintain a bond with up to one creature at a time
+	- Sun: *Light of Revelation*
+		- grants the **Light of Revelation** maneuver
+	- Fate: *Oracular Warning*
+		- grants temporary Stamina to self and allies upon finishing a respite
+	- Death: *Seance*
+		- grants a respite activity
+	- Knowledge: *Saint's Epiphany*
+		- bonus to project rolls during a respite
+	- Storm: *Windwalk*
+		- you can fly, or have a +2 bonus to speed while flying if you can already fly
+		- **Modifications**
+			- *Ride the Lightning* domain feature
+				- bonus to fly speed equal to Might score
+	- Nature: *Wode Road*
+		- grants the **Wode Road** main action
+## 5th Level
+- **Order Feature**
+	- *Exorcist*
+		- **Evil Revealed**
+			- modifies the **Judgment** ability
+	- *Oracle*
+		- **Prophecy**
+			- used to collect pre-rolled 2d10 rolls to dish out
+			- needs to track a list of these premade rolls
+			- add new rolls when you collect Victories, reset during a respite
+	- *Paragon*
+		- **Stand Fast!**
+## 6th Level
+- **Implement of Wrath**
+	- grants benefits to one hero's weapon
+	- granted upon finishing a respite
+	- **Modifications**
+		- **Improved Implement of Wrath**
+			- grants additional benefits
+- **Perk**
+- **Order Ability**
+	- *Exorcist*
+		- **Begone!**
+		- **Pain of Your Own Making**
+	- *Oracle*
+		- **Burden of Evil**
+		- **Edict of Peace**
+	- *Paragon*
+		- **Congregation**
+		- **Intercede**
+## 7th Level
+- **Characteristic Increase**
+- **Domain Feature**
+	- Protection: *Blessing of Iron*
+	- Love: *Covenant of the Heart*
+		- modifies the *Invocation of the Heart* domain feature
+		- grants the **Guided to Your Side** main action
+	- Creation: *Divine Quartermaster*
+		- grants a temporary treasure every respite
+	- Life: *Font of Grace*
+		- modifies the **My Life For Yours** ability
+	- Knowledge: *Gods' Library*
+		- impacts Downtime Projects
+		- grants skills
+	- Sun: *Light of the Burning Sun*
+		- grants fire immunity
+		- allows fire damage to be dealt when dealing rolled damage
+	- Nature: *Nature's Bounty*
+		- prepares a meal that grants boons to self and companions when finishing a respite
+		- the boons can impact:
+			- immunity
+			- temporary Stamina
+			- bonus to speed
+			- bonus to saving throws
+			- edge on influencing other creatures
+	- Storm: *Ride the Lightning*
+		- deal extra lightning damage when dealing rolled damage
+		- modifies *Windwalk*
+	- Trickery: *Trinity of Trickery*
+		- grants the **Trinity of Trickery** maneuver
+	- Death: *Word of Death Deferred*
+		- modifies **My Life For Yours**
+		- deal extra damage to winded creatures
+	- Fate: *Word of Fate Deferred*
+	- War: *Your Triumphs Are Remembered*
+		- allows gaining an extra Victory after a respite that doesn't convert to XP
+- **Focused Wrath**
+	- gain 3 wrath instead of 2 at the start of turns in combat
+- **Skill**
+## 8th Level
+- **Perk**
+- **Order Feature**
+	- *Exorcist*
+		- *Demonologist*
+			- modifies **Judgment** ability
+	- *Oracle*
+		- *Their Past Revealed*
+	- *Paragon*
+		- *Vow*
+## 9th Level
+- **Improved Implement of Wrath**
+	- modifies **Implement of Wrath**
+- **Order Ability**
+	- *Exorcist*
+		- **Banish**
+			- banishes the target, they can do nothing but make saving throws
+		- **Terror Manifest**
+			- while frightened this way, if a target who is a leader or solo creature is winded they take an extra 25 psychic damage
+	- *Oracle*
+		- **Blessing and a Curse**
+		- **Fulfill Your Destiny**
+	- *Paragon*
+		- **Apostate**
+			- until the end of the encounter or until you are dying, the target has damage weakness 10
+		- **Edict of Unyielding Resolve**
+				- until the end of the encounter or until you are dying, each target who starts their turn in the area gains 10 temporary Stamina
+## 10th Level
+- **Characteristic Increase**
+- **Perk**
+- **Skill**
+- **Templar**
+	- modifies **Judgment** ability
+	- can open a portal to rest in the presence of your deity during respites
+	- the deity may give priority targets to be judged. using this ability again before defeating those targets will incur your deity's wrath
+- **Virtue**
+	- new resource gained when Victories are converted to XP during a respite
+	- can spend Virtue as if it were wrath
+	- can spend 3 Virtue to access domain features from one of their deity's other domains. This selection resets at their next respite
+- **Wrath of the Gods**
+	- gain 4 wrath instead of 2 at the start of turns in combat

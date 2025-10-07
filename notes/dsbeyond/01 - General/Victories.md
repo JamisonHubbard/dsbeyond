@@ -1,0 +1,3 @@
+## Modifications
+- A *Censor* of the *Oracle* order who is at least 5th level can use their *Prophecy* order feature to collect pre-rolled 2d10 results when they gain victories. These reset during a respite
+- A *Censor* of the *War Domain* of at least 7th level can use their *Your Triumphs Are Remembered* domain feature to grant themselves and other heroes they rested with to gain 1 Victory after a respite. This Victory is not converted to XP

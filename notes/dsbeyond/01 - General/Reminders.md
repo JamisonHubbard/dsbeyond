@@ -1,0 +1,1 @@
+The Reminders Dashboard should keep track of any ongoing effects or statuses that a player needs to concern themselves with.

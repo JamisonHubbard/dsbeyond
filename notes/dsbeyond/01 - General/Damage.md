@@ -1,0 +1,5 @@
+## Modifications
+- A *Censor* with the *War Domain* can use *Sanctified Weapon* to add a +1 to damage rolls made with a specific weapon. At 4th level this improves to +3 via the *Improved Sanctified Weapon* domain feature
+- A *Censor* with the *Sun Domain* of at least 7th level gains the *Light of the Burning Sun* domain feature allowing them to deal 5 extra fire damage when dealing rolled damage, or 15 if the creature is undead
+- A *Censor* with the *Storm Domain* of at least 7th level gains the *Ride the Lightning* domain feature allowing them to deal extra lightning damage equal to their Presence score when dealing rolled damage
+- A *Censor* with the *Death Domain* of at least 7th level gains the *Word of Death Deferred* domain feature allowing them to deal an extra 5 damage to winded creatures

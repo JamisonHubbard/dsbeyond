@@ -1,0 +1,124 @@
+Note: the only Effects listed are those with ongoing consequences that should be noted
+## Core
+- **Judgment** (1st Level)
+	- added feature based on order (*Exorcist*, *Oracle*, or *Paragon*)
+	- **Modifications**
+		- *Saint's Vigilance* order feature
+			- judged creatures cannot use the *Hide* maneuver
+			- you can use this ability as a free triggered action against creatures you find that are hidden
+		- **Revelator** 5-Wrath Ability
+			- you can use this ability as a free triggered action against one target
+		- **Look On My Work and Despair** 3rd-Level Feature
+			- you can spend 1 wrath when you use this ability to make the target *frightened* (save ends) if `P<AVERAGE`
+			- whenever you use this ability as a free triggered action after reducing a creature to 0 Stamina, you frighten them if `P<STRONG`
+			- if the target is already frightened of you, they instead take holy damage equal to twice your Presence score
+		- *Evil Revealed* order feature
+			- you can use this ability as a free triggered action against a creature when you see through its disguise
+		- **Righteous Judgment** 9-Wrath Ability
+			- once used and until the end of the encounter, whenever an ally deals damage to a target judged by you that ally gains 1 surge
+		- *Demonologist* order feature
+			- you can use this ability as a free triggered action against a demon, devil, or other agent of chaos that you've successfully completed a negotiation against
+		- **Templar** 10th-Level Feature
+			- when you use this ability, you can use a *Conduit* domain effect as a free triggered action using your chosen domain, or a domain you access with the **Virtue** 10th-level feature
+- **My Life For Yours**
+	- **Modifications**
+		- *Blessing of Life* domain feature
+			- whenever an ally regains Stamina within range, they regain additional Stamina equal to your Presence score
+## Domain Abilities
+These abilities are granted by Divine Domain features
+- **Faithful Friend**
+- **Grave Speech**
+- **Hands of the Maker**
+	- **Modifications**
+		- *Improved Hands of the Maker* domain feature
+			- increases max size to size 2
+- **Blessing of Secrets**
+	- Effect: double edge on tests made to sneak or hide for self and each ally in the area until one of the targets harms a creature or object or you end it voluntarily (no action)
+- **Impervious Touch**
+	- a maneuver based on the effects of the *Impervious Touch* domain feature
+- **Invocation of the Heart**
+	- a main action based on the effects of the *Invocation of the Heart* domain feature
+	- **Modifications**
+		- *Covenant of the Heart* domain feature
+			- increases max number of bonds to 3
+		- *Guided to Your Side* domain ability
+			- allows teleportation of bonded individuals
+- **Light of Revelation**
+	- a maneuver based on the effects of the *Light of Revelation* domain feature
+	- can be turned on/off
+- **Wode Road**
+	- a main action based on the effects of the *Wode Road* domain feature
+	- tracks a number of trees up to your Presence score
+- **Guided to Your Side**
+	- modifies the *Invocation of the Heart* domain feature
+- **Trinity of Trickery**
+	- Effect: until the end of the encounter, two illusory duplicates of the target appear. They can be moved and the target can swap places with them as a free triggered action
+## Signature
+- **Back Blasphemer!**
+- **Every Step... Death!**
+	- Effect: target takes psychic damage when they willingly move until end of your next turn
+- **Halt Miscreant!**
+- **Your Allies Cannot Save You!**
+##3-Wrath
+- **Behold a Shield of Faith!**
+	- Effect: enemies take a bane on attacks against you or an ally next to you until the start of your next turn
+- **Driving Assault**
+- **The Gods Punish and Defend**
+- **Repent!**
+## 5-Wrath
+- **Arrest**
+	- Effect: you can choose to spend 3 Wrath if a target grabbed by **Arrest** makes a strike against a creature. You deal holy damage equal to your presence score, and then change the target of the strike to another target within the strike's distance
+- **Behold the Face of Justice!**
+- **Censored**
+- **Purifying Fire**
+	- Effect: while the target has fire weakness from this ability, you can choose your abilities to deal fire damage to the target rather than holy damage
+- **It Is Justice You Fear**
+- **Revelator**
+- **Prescient Grace**
+- **With My Blessing**
+- **Blessing of the Faithful**
+	- Effect: until the end of the encounter or until you are dying, each target gains 1 surge at the end of each of your turns
+- **Sentenced**
+	- Effect: while the target is restrained, your abilities that impose forced movement can still move them
+## 7-Wrath
+- **Edict of Disruptive Isolation**
+	- Effect: until the end of the encounter or until you are dying, each target takes holy damage equal to twice your Presence score at the end of each of your turns. A target takes an extra 2d6 holy damage if they are judged by you or are adjacent to any enemy
+- **Edict of Perfect Order**
+	- Effect: until the end of the encounter or until you are dying, whenever a target uses an ability that costs Malice they take holy damage equal to three times your Presence score. A target judged by you takes an extra 2d6 holy damage
+- **Edict of Purifying Pacifism**
+	- Effect: until the end of the encounter or until you are dying, whenever a target makes a strike, they take holy damage equal to twice your Presence score. A target judged by you takes an extra 2d6 holy damage.
+- **Edict of Stillness**
+	- Effect: until the end of the encounter or until you are dying, whenever a target moves or is force moved out of the area, they take holy damage equal to twice your Presence score. A target judged by you who moves willingly takes an extra 2d6 holy damage.
+## 9-Wrath
+- **Gods Grant Thee Strength**
+- **Orison of Victory**
+- **Righteous Judgment**
+	- Effect: until the end of the encounter, whenever an ally deals damage to a target judged by you, that ally gains 1 surge
+	- modifies the **Judgment** ability
+- **Shield of the Righteous**
+- **Begone!**
+- **Pain of Your Own Making**
+- **Burden of Evil**
+- **Edict of Peace**
+	- Effect: until the end of the encounter or until you are dying, whenever any target takes a triggered action or a free triggered action that action is negated and the target takes holy damage equal to your Presence score
+- **Congregation**
+- **Intercede**
+## 11-Wrath
+- **Excommunication**
+	- Effect: weakened (save ends), at the end of each of your turns a target weakened by this ability deals holy damage equal to twice your Presence score to each enemy within 2 squares of them
+- **Hand of the Gods**
+	- Effect: until the end of the encounter, while the target is judged by you, you can choose to make them the source of any of your abilities and they count as an ally for the purpose of flanking
+- **Pillar of Holy Fire**
+	- Effect: dazed (save ends), until the end of the encounter a target dazed by this ability deals holy damage equal to twice your Presence score to enemies within 2 squares at the end of each of your turns
+- **Your Allies Turn On You!**
+	- Effect: slowed (save ends), while the target is slowed each ally who starts their turn within 5 squares of them must use a free maneuver to make a free strike against the target, and each ally who can make a free triggered strike against a different creature must make it against the target instead
+- **Banish**
+	- Effect: banishes the target, they can do nothing but make saving throws
+- **Terror Manifest**
+	- Effect: frightened (save ends), if a frightened target who is a leader or solo creature is winded they take an extra 25 psychic damage
+- **Blessing and a Curse**
+- **Fulfill Your Destiny**
+- **Apostate**
+	- Effect: until the end of the encounter or until you are dying, the target has damage weakness 10
+- **Edict of Unyielding Resolve**
+	- Effect: until the end of the encounter or until you are dying, each target who starts their turn in the area gains 10 temporary Stamina
