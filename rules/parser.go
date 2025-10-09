@@ -7,7 +7,25 @@ import (
 	"os"
 )
 
-func ParseClass(classID string, characterLevel int) (ParsedClass, error) {
+func Parse(classID string, characterLevel int) (Context, error) {
+	parsedClass, err := parseClass(classID, characterLevel)
+	if err != nil {
+		return Context{}, err
+	}
+
+	ctx := Context{
+		Values:     make(map[string]any),
+		Operations: make(map[string][]*Operation),
+	}
+
+	for _, operation := range parsedClass.Operations {
+		ctx.AddOperation(operation)
+	}
+
+	return ctx, nil
+}
+
+func parseClass(classID string, characterLevel int) (ParsedClass, error) {
 	// read class from JSON file
 	class, err := readClassData(classID)
 	if err != nil {

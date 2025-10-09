@@ -3,7 +3,8 @@ package rules
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+
+	"github.com/JamisonHubbard/dsbeyond/model"
 )
 
 const (
@@ -11,98 +12,199 @@ const (
 	ExprTypeSubtract = "subtract"
 
 	OperationTypeSet = "set"
+	OperationTypeAdd = "add"
 
 	ValueRefTypeInt  = "int"
 	ValueRefTypeID   = "id"
 	ValueRefTypeExpr = "expression"
 )
 
-func NewResolver(operations []Operation) *Resolver {
+func NewResolver(character model.Character) *Resolver {
 	return &Resolver{
-		operations: operations,
-		ctx:        make(map[string]any),
-		chain:      make([]any, 0),
-		error:      nil,
+		character: character,
+		visited:   make(map[string]bool),
+		trace:     Trace{},
+		error:     nil,
 	}
+}
+
+type Context struct {
+	Values     map[string]any          `json:"values"`
+	Operations map[string][]*Operation `json:"operations"`
+}
+
+func (c *Context) AddOperation(operation Operation) {
+	operations, ok := c.Operations[operation.Target]
+	if !ok {
+		c.Operations[operation.Target] = []*Operation{&operation}
+	} else {
+		c.Operations[operation.Target] = append(operations, &operation)
+	}
+}
+
+func (c *Context) GetOperations(target string) []*Operation {
+	return c.Operations[target]
+}
+
+func (c *Context) GetValue(target string) any {
+	return c.Values[target]
+}
+
+func (c *Context) NodeExists(target string) bool {
+	_, valueOk := c.Values[target]
+	_, operationOk := c.Operations[target]
+
+	return valueOk || operationOk
 }
 
 type Resolver struct {
 	// inputs
-	operations []Operation
-	// choiceDefns []ChoiceDefinition
+	character model.Character
 
-	ctx   map[string]any
-	chain []any
-	error error
+	// internals
+	ctx     Context
+	visited map[string]bool
+	trace   Trace
+	error   error
 }
 
 func (r *Resolver) Resolve() (map[string]any, error) {
-	for _, operation := range r.operations {
-		r.chain = append(r.chain, operation)
-		r.EvaluateOperation(&operation)
-		if r.error != nil {
-			log.Println(r.chain)
-
-			operationPretty, err := json.MarshalIndent(operation, "", "  ")
-			if err != nil {
-				return nil, err
-			}
-			log.Println(string(operationPretty))
-
-			return nil, fmt.Errorf("failed to resolve: %s", r.error)
-		}
-		r.chain = r.chain[:len(r.chain)-1]
+	ctx, err := Parse(r.character.ClassID, r.character.Level)
+	if err != nil {
+		return nil, err
 	}
-	return r.ctx, nil
+	r.ctx = ctx
+
+	for node := range r.ctx.Operations {
+		r.trace.Push("Node:" + node)
+		r.EvaluateNode(node)
+		if r.error != nil {
+			return nil, r.error
+		}
+		r.trace.Pop()
+	}
+
+	return r.ctx.Values, nil
 }
 
-func (r *Resolver) EvaluateOperation(operation *Operation) {
-	switch operation.Type {
-	case OperationTypeSet:
-		r.chain = append(r.chain, operation.ValueRef)
-		valueRef := r.EvaluateValueRef(&operation.ValueRef)
+func (r *Resolver) EvaluateNode(node string) {
+	if r.visited[node] {
+		return
+	}
+	r.visited[node] = true
+
+	operations, ok := r.ctx.Operations[node]
+	if !ok {
+		r.error = fmt.Errorf("node \"%s\" does not exist", node)
+		return
+	}
+
+	for _, operation := range operations {
+		r.trace.Push(operation)
+		r.EvaluateOperation(operation)
 		if r.error != nil {
 			return
 		}
-		r.chain = r.chain[:len(r.chain)-1]
+		r.trace.Pop()
+	}
+}
 
-		r.ctx[operation.Target] = valueRef
-	default:
-		r.error = fmt.Errorf("unknown operation type: %s", operation.Type)
+func (r *Resolver) EvaluateOperation(operation *Operation) {
+	// evaluate the value of the oepration
+	target := operation.Target
+	valueRef := operation.ValueRef
+
+	r.trace.Push(valueRef)
+	result := r.EvaluateValueRef(&valueRef)
+	if r.error != nil {
 		return
+	}
+	r.trace.Pop()
+
+	switch operation.Type {
+	case OperationTypeSet:
+		r.ctx.Values[target] = result
+	case OperationTypeAdd:
+		// determine if value already exists
+		_, ok := r.ctx.Values[target]
+		if !ok {
+			r.ctx.Values[target] = 0
+		}
+
+		// make sure the value and the result are ints
+		switch currentValue := r.ctx.Values[target].(type) {
+		case int:
+			switch resultValue := result.(type) {
+			case int:
+				r.ctx.Values[target] = currentValue + resultValue
+			default:
+				r.error = fmt.Errorf("cannot perform an add operation on a non-int")
+				return
+			}
+		default:
+			r.error = fmt.Errorf("cannot perform an add operation on a non-int")
+			return
+		}
 	}
 }
 
 func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 	switch valueRef.Type {
 	case ValueRefTypeInt:
-		switch valueRef.Value.(type) {
+		switch value := valueRef.Value.(type) {
 		case float64:
-			return int(valueRef.Value.(float64))
+			return int(value)
 		case int:
-			return valueRef.Value.(int)
+			return value
 		default:
 			r.error = fmt.Errorf("value is not an int")
 			return nil
 		}
 	case ValueRefTypeID:
-		valueID, ok := valueRef.Value.(string)
+		id, ok := valueRef.Value.(string)
 		if !ok {
 			r.error = fmt.Errorf("value id is not a string")
 			return nil
 		}
 
-		if value, ok := r.ctx[valueID]; ok {
+		value, ok := r.ctx.Values[id]
+		if !ok {
+			// see if there's unperformed operations for this id
+			_, ok := r.ctx.Operations[id]
+			if !ok {
+				r.error = fmt.Errorf("value with id \"%s\" does not exist", id)
+				return nil
+			}
+
+			// process the node in order to get the value
+			r.trace.Push("Node:" + id)
+			r.EvaluateNode(id)
+			if r.error != nil {
+				return nil
+			}
+			r.trace.Pop()
+
+			value, ok = r.ctx.Values[id]
+			if !ok {
+				r.error = fmt.Errorf("value with id \"%s\" does not exist", id)
+				return nil
+			}
+		}
+
+		switch value := value.(type) {
+		case int:
 			return value
-		} else {
-			r.error = fmt.Errorf("value not found for id: %s", valueID)
+		case string:
+			return value
+		default:
+			r.error = fmt.Errorf("invalid type for node value")
 			return nil
 		}
 	case ValueRefTypeExpr:
 		var valueRefExpr *Expression
-		switch valueRef.Value.(type) {
+		switch value := valueRef.Value.(type) {
 		case *Expression:
-			valueRefExpr = valueRef.Value.(*Expression)
+			valueRefExpr = value
 		case map[string]any:
 			// un-marshal and re-marshal into a proper expression
 			data, err := json.Marshal(valueRef.Value)
@@ -124,12 +226,10 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 			return nil
 		}
 
-		r.chain = append(r.chain, valueRefExpr)
 		exprValue := r.EvaluateExpression(valueRefExpr)
 		if r.error != nil {
 			return nil
 		}
-		r.chain = r.chain[:len(r.chain)-1]
 
 		return exprValue
 	default:
@@ -153,12 +253,10 @@ func (r *Resolver) EvaluateExpression(expression *Expression) any {
 func (r *Resolver) evaluateAdd(expression *Expression) any {
 	var result int
 	for _, arg := range expression.Args {
-		r.chain = append(r.chain, arg)
 		value := r.EvaluateValueRef(&arg)
 		if r.error != nil {
 			return nil
 		}
-		r.chain = r.chain[:len(r.chain)-1]
 
 		valueInt, ok := value.(int)
 		if !ok {
@@ -180,19 +278,15 @@ func (r *Resolver) evaluateSubtract(expression *Expression) any {
 		return nil
 	}
 
-	r.chain = append(r.chain, expression.Args[0])
 	arg1 := r.EvaluateValueRef(&expression.Args[0])
 	if r.error != nil {
 		return nil
 	}
-	r.chain = r.chain[:len(r.chain)-1]
 
-	r.chain = append(r.chain, expression.Args[1])
 	arg2 := r.EvaluateValueRef(&expression.Args[1])
 	if r.error != nil {
 		return nil
 	}
-	r.chain = r.chain[:len(r.chain)-1]
 
 	arg1Int, ok := arg1.(int)
 	if !ok {
@@ -207,6 +301,27 @@ func (r *Resolver) evaluateSubtract(expression *Expression) any {
 	}
 
 	result = arg1Int - arg2Int
+
+	return result
+}
+
+type Trace struct {
+	trace []any
+}
+
+func (t *Trace) Push(value any) {
+	t.trace = append(t.trace, value)
+}
+
+func (t *Trace) Pop() {
+	t.trace = t.trace[:len(t.trace)-1]
+}
+
+func (t *Trace) String() string {
+	var result string
+	for _, value := range t.trace {
+		result += fmt.Sprintf("%s ", value)
+	}
 
 	return result
 }

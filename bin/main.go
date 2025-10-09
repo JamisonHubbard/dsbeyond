@@ -18,13 +18,13 @@ func main() {
 
 	ctx, err := ResolveCharacter(character)
 	if err != nil {
-		fmt.Println("ERROR: " + err.Error())
+		fmt.Println("ERROR " + err.Error())
 		return
 	}
 
 	sheetPretty, err := json.MarshalIndent(ctx, "", "  ")
 	if err != nil {
-		fmt.Println("ERROR: " + err.Error())
+		fmt.Println("ERROR " + err.Error())
 		fmt.Println(character)
 		return
 	}
@@ -33,15 +33,10 @@ func main() {
 }
 
 func ResolveCharacter(character model.Character) (map[string]any, error) {
-	parsedClass, err := rules.ParseClass(character.ClassID, character.Level)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse class: %s", err)
-	}
-
-	resolver := rules.NewResolver(parsedClass.Operations)
+	resolver := rules.NewResolver(character)
 	ctx, err := resolver.Resolve()
 	if err != nil {
-		return nil, fmt.Errorf("failed to resolve operations: %s", err)
+		return nil, fmt.Errorf("failed to resolve: %s", err)
 	}
 
 	return ctx, nil
