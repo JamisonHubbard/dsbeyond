@@ -2,78 +2,41 @@
   "id": "class_censor",
   "name": "Censor",
   "basics": {
-    "modifiers": [
-      {"type": "set", "target": "characteristic.might", "value_type": "int", "int_value": 2},
-      {"type": "set", "target": "characteristic.presence", "value_type": "int", "int_value": 2},
-      {"type": "set", "target": "max_recoveries", "value_type": "int", "int_value": 12},
-      {"type": "set", "target": "max_stamina", "value_type": "int", "int_value": 21},
+    "operations": [
+      {"type": "set", "target": "characteristics.might", "value_ref": {"type": "int", "value": 2}},
+      {"type": "set", "target": "characteristics.presence", "value_ref": {"type": "int", "value": 2}},
+      {"type": "set", "target": "health.max_recoveries", "value_ref": {"type": "int", "value": 12}},
+      {"type": "set", "target": "health.max_stamina", "value_ref": {"type": "int", "value": 21}},
+      {"type": "set", "target": "potencies.strong", "value_ref": {"type": "id", "value": "characteristics.presence"}},
       {
         "type": "set",
-        "target": "potency_strong",
-        "value_type": "id",
-        "id_value": "presence"
-      },
-      {
-        "type": "set_operation",
-        "target": "potency_average",
-        "value_type": "operation",
-        "operation_value": {
-          "type": "subtract",
-          "first_type": "id",
-          "first": "presence",
-          "second_type": "int",
-          "second": "1"
-        }
-      },
-      {
-        "type": "set_operation",
-        "target": "potency_weak",
-        "value_type": "operation",
-        "operation_value": {
-          "type": "subtract",
-          "first_type": "id",
-          "first": "presence",
-          "second_type": "int",
-          "second": "2"
-        }
-      }
-    ],
-    "choice_definitions": [
-      {
-        "id": "initial_characteristics",
-        "type": "multiselect",
-        "targets": ["agility", "reason", "intuition"],
-        "option_type": "array_option",
-        "options": [
-          {
-            "id": "option_1",
-            "type": "array",
-            "array_option": [
-              {"type": "int", "int_option": 2},
-              {"type": "int", "int_option": -1},
-              {"type": "int", "int_option": -1}
-            ]
-          },
-          {
-            "id": "option_2",
-            "type": "array",
-            "array_option": [
-              {"type": "int", "int_option": 1},
-              {"type": "int", "int_option": 1},
-              {"type": "int", "int_option": -1}
-            ]
-          },
-          {
-            "id": "option_3",
-            "type": "array",
-            "array_option": [
-              {"type": "int", "int_option": 1},
-              {"type": "int", "int_option": 0},
-              {"type": "int", "int_option": 0}
+        "target": "potencies.average",
+        "value_ref": {
+          "type": "expression",
+          "value": {
+            "type": "subtract",
+            "args": [
+              {"type": "id", "value": "characteristics.presence"},
+              {"type": "int", "value": 1}
             ]
           }
-        ]
+        }
+      },
+      {
+        "type": "set",
+        "target": "potencies.weak",
+        "value_ref": {
+          "type": "expression",
+          "value": {
+            "type": "subtract",
+            "args": [
+              {"type": "id", "value": "characteristics.presence"},
+              {"type": "int", "value": 2}
+            ]
+          }
+        }
       }
     ]
-  }
+  },
+  "levels": {}
 }

@@ -24,54 +24,35 @@ type Potencies struct {
 	Weak    int `json:"weak"`
 }
 
-type Modifier struct {
-	Type           string    `json:"type"`
-	Target         string    `json:"target"`
-	ValueType      string    `json:"value_type"`
-	IntValue       int       `json:"int_value"`
-	StringValue    string    `json:"string_value"`
-	ArrayValue     []int     `json:"array_value"`
-	OperationValue Operation `json:"operation_value"`
-	IDValue        string    `json:"id_value"`
+type ValueRef struct {
+	Type  string `json:"type"`
+	Value any    `json:"value"`
 }
 
 type Operation struct {
-	Type       string `json:"type"`
-	FirstType  string `json:"first_type"`
-	First      string `json:"first"`
-	SecondType string `json:"second_type"`
-	Second     string `json:"second"`
+	Type     string   `json:"type"`
+	Target   string   `json:"target"`
+	ValueRef ValueRef `json:"value_ref"`
 }
 
-type ChoiceDefinition struct {
-	ID         string   `json:"id"`
-	Type       string   `json:"type"`
-	Target     string   `json:"target"`
-	Targets    []string `json:"targets"`
-	OptionType string   `json:"option_type"`
-	Options    []Option `json:"options"`
-}
-
-type Option struct {
-	ID           string   `json:"id"`
-	Type         string   `json:"type"`
-	IntOption    int      `json:"int_option"`
-	StringOption string   `json:"string_option"`
-	ArrayOption  []Option `json:"array_option"`
-}
-
-type Choice struct {
-	ID       string `json:"id"`
-	OptionID string `json:"option_id"`
-}
-
-type ClassBasics struct {
-	Modifiers         []Modifier         `json:"modifiers"`
-	ChoiceDefinitions []ChoiceDefinition `json:"choice_definitions"`
+type Expression struct {
+	Type string     `json:"type"`
+	Args []ValueRef `json:"args"`
 }
 
 type Class struct {
-	ID     string      `json:"id"`
-	Name   string      `json:"name"`
-	Basics ClassBasics `json:"basics"`
+	ID     string             `json:"id"`
+	Name   string             `json:"name"`
+	Basics ClassLevel         `json:"basics"`
+	Levels map[int]ClassLevel `json:"levels"`
+}
+
+type ClassLevel struct {
+	Operations []Operation `json:"operations"`
+	// ChoiceDefns []ChoiceDefinition `json:"choice_defns"`
+}
+
+type ParsedClass struct {
+	Operations []Operation `json:"operations"`
+	// ChoiceDefns []ChoiceDefinition `json:"choice_defns"`
 }
