@@ -1,7 +1,6 @@
 package rules
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/JamisonHubbard/dsbeyond/model"
@@ -12,7 +11,6 @@ const (
 	ExprTypeSubtract = "subtract"
 
 	OperationTypeSet = "set"
-	OperationTypeAdd = "add"
 
 	ValueRefTypeInt  = "int"
 	ValueRefTypeID   = "id"
@@ -21,10 +19,11 @@ const (
 
 func NewResolver(character model.Character) *Resolver {
 	return &Resolver{
-		character: character,
-		visited:   make(map[string]bool),
-		trace:     Trace{},
-		error:     nil,
+		character:  character,
+		visited:    make(map[string]bool),
+		dependency: NewDependencyTracker(),
+		trace:      Trace{},
+		error:      nil,
 	}
 }
 
@@ -33,10 +32,11 @@ type Resolver struct {
 	character model.Character
 
 	// internals
-	ctx     Context
-	visited map[string]bool
-	trace   Trace
-	error   error
+	ctx        Context
+	visited    map[string]bool
+	dependency *DependencyTracker
+	trace      Trace
+	error      error
 }
 
 func (r *Resolver) Resolve() (map[string]any, error) {
@@ -54,6 +54,9 @@ func (r *Resolver) Resolve() (map[string]any, error) {
 		}
 		r.trace.Pop()
 	}
+
+	// logging
+	// fmt.Println(r.dependency.String())
 
 	return r.ctx.Values, nil
 }
@@ -85,6 +88,17 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 	target := operation.Target
 	valueRef := operation.ValueRef
 
+	// track dependencies
+	switch valueRef.Type {
+	case ValueRefTypeID:
+		r.dependency.Add(target, valueRef.Value.(string))
+	case ValueRefTypeExpr:
+		dependencies := r.evaluateExprDepenencies(valueRef.Value.(*Expression))
+		for _, dependency := range dependencies {
+			r.dependency.Add(target, dependency)
+		}
+	}
+
 	r.trace.Push(valueRef)
 	result := r.EvaluateValueRef(&valueRef)
 	if r.error != nil {
@@ -95,48 +109,18 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 	switch operation.Type {
 	case OperationTypeSet:
 		r.ctx.Values[target] = result
-	case OperationTypeAdd:
-		// determine if value already exists
-		_, ok := r.ctx.Values[target]
-		if !ok {
-			r.ctx.Values[target] = 0
-		}
-
-		// make sure the value and the result are ints
-		switch currentValue := r.ctx.Values[target].(type) {
-		case int:
-			switch resultValue := result.(type) {
-			case int:
-				r.ctx.Values[target] = currentValue + resultValue
-			default:
-				r.error = fmt.Errorf("cannot perform an add operation on a non-int")
-				return
-			}
-		default:
-			r.error = fmt.Errorf("cannot perform an add operation on a non-int")
-			return
-		}
+	default:
+		r.error = fmt.Errorf("unknown operation type: %s", operation.Type)
+		return
 	}
 }
 
 func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 	switch valueRef.Type {
 	case ValueRefTypeInt:
-		switch value := valueRef.Value.(type) {
-		case float64:
-			return int(value)
-		case int:
-			return value
-		default:
-			r.error = fmt.Errorf("value is not an int")
-			return nil
-		}
+		return valueRef.Value.(int)
 	case ValueRefTypeID:
-		id, ok := valueRef.Value.(string)
-		if !ok {
-			r.error = fmt.Errorf("value id is not a string")
-			return nil
-		}
+		id := valueRef.Value.(string)
 
 		value, ok := r.ctx.Values[id]
 		if !ok {
@@ -172,32 +156,9 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 			return nil
 		}
 	case ValueRefTypeExpr:
-		var valueRefExpr *Expression
-		switch value := valueRef.Value.(type) {
-		case *Expression:
-			valueRefExpr = value
-		case map[string]any:
-			// un-marshal and re-marshal into a proper expression
-			data, err := json.Marshal(valueRef.Value)
-			if err != nil {
-				r.error = fmt.Errorf("failed to marshal expression: %s", err)
-				return nil
-			}
+		valueExpr := valueRef.Value.(*Expression)
 
-			var expr Expression
-			err = json.Unmarshal(data, &expr)
-			if err != nil {
-				r.error = fmt.Errorf("failed to unmarshal expression: %s", err)
-				return nil
-			}
-
-			valueRefExpr = &expr
-		default:
-			r.error = fmt.Errorf("value is not an expression")
-			return nil
-		}
-
-		exprValue := r.EvaluateExpression(valueRefExpr)
+		exprValue := r.EvaluateExpression(valueExpr)
 		if r.error != nil {
 			return nil
 		}
@@ -274,4 +235,17 @@ func (r *Resolver) evaluateSubtract(expression *Expression) any {
 	result = arg1Int - arg2Int
 
 	return result
+}
+
+func (r *Resolver) evaluateExprDepenencies(expression *Expression) []string {
+	var dependencies []string
+	for _, arg := range expression.Args {
+		switch arg.Type {
+		case ValueRefTypeID:
+			dependencies = append(dependencies, arg.Value.(string))
+		case ValueRefTypeExpr:
+			dependencies = append(dependencies, r.evaluateExprDepenencies(arg.Value.(*Expression))...)
+		}
+	}
+	return dependencies
 }
