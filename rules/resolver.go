@@ -28,35 +28,6 @@ func NewResolver(character model.Character) *Resolver {
 	}
 }
 
-type Context struct {
-	Values     map[string]any          `json:"values"`
-	Operations map[string][]*Operation `json:"operations"`
-}
-
-func (c *Context) AddOperation(operation Operation) {
-	operations, ok := c.Operations[operation.Target]
-	if !ok {
-		c.Operations[operation.Target] = []*Operation{&operation}
-	} else {
-		c.Operations[operation.Target] = append(operations, &operation)
-	}
-}
-
-func (c *Context) GetOperations(target string) []*Operation {
-	return c.Operations[target]
-}
-
-func (c *Context) GetValue(target string) any {
-	return c.Values[target]
-}
-
-func (c *Context) NodeExists(target string) bool {
-	_, valueOk := c.Values[target]
-	_, operationOk := c.Operations[target]
-
-	return valueOk || operationOk
-}
-
 type Resolver struct {
 	// inputs
 	character model.Character
@@ -301,27 +272,6 @@ func (r *Resolver) evaluateSubtract(expression *Expression) any {
 	}
 
 	result = arg1Int - arg2Int
-
-	return result
-}
-
-type Trace struct {
-	trace []any
-}
-
-func (t *Trace) Push(value any) {
-	t.trace = append(t.trace, value)
-}
-
-func (t *Trace) Pop() {
-	t.trace = t.trace[:len(t.trace)-1]
-}
-
-func (t *Trace) String() string {
-	var result string
-	for _, value := range t.trace {
-		result += fmt.Sprintf("%s ", value)
-	}
 
 	return result
 }
