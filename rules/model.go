@@ -6,29 +6,6 @@ import (
 	"fmt"
 )
 
-type Sheet struct {
-	ClassID         string          `json:"class_id"`
-	Level           int             `json:"level"`
-	Characteristics Characteristics `json:"characteristics"`
-	MaxStamina      int             `json:"max_stamina"`
-	Recoveries      int             `json:"recoveries"`
-	Potencies       Potencies       `json:"potencies"`
-}
-
-type Characteristics struct {
-	Might     int `json:"might"`
-	Agility   int `json:"agility"`
-	Reason    int `json:"reason"`
-	Intuition int `json:"intuition"`
-	Presence  int `json:"presence"`
-}
-
-type Potencies struct {
-	Strong  int `json:"strong"`
-	Average int `json:"average"`
-	Weak    int `json:"weak"`
-}
-
 type ValueRef struct {
 	Type  string `json:"type"`
 	Value any    `json:"value"`

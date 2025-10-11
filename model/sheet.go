@@ -1,0 +1,33 @@
+package model
+
+type Sheet struct {
+	ClassID string    `json:"class_id"`
+	Level   int       `json:"level"`
+	Core    SheetCore `json:"core"`
+	Skills  []Skill   `json:"skills"`
+}
+
+type SheetCore struct {
+	Characteristics Characteristics `json:"characteristics"`
+	Health          Health          `json:"health"`
+	Potencies       Potencies       `json:"potencies"`
+}
+
+type Characteristics struct {
+	Might     int `json:"might"`
+	Agility   int `json:"agility"`
+	Reason    int `json:"reason"`
+	Intuition int `json:"intuition"`
+	Presence  int `json:"presence"`
+}
+
+type Health struct {
+	MaxStamina    int `json:"max_stamina"`
+	MaxRecoveries int `json:"max_recoveries"`
+}
+
+type Potencies struct {
+	Strong  int `json:"strong"`
+	Average int `json:"average"`
+	Weak    int `json:"weak"`
+}

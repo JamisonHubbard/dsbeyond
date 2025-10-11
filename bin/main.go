@@ -22,13 +22,13 @@ func main() {
 		},
 	}
 
-	ctx, err := ResolveCharacter(character, decisions)
+	sheet, err := ResolveCharacter(character, decisions)
 	if err != nil {
 		fmt.Println("ERROR " + err.Error())
 		return
 	}
 
-	sheetPretty, err := json.MarshalIndent(ctx, "", "  ")
+	sheetPretty, err := json.MarshalIndent(sheet, "", "  ")
 	if err != nil {
 		fmt.Println("ERROR " + err.Error())
 		fmt.Println(character)
@@ -38,12 +38,12 @@ func main() {
 	fmt.Println(string(sheetPretty))
 }
 
-func ResolveCharacter(character model.Character, decisions []rules.Decision) (map[string]any, error) {
+func ResolveCharacter(character model.Character, decisions []rules.Decision) (model.Sheet, error) {
 	resolver := rules.NewResolver(character, decisions)
-	ctx, err := resolver.Resolve()
+	sheet, err := resolver.Resolve()
 	if err != nil {
-		return nil, fmt.Errorf("failed to resolve: %s", err)
+		return model.Sheet{}, fmt.Errorf("failed to resolve: %s", err)
 	}
 
-	return ctx, nil
+	return sheet, nil
 }

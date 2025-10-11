@@ -41,18 +41,22 @@ type Resolver struct {
 	error      error
 }
 
-func (r *Resolver) Resolve() (map[string]any, error) {
+func (r *Resolver) Resolve() (model.Sheet, error) {
 	ctx, err := Parse(r.character.ClassID, r.character.Level, r.decisions)
 	if err != nil {
-		return nil, err
+		return model.Sheet{}, err
 	}
 	r.ctx = ctx
+
+	// seed default values before execution
+	r.ctx.Values["skills"] = []model.Skill{}
+	// r.ctx.Values["abilities"] = []model.Ability{}
 
 	for node := range r.ctx.Operations {
 		r.trace.Push("Node:" + node)
 		r.EvaluateNode(node)
 		if r.error != nil {
-			return nil, r.error
+			return model.Sheet{}, r.error
 		}
 		r.trace.Pop()
 	}
@@ -60,7 +64,39 @@ func (r *Resolver) Resolve() (map[string]any, error) {
 	// logging
 	// fmt.Println(r.dependency.String())
 
-	return r.ctx.Values, nil
+	sheet := model.Sheet{
+		ClassID: r.character.ClassID,
+		Level:   r.character.Level,
+		Core: model.SheetCore{
+			Characteristics: model.Characteristics{
+				Might:     expectInt("characteristics.might", r.ctx.Values["characteristics.might"]),
+				Agility:   expectInt("characteristics.agility", r.ctx.Values["characteristics.agility"]),
+				Reason:    expectInt("characteristics.reason", r.ctx.Values["characteristics.reason"]),
+				Intuition: expectInt("characteristics.intuition", r.ctx.Values["characteristics.intuition"]),
+				Presence:  expectInt("characteristics.presence", r.ctx.Values["characteristics.presence"]),
+			},
+			Health: model.Health{
+				MaxStamina:    expectInt("health.max_stamina", r.ctx.Values["health.max_stamina"]),
+				MaxRecoveries: expectInt("health.max_recoveries", r.ctx.Values["health.max_recoveries"]),
+			},
+			Potencies: model.Potencies{
+				Strong:  expectInt("potencies.strong", r.ctx.Values["potencies.strong"]),
+				Average: expectInt("potencies.average", r.ctx.Values["potencies.average"]),
+				Weak:    expectInt("potencies.weak", r.ctx.Values["potencies.weak"]),
+			},
+		},
+		Skills: []model.Skill{},
+	}
+
+	return sheet, nil
+}
+
+func expectInt(name string, value any) int {
+	valueInt, ok := value.(int)
+	if !ok {
+		panic(fmt.Sprintf("%s is not an int, instead %T", name, value))
+	}
+	return valueInt
 }
 
 func (r *Resolver) EvaluateNode(node string) {
