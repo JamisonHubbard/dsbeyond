@@ -45,6 +45,28 @@ type Expression struct {
 	Args []ValueRef `json:"args"`
 }
 
+type Choice struct {
+	ID      string      `json:"id"`
+	Prereqs []Assertion `json:"prereqs"`
+	Options []Option    `json:"options"`
+}
+
+type Assertion struct {
+	ID       string     `json:"id"`
+	TargetID string     `json:"target_id"`
+	Values   []ValueRef `json:"values"`
+}
+
+type Option struct {
+	ID         string      `json:"id"`
+	Operations []Operation `json:"operations"`
+}
+
+type Decision struct {
+	ChoiceID string `json:"choice_id"`
+	OptionID string `json:"option_id"`
+}
+
 type Class struct {
 	ID     string             `json:"id"`
 	Name   string             `json:"name"`
@@ -54,12 +76,7 @@ type Class struct {
 
 type ClassLevel struct {
 	Operations []Operation `json:"operations"`
-	// ChoiceDefns []ChoiceDefinition `json:"choice_defns"`
-}
-
-type ParsedClass struct {
-	Operations []Operation `json:"operations"`
-	// ChoiceDefns []ChoiceDefinition `json:"choice_defns"`
+	Choices    []Choice    `json:"choices"`
 }
 
 func (v *ValueRef) UnmarshalJSON(data []byte) error {

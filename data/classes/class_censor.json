@@ -1,42 +1,179 @@
 {
-  "id": "class_censor",
-  "name": "Censor",
-  "basics": {
-    "operations": [
-      {"type": "set", "target": "characteristics.might", "value_ref": {"type": "int", "value": 2}},
-      {"type": "set", "target": "characteristics.presence", "value_ref": {"type": "int", "value": 2}},
-      {"type": "set", "target": "health.max_recoveries", "value_ref": {"type": "int", "value": 12}},
-      {"type": "set", "target": "health.max_stamina", "value_ref": {"type": "int", "value": 21}},
-      {"type": "set", "target": "potencies.strong", "value_ref": {"type": "id", "value": "characteristics.presence"}},
-      {
-        "type": "set",
-        "target": "potencies.average",
-        "value_ref": {
-          "type": "expression",
-          "value": {
-            "type": "subtract",
-            "args": [
-              {"type": "id", "value": "characteristics.presence"},
-              {"type": "int", "value": 1}
-            ]
-          }
+  "id":"class_censor",
+  "name":"Censor",
+  "basics":{
+    "operations":[
+      {"type":"set","target":"characteristics.might","value_ref":{
+        "type":"int",
+        "value":2
+      }},
+      {"type":"set","target":"characteristics.presence","value_ref":{
+        "type":"int",
+        "value":2
+      }},
+      {"type":"set","target":"health.max_recoveries","value_ref":{
+        "type":"int",
+        "value":12
+      }},
+      {"type":"set","target":"health.max_stamina","value_ref":{
+        "type":"int",
+        "value":21
+      }},
+      {"type":"set","target":"potencies.strong","value_ref":{
+        "type":"id",
+        "value":"characteristics.presence"
+      }},
+      {"type":"set","target":"potencies.average","value_ref":{
+        "type":"expression",
+        "value":{
+          "type":"subtract",
+          "args":[
+            {"type":"id","value":"characteristics.presence"},
+            {"type":"int","value":1}
+          ]
         }
-      },
-      {
-        "type": "set",
-        "target": "potencies.weak",
-        "value_ref": {
-          "type": "expression",
-          "value": {
-            "type": "subtract",
-            "args": [
-              {"type": "id", "value": "characteristics.presence"},
-              {"type": "int", "value": 2}
-            ]
-          }
+      }},
+      {"type":"set","target":"potencies.weak","value_ref":{
+        "type":"expression",
+        "value":{
+          "type":"subtract",
+          "args":[
+            {"type":"id","value":"characteristics.presence"},
+            {"type":"int","value":2}
+          ]
         }
-      }
+      }}
+    ],
+    "choices":[
+      {"id":"starting_characteristics","options":[
+        {"id":"a2rn1in1","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":2
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":-1
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":-1
+          }}
+        ]},
+        {"id":"an1r2in1","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":-1
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":2
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":-1
+          }}
+        ]},
+        {"id":"an1rn1i2","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":-1
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":-1
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":2
+          }}
+        ]},
+        {"id":"a1r1in1","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":1
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":1
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":-1
+          }}
+        ]},
+        {"id":"a1rn1i1","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":1
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":-1
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":1
+          }}
+        ]},
+        {"id":"an1r1i1","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":-1
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":1
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":1
+          }}
+        ]},
+        {"id":"a1r0i0","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":1
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":0
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":0
+          }}
+        ]},
+        {"id":"a0r1i0","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":0
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":1
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":0
+          }}
+        ]},
+        {"id":"a0r0i1","operations":[
+          {"type":"set","target":"characteristics.agility","value_ref":{
+            "type":"int",
+            "value":0
+          }},
+          {"type":"set","target":"characteristics.reason","value_ref":{
+            "type":"int",
+            "value":0
+          }},
+          {"type":"set","target":"characteristics.inuition","value_ref":{
+            "type":"int",
+            "value":1
+          }}
+        ]}
+      ]}
     ]
   },
-  "levels": {}
+   "levels":{}
 }

@@ -17,9 +17,10 @@ const (
 	ValueRefTypeExpr = "expression"
 )
 
-func NewResolver(character model.Character) *Resolver {
+func NewResolver(character model.Character, decisions []Decision) *Resolver {
 	return &Resolver{
 		character:  character,
+		decisions:  decisions,
 		visited:    make(map[string]bool),
 		dependency: NewDependencyTracker(),
 		trace:      Trace{},
@@ -30,6 +31,7 @@ func NewResolver(character model.Character) *Resolver {
 type Resolver struct {
 	// inputs
 	character model.Character
+	decisions []Decision
 
 	// internals
 	ctx        Context
@@ -40,7 +42,7 @@ type Resolver struct {
 }
 
 func (r *Resolver) Resolve() (map[string]any, error) {
-	ctx, err := Parse(r.character.ClassID, r.character.Level)
+	ctx, err := Parse(r.character.ClassID, r.character.Level, r.decisions)
 	if err != nil {
 		return nil, err
 	}

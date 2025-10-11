@@ -7,10 +7,33 @@ import (
 	"os"
 )
 
-func Parse(classID string, characterLevel int) (Context, error) {
-	parsedClass, err := parseClass(classID, characterLevel)
+func Parse(classID string, characterLevel int, decisions []Decision) (Context, error) {
+	// read class from JSON file
+	class, err := readClassData(classID)
 	if err != nil {
 		return Context{}, err
+	}
+
+	var operations []Operation
+
+	// add basic operations for the class
+	operations = append(operations, class.Basics.Operations...)
+	choiceOperations, err := resolveDecisions(&class.Basics.Choices, &decisions)
+	if err != nil {
+		return Context{}, fmt.Errorf("failed to resolve basic decisions: %s", err)
+	}
+	operations = append(operations, choiceOperations...)
+
+	// add operations from levels the character has reached
+	for classLevel, classLevelDefn := range class.Levels {
+		if classLevel <= characterLevel {
+			operations = append(operations, classLevelDefn.Operations...)
+			choiceOperations, err := resolveDecisions(&classLevelDefn.Choices, &decisions)
+			if err != nil {
+				return Context{}, fmt.Errorf("failed to resolve decisions for level %d: %s", classLevel, err)
+			}
+			operations = append(operations, choiceOperations...)
+		}
 	}
 
 	ctx := Context{
@@ -18,36 +41,47 @@ func Parse(classID string, characterLevel int) (Context, error) {
 		Operations: make(map[string][]*Operation),
 	}
 
-	for _, operation := range parsedClass.Operations {
+	for _, operation := range operations {
 		ctx.AddOperation(operation)
 	}
 
 	return ctx, nil
 }
 
-func parseClass(classID string, characterLevel int) (ParsedClass, error) {
-	// read class from JSON file
-	class, err := readClassData(classID)
-	if err != nil {
-		return ParsedClass{}, err
-	}
-
+func resolveDecisions(choices *[]Choice, decisions *[]Decision) ([]Operation, error) {
 	var operations []Operation
-	// var choiceDefns []ChoiceDefinition
 
-	// add basic operations for the class
-	operations = append(operations, class.Basics.Operations...)
-
-	// add operations from levels the character has reached
-	for classLevel, classLevelDefn := range class.Levels {
-		if classLevel <= characterLevel {
-			operations = append(operations, classLevelDefn.Operations...)
+	for _, choice := range *choices {
+		// find the corresponding decision
+		var decision *Decision
+		for _, d := range *decisions {
+			if d.ChoiceID == choice.ID {
+				decision = &d
+				break
+			}
 		}
+
+		if decision == nil {
+			return nil, fmt.Errorf("decision for choice \"%s\" not found", choice.ID)
+		}
+
+		// find the corresponding option
+		var option *Option
+		for _, o := range choice.Options {
+			if o.ID == decision.OptionID {
+				option = &o
+				break
+			}
+		}
+
+		if option == nil {
+			return nil, fmt.Errorf("option \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
+		}
+
+		operations = append(operations, option.Operations...)
 	}
 
-	return ParsedClass{
-		Operations: operations,
-	}, nil
+	return operations, nil
 }
 
 func readClassData(classID string) (Class, error) {
