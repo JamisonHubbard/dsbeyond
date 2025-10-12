@@ -52,20 +52,19 @@ type Resolver struct {
 }
 
 func (r *Resolver) Resolve() (model.Sheet, error) {
-	// get class from reference
+	// get class data from reference
 	class, ok := r.reference.Classes[r.character.ClassID]
 	if !ok {
 		return model.Sheet{}, fmt.Errorf("class \"%s\" not found", r.character.ClassID)
 	}
 
-	// parse class and decisions
-	ctx, err := r.parse(r.character.Level, &class, r.decisions)
+	// load operations that don't require decisions
+	err := r.loadNondecisionOperations(r.character.Level, &class)
 	if err != nil {
 		return model.Sheet{}, err
 	}
-	r.ctx = ctx
 
-	// evaluate all nodes
+	// evaluate nondecision nodes
 	for node := range r.ctx.Operations {
 		r.trace.Push("Node:" + node)
 		r.EvaluateNode(node)
@@ -73,6 +72,12 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 			return model.Sheet{}, r.error
 		}
 		r.trace.Pop()
+	}
+
+	// execute choice operations
+	err = r.executeChoiceOperations(&class)
+	if err != nil {
+		return model.Sheet{}, err
 	}
 
 	// logging
@@ -336,26 +341,105 @@ func (r *Resolver) evaluateExprDepenencies(expression *Expression) []string {
 	return dependencies
 }
 
-func (r *Resolver) parse(characterLevel int, class *Class, decisions map[string]Decision) (Context, error) {
+func (r *Resolver) executeChoiceOperations(class *Class) error {
+	// compile a list of choices
+	var choices []Choice
+	choices = append(choices, class.Basics.Choices...)
+
+	for classLevel, classLevelDefn := range class.Levels {
+		if classLevel <= r.character.Level {
+			choices = append(choices, classLevelDefn.Choices...)
+		}
+	}
+
+	for _, choice := range choices {
+		// determine if the choice is applicable
+		prereqsMet := true
+		for _, assertion := range choice.Prereqs {
+			if !r.checkAssertion(&assertion) {
+				prereqsMet = false
+				break
+			}
+		}
+		if !prereqsMet {
+			continue
+		}
+
+		// resolve the choice
+		operations, err := r.resolveChoice(&choice)
+		if err != nil {
+			return fmt.Errorf("failed to resolve choice: %s", err)
+		}
+
+		for _, operation := range operations {
+			r.EvaluateOperation(&operation)
+			if r.error != nil {
+				return fmt.Errorf("failed to resolve choice: %s", r.error)
+			}
+		}
+	}
+
+	return nil
+}
+
+func (r *Resolver) checkAssertion(assertion *Assertion) bool {
+	target := assertion.TargetID
+	valueRefs := assertion.Values
+
+	targetValue, ok := r.ctx.Values[target]
+	if !ok {
+		return false
+	}
+
+	switch targetValue := targetValue.(type) {
+	case int:
+		for _, valueRef := range valueRefs {
+			value := r.EvaluateValueRef(&valueRef)
+			if r.error != nil {
+				continue
+			}
+
+			valueInt, ok := value.(int)
+			if !ok {
+				continue
+			}
+
+			if valueInt == targetValue {
+				return true
+			}
+		}
+	case string:
+		for _, valueRef := range valueRefs {
+			value := r.EvaluateValueRef(&valueRef)
+			if r.error != nil {
+				continue
+			}
+
+			valueString, ok := value.(string)
+			if !ok {
+				continue
+			}
+
+			if valueString == targetValue {
+				return true
+			}
+		}
+	default:
+		return false
+	}
+	return false
+}
+
+func (r *Resolver) loadNondecisionOperations(characterLevel int, class *Class) error {
 	var operations []Operation
 
 	// add basic operations for the class
 	operations = append(operations, class.Basics.Operations...)
-	choiceOperations, err := r.resolveDecisions(&class.Basics.Choices, &decisions)
-	if err != nil {
-		return Context{}, fmt.Errorf("failed to resolve basic decisions: %s", err)
-	}
-	operations = append(operations, choiceOperations...)
 
 	// add operations from levels the character has reached
 	for classLevel, classLevelDefn := range class.Levels {
 		if classLevel <= characterLevel {
 			operations = append(operations, classLevelDefn.Operations...)
-			choiceOperations, err := r.resolveDecisions(&classLevelDefn.Choices, &decisions)
-			if err != nil {
-				return Context{}, fmt.Errorf("failed to resolve decisions for level %d: %s", classLevel, err)
-			}
-			operations = append(operations, choiceOperations...)
 		}
 	}
 
@@ -363,68 +447,66 @@ func (r *Resolver) parse(characterLevel int, class *Class, decisions map[string]
 		Values:     make(map[string]any),
 		Operations: make(map[string][]*Operation),
 	}
-
 	for _, operation := range operations {
 		ctx.AddOperation(operation)
 	}
 
-	return ctx, nil
+	r.ctx = ctx
+	return nil
 }
 
-func (r *Resolver) resolveDecisions(choices *[]Choice, decisions *map[string]Decision) ([]Operation, error) {
+func (r *Resolver) resolveChoice(choice *Choice) ([]Operation, error) {
 	var operations []Operation
 
-	for _, choice := range *choices {
-		// find the corresponding decision
-		var decision *Decision
-		for _, d := range *decisions {
-			if d.ChoiceID == choice.ID {
-				decision = &d
+	// find the corresponding decision
+	var decision *Decision
+	for _, d := range r.decisions {
+		if d.ChoiceID == choice.ID {
+			decision = &d
+			break
+		}
+	}
+
+	if decision == nil {
+		return nil, fmt.Errorf("decision for choice \"%s\" not found", choice.ID)
+	}
+
+	switch choice.Type {
+	case ChoiceTypeOptionSelect:
+		// find the corresponding option
+		var option *Option
+		for _, o := range choice.Options {
+			if o.ID == decision.OptionID {
+				option = &o
 				break
 			}
 		}
 
-		if decision == nil {
-			return nil, fmt.Errorf("decision for choice \"%s\" not found", choice.ID)
+		if option == nil {
+			return nil, fmt.Errorf("option \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
 		}
 
-		switch choice.Type {
-		case ChoiceTypeOptionSelect:
-			// find the corresponding option
-			var option *Option
-			for _, o := range choice.Options {
-				if o.ID == decision.OptionID {
-					option = &o
-					break
-				}
+		operations = append(operations, option.Operations...)
+	case ChoiceTypeSkillSelect:
+		// find the corresponding skill
+		var skill *Skill
+		for _, s := range r.reference.Skills {
+			if s.ID == decision.OptionID {
+				skill = &s
+				break
 			}
-
-			if option == nil {
-				return nil, fmt.Errorf("option \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
-			}
-
-			operations = append(operations, option.Operations...)
-		case ChoiceTypeSkillSelect:
-			// find the corresponding skill
-			var skill *Skill
-			for _, s := range r.reference.Skills {
-				if s.ID == decision.OptionID {
-					skill = &s
-					break
-				}
-			}
-
-			if skill == nil {
-				return nil, fmt.Errorf("skill \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
-			}
-
-			operations = append(operations, Operation{
-				Type:     OperationTypeAddSkill,
-				ValueRef: ValueRef{Type: ValueRefTypeSkill, Value: skill.ID},
-			})
-		default:
-			return nil, fmt.Errorf("unknown choice type: %s", choice.Type)
 		}
+
+		if skill == nil {
+			return nil, fmt.Errorf("skill \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
+		}
+
+		operations = append(operations, Operation{
+			Type:     OperationTypeAddSkill,
+			ValueRef: ValueRef{Type: ValueRefTypeSkill, Value: skill.ID},
+		})
+	default:
+		return nil, fmt.Errorf("unknown choice type: %s", choice.Type)
 	}
 
 	return operations, nil

@@ -172,5 +172,8 @@
       {"id":"basic_skill_2","type":"skill_select"}
     ]
   },
-  "levels": {}
+  "levels": {
+    "1": {
+    }
+  }
 }
