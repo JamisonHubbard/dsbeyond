@@ -6,6 +6,12 @@ import (
 	"fmt"
 )
 
+type Reference struct {
+	Classes     map[string]Class
+	Skills      map[string]Skill
+	SkillGroups map[string]SkillGroup
+}
+
 type ValueRef struct {
 	Type  string `json:"type"`
 	Value any    `json:"value"`
@@ -24,6 +30,7 @@ type Expression struct {
 
 type Choice struct {
 	ID      string      `json:"id"`
+	Type    string      `json:"type"`
 	Prereqs []Assertion `json:"prereqs"`
 	Options []Option    `json:"options"`
 }
@@ -40,20 +47,10 @@ type Option struct {
 }
 
 type Decision struct {
-	ChoiceID string `json:"choice_id"`
-	OptionID string `json:"option_id"`
-}
-
-type Class struct {
-	ID     string             `json:"id"`
-	Name   string             `json:"name"`
-	Basics ClassLevel         `json:"basics"`
-	Levels map[int]ClassLevel `json:"levels"`
-}
-
-type ClassLevel struct {
-	Operations []Operation `json:"operations"`
-	Choices    []Choice    `json:"choices"`
+	ChoiceID        string    `json:"choice_id"`
+	Type            string    `json:"type"`
+	OptionID        string    `json:"option_id"`
+	OptionOperation Operation `json:"option_operation"`
 }
 
 func (v *ValueRef) UnmarshalJSON(data []byte) error {
@@ -78,6 +75,12 @@ func (v *ValueRef) UnmarshalJSON(data []byte) error {
 		}
 		v.Value = i
 	case ValueRefTypeID:
+		var s string
+		if err := json.Unmarshal(tmp.Value, &s); err != nil {
+			return err
+		}
+		v.Value = s
+	case ValueRefTypeSkill:
 		var s string
 		if err := json.Unmarshal(tmp.Value, &s); err != nil {
 			return err

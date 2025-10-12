@@ -7,20 +7,29 @@ import (
 )
 
 const (
+	DecisionTypeID        = "id"
+	DecisionTypeOperation = "operation"
+
+	ChoiceTypeOptionSelect = "option_select"
+	ChoiceTypeSkillSelect  = "skill_select"
+
 	ExprTypeAdd      = "add"
 	ExprTypeSubtract = "subtract"
 
-	OperationTypeSet = "set"
+	OperationTypeSet      = "set"
+	OperationTypeAddSkill = "add_skill"
 
-	ValueRefTypeInt  = "int"
-	ValueRefTypeID   = "id"
-	ValueRefTypeExpr = "expression"
+	ValueRefTypeExpr  = "expression"
+	ValueRefTypeID    = "id"
+	ValueRefTypeInt   = "int"
+	ValueRefTypeSkill = "skill"
 )
 
-func NewResolver(character model.Character, decisions []Decision) *Resolver {
+func NewResolver(character model.Character, decisions map[string]Decision, reference *Reference) *Resolver {
 	return &Resolver{
 		character:  character,
 		decisions:  decisions,
+		reference:  reference,
 		visited:    make(map[string]bool),
 		dependency: NewDependencyTracker(),
 		trace:      Trace{},
@@ -31,7 +40,8 @@ func NewResolver(character model.Character, decisions []Decision) *Resolver {
 type Resolver struct {
 	// inputs
 	character model.Character
-	decisions []Decision
+	decisions map[string]Decision
+	reference *Reference
 
 	// internals
 	ctx        Context
@@ -42,16 +52,20 @@ type Resolver struct {
 }
 
 func (r *Resolver) Resolve() (model.Sheet, error) {
-	ctx, err := Parse(r.character.ClassID, r.character.Level, r.decisions)
+	// get class from reference
+	class, ok := r.reference.Classes[r.character.ClassID]
+	if !ok {
+		return model.Sheet{}, fmt.Errorf("class \"%s\" not found", r.character.ClassID)
+	}
+
+	// parse class and decisions
+	ctx, err := r.parse(r.character.Level, &class, r.decisions)
 	if err != nil {
 		return model.Sheet{}, err
 	}
 	r.ctx = ctx
 
-	// seed default values before execution
-	r.ctx.Values["skills"] = []model.Skill{}
-	// r.ctx.Values["abilities"] = []model.Ability{}
-
+	// evaluate all nodes
 	for node := range r.ctx.Operations {
 		r.trace.Push("Node:" + node)
 		r.EvaluateNode(node)
@@ -64,6 +78,12 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 	// logging
 	// fmt.Println(r.dependency.String())
 
+	skills, ok := r.ctx.Values["skills"]
+	if !ok {
+		skills = []string{}
+	}
+
+	// create sheet
 	sheet := model.Sheet{
 		ClassID: r.character.ClassID,
 		Level:   r.character.Level,
@@ -85,7 +105,7 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 				Weak:    expectInt("potencies.weak", r.ctx.Values["potencies.weak"]),
 			},
 		},
-		Skills: []model.Skill{},
+		Skills: skills.([]string),
 	}
 
 	return sheet, nil
@@ -133,7 +153,9 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 	case ValueRefTypeExpr:
 		dependencies := r.evaluateExprDepenencies(valueRef.Value.(*Expression))
 		for _, dependency := range dependencies {
-			r.dependency.Add(target, dependency)
+			if target != dependency {
+				r.dependency.Add(target, dependency)
+			}
 		}
 	}
 
@@ -147,6 +169,18 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 	switch operation.Type {
 	case OperationTypeSet:
 		r.ctx.Values[target] = result
+	case OperationTypeAddSkill:
+		skillID := result.(string)
+
+		_, ok := r.ctx.Values["skills"]
+		if !ok {
+			r.ctx.Values["skills"] = make([]string, 0)
+		}
+
+		// TODO verify skill is not already in skills
+		skills := r.ctx.Values["skills"].([]string)
+		skills = append(skills, skillID)
+		r.ctx.Values["skills"] = skills
 	default:
 		r.error = fmt.Errorf("unknown operation type: %s", operation.Type)
 		return
@@ -202,6 +236,20 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 		}
 
 		return exprValue
+	case ValueRefTypeSkill:
+		skillID, ok := valueRef.Value.(string)
+		if !ok {
+			r.error = fmt.Errorf("invalid id for skill")
+			return nil
+		}
+
+		_, ok = r.reference.Skills[skillID]
+		if !ok {
+			r.error = fmt.Errorf("skill \"%s\" not found", skillID)
+			return nil
+		}
+
+		return skillID
 	default:
 		r.error = fmt.Errorf("invalid ValueRef type: %s", valueRef.Type)
 		return nil
@@ -286,4 +334,98 @@ func (r *Resolver) evaluateExprDepenencies(expression *Expression) []string {
 		}
 	}
 	return dependencies
+}
+
+func (r *Resolver) parse(characterLevel int, class *Class, decisions map[string]Decision) (Context, error) {
+	var operations []Operation
+
+	// add basic operations for the class
+	operations = append(operations, class.Basics.Operations...)
+	choiceOperations, err := r.resolveDecisions(&class.Basics.Choices, &decisions)
+	if err != nil {
+		return Context{}, fmt.Errorf("failed to resolve basic decisions: %s", err)
+	}
+	operations = append(operations, choiceOperations...)
+
+	// add operations from levels the character has reached
+	for classLevel, classLevelDefn := range class.Levels {
+		if classLevel <= characterLevel {
+			operations = append(operations, classLevelDefn.Operations...)
+			choiceOperations, err := r.resolveDecisions(&classLevelDefn.Choices, &decisions)
+			if err != nil {
+				return Context{}, fmt.Errorf("failed to resolve decisions for level %d: %s", classLevel, err)
+			}
+			operations = append(operations, choiceOperations...)
+		}
+	}
+
+	ctx := Context{
+		Values:     make(map[string]any),
+		Operations: make(map[string][]*Operation),
+	}
+
+	for _, operation := range operations {
+		ctx.AddOperation(operation)
+	}
+
+	return ctx, nil
+}
+
+func (r *Resolver) resolveDecisions(choices *[]Choice, decisions *map[string]Decision) ([]Operation, error) {
+	var operations []Operation
+
+	for _, choice := range *choices {
+		// find the corresponding decision
+		var decision *Decision
+		for _, d := range *decisions {
+			if d.ChoiceID == choice.ID {
+				decision = &d
+				break
+			}
+		}
+
+		if decision == nil {
+			return nil, fmt.Errorf("decision for choice \"%s\" not found", choice.ID)
+		}
+
+		switch choice.Type {
+		case ChoiceTypeOptionSelect:
+			// find the corresponding option
+			var option *Option
+			for _, o := range choice.Options {
+				if o.ID == decision.OptionID {
+					option = &o
+					break
+				}
+			}
+
+			if option == nil {
+				return nil, fmt.Errorf("option \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
+			}
+
+			operations = append(operations, option.Operations...)
+		case ChoiceTypeSkillSelect:
+			// find the corresponding skill
+			var skill *Skill
+			for _, s := range r.reference.Skills {
+				if s.ID == decision.OptionID {
+					skill = &s
+					break
+				}
+			}
+
+			if skill == nil {
+				return nil, fmt.Errorf("skill \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
+			}
+
+			operations = append(operations, Operation{
+				Type:     OperationTypeAddSkill,
+				ValueRef: ValueRef{Type: ValueRefTypeSkill, Value: skill.ID},
+			})
+		default:
+			return nil, fmt.Errorf("unknown choice type: %s", choice.Type)
+		}
+	}
+
+	return operations, nil
 }

@@ -1,10 +1,11 @@
 package model
 
 type Sheet struct {
-	ClassID string    `json:"class_id"`
-	Level   int       `json:"level"`
-	Core    SheetCore `json:"core"`
-	Skills  []Skill   `json:"skills"`
+	CharacterID string    `json:"character_id"`
+	ClassID     string    `json:"class_id"`
+	Level       int       `json:"level"`
+	Core        SheetCore `json:"core"`
+	Skills      []string  `json:"skills"`
 }
 
 type SheetCore struct {
