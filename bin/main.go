@@ -35,6 +35,11 @@ func main() {
 			Type:     "skill_select",
 			OptionID: "history",
 		},
+		"censor_order": {
+			ChoiceID: "censor_order",
+			Type:     "option_select",
+			OptionID: "exorcist",
+		},
 	}
 
 	// load reference data, e.g. skills and abilities

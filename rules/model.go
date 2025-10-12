@@ -74,6 +74,12 @@ func (v *ValueRef) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		v.Value = i
+	case ValueRefTypeString:
+		var s string
+		if err := json.Unmarshal(tmp.Value, &s); err != nil {
+			return err
+		}
+		v.Value = s
 	case ValueRefTypeID:
 		var s string
 		if err := json.Unmarshal(tmp.Value, &s); err != nil {

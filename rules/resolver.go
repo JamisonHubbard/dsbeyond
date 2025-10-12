@@ -1,7 +1,9 @@
 package rules
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/JamisonHubbard/dsbeyond/model"
 )
@@ -19,10 +21,11 @@ const (
 	OperationTypeSet      = "set"
 	OperationTypeAddSkill = "add_skill"
 
-	ValueRefTypeExpr  = "expression"
-	ValueRefTypeID    = "id"
-	ValueRefTypeInt   = "int"
-	ValueRefTypeSkill = "skill"
+	ValueRefTypeExpr   = "expression"
+	ValueRefTypeID     = "id"
+	ValueRefTypeInt    = "int"
+	ValueRefTypeSkill  = "skill"
+	ValueRefTypeString = "string"
 )
 
 func NewResolver(character model.Character, decisions map[string]Decision, reference *Reference) *Resolver {
@@ -82,6 +85,14 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 
 	// logging
 	// fmt.Println(r.dependency.String())
+
+	// pretty print context values
+	prettyContext, err := json.MarshalIndent(r.ctx.Values, "", "  ")
+	if err != nil {
+		log.Println("WARNING failed to pretty print context")
+	} else {
+		log.Println(string(prettyContext))
+	}
 
 	skills, ok := r.ctx.Values["skills"]
 	if !ok {
@@ -196,6 +207,8 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 	switch valueRef.Type {
 	case ValueRefTypeInt:
 		return valueRef.Value.(int)
+	case ValueRefTypeString:
+		return valueRef.Value.(string)
 	case ValueRefTypeID:
 		id := valueRef.Value.(string)
 
