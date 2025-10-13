@@ -1,0 +1,26 @@
+[
+  {
+    "id":"judgment",
+    "name":"Judgment",
+    "description":"You utter a prayer that outlines your foe in holy energy.",
+    "keywords":["Magic","Ranged"],
+    "heroic_resource_cost":0,
+    "action_type":"maneuver",
+    "range":{
+      "type":"ranged",
+      "value":10
+    },
+    "target":"One enemy",
+    "sections":[
+      {"title":"Effect","order":1,"type":"text","text":"The target is judged by you until the end of the encounter, you use this ability again, you willingly end this effect (no action required), or another censor judges the target."},
+      {"order":2,"type":"text","text":"Whenever a creature judged by you uses a main action and is within your line of effect, you can use a free triggered action to deal holy damage equal to twice your Presence score to them."},
+      {"order":3,"type":"text","text":"When a creature judged by you is reduced to 0 Stamina, you can use a free triggered action to use this ability against a new target."},
+      {"order":4,"type":"text","text":"Additionally, you can spend 1 wrath to take one of the following free triggered actions:"},
+      {"order":5,"type":"bulleted_text","text":"When an adjacent creature judged by you starts to shift, you make a melee free strike against them and their speed becomes 0 until the end of the current turn, preventing them from shifting."},
+      {"order":6,"type":"bulleted_text","text":"When a creature judged by you within 10 squares makes a power roll, you cause them to take a bane on the roll."},
+      {"order":7,"type":"bulleted_text","text":"When a creature judged by you within 10 squares uses an ability with a potency that targets only one creature, the potency is reduced by 1 for that creature."},
+      {"order":8,"type":"bulleted_text","text":"If you damage a creature judged by you with a melee ability, the creature is taunted by you until the end of their next turn."},
+      {"order":9,"type":"text","text":"You can choose only one free triggered action option at a time, even if multiple options are triggered by the same effect."}
+    ]
+  }
+]

@@ -204,7 +204,13 @@
   },
   "levels": {
     "1": {
-      "operations":[],
+      "operations":[
+        {"type":"add_ability","value_ref":{
+          "type":"ref_id",
+          "value":"judgment",
+          "ref_type":"ability"
+        }}
+      ],
       "choices":[
         {"id":"censor_order","type":"option_select","options":[
           {"id":"exorcist","operations":[

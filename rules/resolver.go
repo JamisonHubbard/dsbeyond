@@ -21,8 +21,9 @@ const (
 	ExprTypeAdd      = "add"
 	ExprTypeSubtract = "subtract"
 
-	OperationTypeSet      = "set"
-	OperationTypeAddSkill = "add_skill"
+	OperationTypeSet        = "set"
+	OperationTypeAddSkill   = "add_skill"
+	OperationTypeAddAbility = "add_ability"
 
 	ValueRefTypeExpr   = "expression"
 	ValueRefTypeID     = "id"
@@ -209,6 +210,18 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 		skills := r.ctx.Values["skills"].([]string)
 		skills = append(skills, skillID)
 		r.ctx.Values["skills"] = skills
+	case OperationTypeAddAbility:
+		abilityID := result.(string)
+
+		_, ok := r.ctx.Values["abilities"]
+		if !ok {
+			r.ctx.Values["abilities"] = make([]string, 0)
+		}
+
+		// TODO verify ability is not already in abilities
+		abilities := r.ctx.Values["abilities"].([]string)
+		abilities = append(abilities, abilityID)
+		r.ctx.Values["abilities"] = abilities
 	default:
 		r.error = fmt.Errorf("unknown operation type: %s", operation.Type)
 		return
@@ -278,6 +291,8 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 			_, ok = r.reference.Skills[refID]
 		case "domain":
 			_, ok = r.reference.Domains[refID]
+		case "ability":
+			_, ok = r.reference.Abilities[refID]
 		default:
 			r.error = fmt.Errorf("invalid reference type: %s", valueRef.RefType)
 			return nil
@@ -522,6 +537,15 @@ func (r *Resolver) resolveChoice(choice *Choice) ([]Operation, error) {
 		operations = append(operations, option.Operations...)
 	case ChoiceTypeRefSelect:
 		switch choice.RefType {
+		case "ability":
+			_, ok := r.reference.Abilities[decision.RefID]
+			if !ok {
+				return nil, fmt.Errorf("ability \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
+			}
+			operations = append(operations, Operation{
+				Type:     OperationTypeAddAbility,
+				ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: decision.RefID, RefType: choice.RefType},
+			})
 		case "skill":
 			_, ok := r.reference.Skills[decision.RefID]
 			if !ok {

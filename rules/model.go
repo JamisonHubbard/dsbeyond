@@ -7,6 +7,7 @@ import (
 )
 
 type Reference struct {
+	Abilities   map[string]Ability
 	Classes     map[string]Class
 	Domains     map[string]Domain
 	Skills      map[string]Skill

@@ -81,6 +81,11 @@ func main() {
 }
 
 func loadReference() (rules.Reference, error) {
+	abilities, err := loadArraysFromFolder[rules.Ability]("data/abilities")
+	if err != nil {
+		return rules.Reference{}, err
+	}
+
 	classes, err := loadArrayFromFolder[rules.Class]("data/classes")
 	if err != nil {
 		return rules.Reference{}, err
@@ -102,6 +107,7 @@ func loadReference() (rules.Reference, error) {
 	}
 
 	reference := rules.Reference{
+		Abilities:   abilities,
 		Classes:     classes,
 		Domains:     domains,
 		Skills:      skills,
@@ -119,7 +125,7 @@ func loadReference() (rules.Reference, error) {
 }
 
 type ItemT interface {
-	rules.Skill | rules.SkillGroup | rules.Class | rules.Domain
+	rules.Skill | rules.SkillGroup | rules.Class | rules.Domain | rules.Ability
 }
 
 func loadArrayFromFile[T ItemT](path string) (map[string]T, error) {
@@ -178,6 +184,45 @@ func loadArrayFromFolder[T ItemT](path string) (map[string]T, error) {
 		}
 
 		containerMap[id.String()] = item
+	}
+
+	return containerMap, nil
+}
+
+func loadArraysFromFolder[T ItemT](path string) (map[string]T, error) {
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read directory %s: %s", path, err)
+	}
+
+	containerMap := make(map[string]T)
+
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+
+		path := filepath.Join(path, entry.Name())
+
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read %s: %s", path, err)
+		}
+
+		var items []T
+		if err := json.Unmarshal(data, &items); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal %s: %s", path, err)
+		}
+
+		for _, item := range items {
+			value := reflect.ValueOf(item)
+			id := value.FieldByName("ID")
+			if !id.IsValid() {
+				return nil, fmt.Errorf("failed to get ID from value")
+			}
+
+			containerMap[id.String()] = item
+		}
 	}
 
 	return containerMap, nil
