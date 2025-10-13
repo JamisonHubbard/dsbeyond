@@ -168,8 +168,8 @@
           }}
         ]}
       ]},
-      {"id":"basic_skill_1","type":"skill_select"},
-      {"id":"basic_skill_2","type":"skill_select"}
+      {"id":"basic_skill_1","type":"ref_select","ref_type":"skill"},
+      {"id":"basic_skill_2","type":"ref_select","ref_type":"skill"}
     ]
   },
   "levels": {
@@ -181,9 +181,38 @@
             {"type":"set","target":"censor_order","value_ref":{
               "type":"string",
               "value":"exorcist"
+            }},
+            {"type":"add_skill","value_ref":{
+              "type":"ref_id",
+              "value":"read_person",
+              "ref_type":"skill"
+            }}
+          ]},
+          {"id":"oracle","operations":[
+            {"type":"set","target":"censor_order","value_ref":{
+              "type":"string",
+              "value":"oracle"
+            }},
+            {"type":"add_skill","value_ref":{
+              "type":"ref_id",
+              "value":"magic",
+              "ref_type":"skill"
+            }}
+          ]},
+          {"id":"paragon","operations":[
+            {"type":"set","target":"censor_order","value_ref":{
+              "type":"string",
+              "value":"paragon"
+            }},
+            {"type":"add_skill","value_ref":{
+              "type":"ref_id",
+              "value":"lead",
+              "ref_type":"skill"
             }}
           ]}
-        ]}
+        ]},
+        {"id":"deity","type":"input"},
+        {"id":"domain","type":"ref_select","ref_type":"domain"}
       ]
     }
   }

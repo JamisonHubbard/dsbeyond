@@ -27,18 +27,32 @@ func main() {
 		},
 		"basic_skill_1": {
 			ChoiceID: "basic_skill_1",
-			Type:     "skill_select",
-			OptionID: "brag",
+			Type:     "ref_id",
+			RefID:    "brag",
 		},
 		"basic_skill_2": {
 			ChoiceID: "basic_skill_2",
-			Type:     "skill_select",
-			OptionID: "history",
+			Type:     "ref_id",
+			RefID:    "history",
 		},
 		"censor_order": {
 			ChoiceID: "censor_order",
 			Type:     "option_select",
 			OptionID: "exorcist",
+		},
+		"deity": {
+			ChoiceID: "deity",
+			Type:     "value",
+			Target:   "deity",
+			Value: rules.ValueRef{
+				Type:  rules.ValueRefTypeString,
+				Value: "Kurtulmak",
+			},
+		},
+		"domain": {
+			ChoiceID: "domain",
+			Type:     "ref_id",
+			RefID:    "war",
 		},
 	}
 
@@ -50,20 +64,20 @@ func main() {
 	}
 
 	resolver := rules.NewResolver(character, decisions, &reference)
-	sheet, err := resolver.Resolve()
+	_, err = resolver.Resolve()
 	if err != nil {
 		fmt.Println("ERROR failed to resolve: " + err.Error())
 		return
 	}
 
-	sheetPretty, err := json.MarshalIndent(sheet, "", "  ")
-	if err != nil {
-		fmt.Println("ERROR " + err.Error())
-		fmt.Println(character)
-		return
-	}
-
-	fmt.Println(string(sheetPretty))
+	// sheetPretty, err := json.MarshalIndent(sheet, "", "  ")
+	// if err != nil {
+	// 	fmt.Println("ERROR " + err.Error())
+	// 	fmt.Println(character)
+	// 	return
+	// }
+	//
+	// fmt.Println(string(sheetPretty))
 }
 
 func loadReference() (rules.Reference, error) {
@@ -72,18 +86,24 @@ func loadReference() (rules.Reference, error) {
 		return rules.Reference{}, err
 	}
 
-	skills, err := loadArrayFromFile[rules.Skill]("data/skills/skills.json")
+	skills, err := loadArrayFromFile[rules.Skill]("data/skills.json")
 	if err != nil {
 		return rules.Reference{}, err
 	}
 
-	skillGroups, err := loadArrayFromFile[rules.SkillGroup]("data/skills/skill_groups.json")
+	skillGroups, err := loadArrayFromFile[rules.SkillGroup]("data/skill_groups.json")
+	if err != nil {
+		return rules.Reference{}, err
+	}
+
+	domains, err := loadArrayFromFile[rules.Domain]("data/domains.json")
 	if err != nil {
 		return rules.Reference{}, err
 	}
 
 	reference := rules.Reference{
 		Classes:     classes,
+		Domains:     domains,
 		Skills:      skills,
 		SkillGroups: skillGroups,
 	}
@@ -99,7 +119,7 @@ func loadReference() (rules.Reference, error) {
 }
 
 type ItemT interface {
-	rules.Skill | rules.SkillGroup | rules.Class
+	rules.Skill | rules.SkillGroup | rules.Class | rules.Domain
 }
 
 func loadArrayFromFile[T ItemT](path string) (map[string]T, error) {

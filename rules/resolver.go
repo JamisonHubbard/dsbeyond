@@ -9,11 +9,14 @@ import (
 )
 
 const (
-	DecisionTypeID        = "id"
-	DecisionTypeOperation = "operation"
-
 	ChoiceTypeOptionSelect = "option_select"
-	ChoiceTypeSkillSelect  = "skill_select"
+	ChoiceTypeRefSelect    = "ref_select"
+	ChoiceTypeInput        = "input"
+
+	DecisionTypeID        = "id"
+	DecisionTypeRefID     = "ref_id"
+	DecisionTypeOperation = "operation"
+	DecisionTypeValue     = "value"
 
 	ExprTypeAdd      = "add"
 	ExprTypeSubtract = "subtract"
@@ -24,7 +27,7 @@ const (
 	ValueRefTypeExpr   = "expression"
 	ValueRefTypeID     = "id"
 	ValueRefTypeInt    = "int"
-	ValueRefTypeSkill  = "skill"
+	ValueRefTypeRefID  = "ref_id"
 	ValueRefTypeString = "string"
 )
 
@@ -254,20 +257,28 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 		}
 
 		return exprValue
-	case ValueRefTypeSkill:
-		skillID, ok := valueRef.Value.(string)
+	case ValueRefTypeRefID:
+		refID, ok := valueRef.Value.(string)
 		if !ok {
-			r.error = fmt.Errorf("invalid id for skill")
+			r.error = fmt.Errorf("invalid reference id")
 			return nil
 		}
 
-		_, ok = r.reference.Skills[skillID]
+		switch valueRef.RefType {
+		case "skill":
+			_, ok = r.reference.Skills[refID]
+		case "domain":
+			_, ok = r.reference.Domains[refID]
+		default:
+			r.error = fmt.Errorf("invalid reference type: %s", valueRef.RefType)
+			return nil
+		}
 		if !ok {
-			r.error = fmt.Errorf("skill \"%s\" not found", skillID)
+			r.error = fmt.Errorf("%s \"%s\" not found", valueRef.RefType, refID)
 			return nil
 		}
 
-		return skillID
+		return refID
 	default:
 		r.error = fmt.Errorf("invalid ValueRef type: %s", valueRef.Type)
 		return nil
@@ -500,23 +511,42 @@ func (r *Resolver) resolveChoice(choice *Choice) ([]Operation, error) {
 		}
 
 		operations = append(operations, option.Operations...)
-	case ChoiceTypeSkillSelect:
-		// find the corresponding skill
-		var skill *Skill
-		for _, s := range r.reference.Skills {
-			if s.ID == decision.OptionID {
-				skill = &s
-				break
+	case ChoiceTypeRefSelect:
+		switch choice.RefType {
+		case "skill":
+			_, ok := r.reference.Skills[decision.RefID]
+			if !ok {
+				return nil, fmt.Errorf("skill \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
 			}
+			operations = append(operations, Operation{
+				Type:     OperationTypeAddSkill,
+				ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: decision.RefID, RefType: choice.RefType},
+			})
+		case "domain":
+			_, ok := r.reference.Domains[decision.RefID]
+			if !ok {
+				return nil, fmt.Errorf("domain \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
+			}
+			operations = append(operations, Operation{
+				Type:     OperationTypeSet,
+				Target:   "domain",
+				ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: decision.RefID, RefType: choice.RefType},
+			})
+		default:
+			return nil, fmt.Errorf("invalid reference type: %s", choice.RefType)
+		}
+	case ChoiceTypeInput:
+		if decision.Type != DecisionTypeValue {
+			return nil, fmt.Errorf("invalid decision type for choice \"%s\": %s", choice.ID, decision.Type)
 		}
 
-		if skill == nil {
-			return nil, fmt.Errorf("skill \"%s\" for choice \"%s\" not found", decision.OptionID, choice.ID)
-		}
+		target := decision.Target
+		valueRef := decision.Value
 
 		operations = append(operations, Operation{
-			Type:     OperationTypeAddSkill,
-			ValueRef: ValueRef{Type: ValueRefTypeSkill, Value: skill.ID},
+			Type:     OperationTypeSet,
+			Target:   target,
+			ValueRef: valueRef,
 		})
 	default:
 		return nil, fmt.Errorf("unknown choice type: %s", choice.Type)

@@ -24,3 +24,8 @@ type SkillGroup struct {
 	DescriptionShort string   `json:"description_short"`
 	SkillIDs         []string `json:"skills"`
 }
+
+type Domain struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}

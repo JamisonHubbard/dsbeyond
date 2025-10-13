@@ -1,0 +1,47 @@
+[
+  {
+    "id": "brag",
+    "name": "Brag",
+    "description": "Impress others with stories of your deeds"
+  },
+  {
+    "id": "criminal_underworld",
+    "name": "Criminal Underworld",
+    "description": "Knowing about criminal organizations, their crimes, their relationships, and their leaders"
+  },
+  {
+    "id": "culture",
+    "name": "Culture",
+    "description": "Knowing about a culture's customs, folktales, and taboos"
+  },
+  {
+    "id": "empathize",
+    "name": "Empathize",
+    "description": "Relate to someone on a personal level"
+  },
+  {
+    "id": "flirt",
+    "name": "Flirt",
+    "description": "Attract romantic attention from someone"
+  },
+  {
+    "id": "history",
+    "name": "History",
+    "description": "Knowing about significant past events"
+  },
+  {
+    "id": "lead",
+    "name": "Lead",
+    "description": "Inspire people to action"
+  },
+  {
+    "id": "magic",
+    "name": "Magic",
+    "description": "Knowing about magical places, spells, rituals, items, and phenomena"
+  },
+  {
+    "id": "read_person",
+    "name": "Read Person",
+    "description": "Read the emotions and body language of other creatures"
+  }
+]

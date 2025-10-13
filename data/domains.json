@@ -1,0 +1,14 @@
+[
+  {"id":"creation","name":"Creation"},
+  {"id":"death","name":"Death"},
+  {"id":"fate","name":"Fate"},
+  {"id":"knowledge","name":"Knowledge"},
+  {"id":"life","name":"Life"},
+  {"id":"love","name":"Love"},
+  {"id":"nature","name":"Nature"},
+  {"id":"protection","name":"Protection"},
+  {"id":"storm","name":"Storm"},
+  {"id":"sun","name":"Sun"},
+  {"id":"trickery","name":"Trickery"},
+  {"id":"war","name":"War"}
+]

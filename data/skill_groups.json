@@ -1,0 +1,25 @@
+[
+  {
+    "id": "interpersonal",
+    "name": "Interpersonal",
+    "description_short": "Skills from the interpersonal skill group are used to socially interact with other creatures, and are particularly useful during negotiations.",
+    "skills": [
+      "brag",
+      "empathize",
+      "flirt",
+      "lead",
+      "read_person"
+    ]
+  },
+  {
+    "id": "lore",
+    "name": "Lore",
+    "description_short": "Skills from the lore skill group are used to research and recall specific information. They are especially useful during rests and downtime.",
+    "skills": [
+      "criminal_underworld",
+      "culture",
+      "history",
+      "magic"
+    ]
+  }
+]

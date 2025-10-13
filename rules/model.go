@@ -8,13 +8,15 @@ import (
 
 type Reference struct {
 	Classes     map[string]Class
+	Domains     map[string]Domain
 	Skills      map[string]Skill
 	SkillGroups map[string]SkillGroup
 }
 
 type ValueRef struct {
-	Type  string `json:"type"`
-	Value any    `json:"value"`
+	Type    string `json:"type"`
+	Value   any    `json:"value"`
+	RefType string `json:"ref_type"`
 }
 
 type Operation struct {
@@ -33,6 +35,7 @@ type Choice struct {
 	Type    string      `json:"type"`
 	Prereqs []Assertion `json:"prereqs"`
 	Options []Option    `json:"options"`
+	RefType string      `json:"ref_type"`
 }
 
 type Assertion struct {
@@ -47,17 +50,20 @@ type Option struct {
 }
 
 type Decision struct {
-	ChoiceID        string    `json:"choice_id"`
-	Type            string    `json:"type"`
-	OptionID        string    `json:"option_id"`
-	OptionOperation Operation `json:"option_operation"`
+	ChoiceID string   `json:"choice_id"`
+	Type     string   `json:"type"`
+	OptionID string   `json:"option_id"`
+	RefID    string   `json:"ref_id"`
+	Target   string   `json:"target"`
+	Value    ValueRef `json:"value"`
 }
 
 func (v *ValueRef) UnmarshalJSON(data []byte) error {
 	// define an initial lightweight struct for initial decode
 	type rawValueRef struct {
-		Type  string          `json:"type"`
-		Value json.RawMessage `json:"value"`
+		Type    string          `json:"type"`
+		Value   json.RawMessage `json:"value"`
+		RefType string          `json:"ref_type"`
 	}
 
 	var tmp rawValueRef
@@ -66,6 +72,7 @@ func (v *ValueRef) UnmarshalJSON(data []byte) error {
 	}
 
 	v.Type = tmp.Type
+	v.RefType = tmp.RefType
 
 	switch tmp.Type {
 	case ValueRefTypeInt:
@@ -86,7 +93,7 @@ func (v *ValueRef) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		v.Value = s
-	case ValueRefTypeSkill:
+	case ValueRefTypeRefID:
 		var s string
 		if err := json.Unmarshal(tmp.Value, &s); err != nil {
 			return err
