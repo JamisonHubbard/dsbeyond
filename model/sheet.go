@@ -9,6 +9,7 @@ type Sheet struct {
 }
 
 type SheetCore struct {
+	HeroicResource  string          `json:"heroic_resource"`
 	Characteristics Characteristics `json:"characteristics"`
 	Health          Health          `json:"health"`
 	Potencies       Potencies       `json:"potencies"`

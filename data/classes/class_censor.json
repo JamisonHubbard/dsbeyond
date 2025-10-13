@@ -3,6 +3,10 @@
   "name":"Censor",
   "basics":{
    "operations":[
+      {"type":"set","target":"heroic_resource","value_ref":{
+        "type":"string",
+        "value":"wrath"
+      }},
       {"type":"set","target":"characteristics.might","value_ref":{
         "type":"int",
         "value": 2
@@ -170,6 +174,32 @@
       ]},
       {"id":"basic_skill_1","type":"ref_select","ref_type":"skill"},
       {"id":"basic_skill_2","type":"ref_select","ref_type":"skill"}
+    ],
+    "hooks":[
+      {"id":"combat_start_gain_wrath","event":"combat.start","operations":[
+        {"type":"set","target":"current_wrath","value_ref":{
+          "type":"expression",
+          "value":{"type":"add","args":[
+            {"type":"id","value":"current_wrath"},
+            {"type":"id","value":"victories"}
+          ]}
+        }}
+      ]},
+      {"id":"combat_round_start_gain_wrath","event":"combat.round.start","operations":[
+        {"type":"set","target":"current_wrath","value_ref":{
+          "type":"expression",
+          "value":{"type":"add","args":[
+            {"type":"id","value":"current_wrath"},
+            {"type":"int","value":2}
+          ]}
+        }}
+      ]},
+      {"id":"combat_end_reset_wrath","event":"combat.end","operations":[
+        {"type":"set","target":"current_wrath","value_ref":{
+          "type":"int",
+          "value":0
+        }}
+      ]}
     ]
   },
   "levels": {

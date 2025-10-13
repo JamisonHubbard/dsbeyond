@@ -107,6 +107,7 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 		ClassID: r.character.ClassID,
 		Level:   r.character.Level,
 		Core: model.SheetCore{
+			HeroicResource: expectString("heroic_resource", r.ctx.Values["heroic_resource"]),
 			Characteristics: model.Characteristics{
 				Might:     expectInt("characteristics.might", r.ctx.Values["characteristics.might"]),
 				Agility:   expectInt("characteristics.agility", r.ctx.Values["characteristics.agility"]),
@@ -136,6 +137,14 @@ func expectInt(name string, value any) int {
 		panic(fmt.Sprintf("%s is not an int, instead %T", name, value))
 	}
 	return valueInt
+}
+
+func expectString(name string, value any) string {
+	valueString, ok := value.(string)
+	if !ok {
+		panic(fmt.Sprintf("%s is not a string, instead %T", name, value))
+	}
+	return valueString
 }
 
 func (r *Resolver) EvaluateNode(node string) {

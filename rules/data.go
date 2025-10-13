@@ -10,6 +10,7 @@ type Class struct {
 type ClassLevel struct {
 	Operations []Operation `json:"operations"`
 	Choices    []Choice    `json:"choices"`
+	Hooks      []Hook      `json:"hooks"`
 }
 
 type Skill struct {

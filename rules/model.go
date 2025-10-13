@@ -58,6 +58,12 @@ type Decision struct {
 	Value    ValueRef `json:"value"`
 }
 
+type Hook struct {
+	ID         string      `json:"id"`
+	Event      string      `json:"event"`
+	Operations []Operation `json:"operations"`
+}
+
 func (v *ValueRef) UnmarshalJSON(data []byte) error {
 	// define an initial lightweight struct for initial decode
 	type rawValueRef struct {
