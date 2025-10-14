@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/JamisonHubbard/dsbeyond/model"
 )
@@ -21,9 +22,10 @@ const (
 	ExprTypeAdd      = "add"
 	ExprTypeSubtract = "subtract"
 
-	OperationTypeSet        = "set"
-	OperationTypeAddSkill   = "add_skill"
-	OperationTypeAddAbility = "add_ability"
+	OperationTypeSet           = "set"
+	OperationTypeAddSkill      = "add_skill"
+	OperationTypeAddAbility    = "add_ability"
+	OperationTypeModifyAbility = "modify_ability"
 
 	ValueRefTypeExpr   = "expression"
 	ValueRefTypeID     = "id"
@@ -65,13 +67,19 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 		return model.Sheet{}, fmt.Errorf("class \"%s\" not found", r.character.ClassID)
 	}
 
-	// load operations that don't require decisions
-	err := r.loadNondecisionOperations(r.character.Level, &class)
+	// setup context
+	r.ctx = Context{
+		Values:     make(map[string]any),
+		Operations: make(map[string][]*Operation),
+	}
+
+	// load pre ops
+	err := r.loadPreOperations(r.character.Level, &class)
 	if err != nil {
 		return model.Sheet{}, err
 	}
 
-	// evaluate nondecision nodes
+	// evaluate preops nodes
 	for node := range r.ctx.Operations {
 		r.trace.Push("Node:" + node)
 		r.EvaluateNode(node)
@@ -85,6 +93,22 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 	err = r.executeChoiceOperations(&class)
 	if err != nil {
 		return model.Sheet{}, err
+	}
+
+	// load post ops
+	err = r.loadPostOperations(r.character.Level, &class)
+	if err != nil {
+		return model.Sheet{}, err
+	}
+
+	// evaluate preops nodes
+	for node := range r.ctx.Operations {
+		r.trace.Push("Node:" + node)
+		r.EvaluateNode(node)
+		if r.error != nil {
+			return model.Sheet{}, r.error
+		}
+		r.trace.Pop()
 	}
 
 	// logging
@@ -171,6 +195,15 @@ func (r *Resolver) EvaluateNode(node string) {
 }
 
 func (r *Resolver) EvaluateOperation(operation *Operation) {
+	log.Printf("evaluating operation: %s", operation)
+
+	// evaluate prereqs
+	for _, assertion := range operation.Prereqs {
+		if !r.checkAssertion(&assertion) {
+			return
+		}
+	}
+
 	// evaluate the value of the oepration
 	target := operation.Target
 	valueRef := operation.ValueRef
@@ -222,6 +255,18 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 		abilities := r.ctx.Values["abilities"].([]string)
 		abilities = append(abilities, abilityID)
 		r.ctx.Values["abilities"] = abilities
+	case OperationTypeModifyAbility:
+		modifierID := result.(string)
+
+		_, ok := r.ctx.Values["ability_modifiers"]
+		if !ok {
+			r.ctx.Values["ability_modifiers"] = make([]string, 0)
+		}
+
+		// TODO verify modifier is not already in modifiers
+		modifiers := r.ctx.Values["ability_modifiers"].([]string)
+		modifiers = append(modifiers, modifierID)
+		r.ctx.Values["ability_modifiers"] = modifiers
 	default:
 		r.error = fmt.Errorf("unknown operation type: %s", operation.Type)
 		return
@@ -293,6 +338,28 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 			_, ok = r.reference.Domains[refID]
 		case "ability":
 			_, ok = r.reference.Abilities[refID]
+		case "ability_modifier":
+			ids := strings.Split(refID, ".")
+			if len(ids) != 2 {
+				r.error = fmt.Errorf("invalid ability modifier id: %s", refID)
+				return nil
+			}
+
+			abilityID := ids[0]
+			modifierID := ids[1]
+			ability, ok := r.reference.Abilities[abilityID]
+			if !ok {
+				r.error = fmt.Errorf("ability \"%s\" not found", abilityID)
+				return nil
+			}
+
+			_, ok = ability.Modifiers[modifierID]
+			if !ok {
+				r.error = fmt.Errorf("modifier \"%s\" not found for ability \"%s\"", modifierID, abilityID)
+				return nil
+			}
+
+			return refID
 		default:
 			r.error = fmt.Errorf("invalid reference type: %s", valueRef.RefType)
 			return nil
@@ -431,11 +498,13 @@ func (r *Resolver) executeChoiceOperations(class *Class) error {
 }
 
 func (r *Resolver) checkAssertion(assertion *Assertion) bool {
+	log.Printf("checking assertion: %s", assertion)
 	target := assertion.TargetID
 	valueRefs := assertion.Values
 
 	targetValue, ok := r.ctx.Values[target]
 	if !ok {
+		log.Printf("assert false: %s %s", target, valueRefs)
 		return false
 	}
 
@@ -453,6 +522,7 @@ func (r *Resolver) checkAssertion(assertion *Assertion) bool {
 			}
 
 			if valueInt == targetValue {
+				log.Printf("assert true: %s %s", target, valueRefs)
 				return true
 			}
 		}
@@ -469,37 +539,55 @@ func (r *Resolver) checkAssertion(assertion *Assertion) bool {
 			}
 
 			if valueString == targetValue {
+				log.Printf("assert true: %s %s", target, valueRefs)
 				return true
 			}
 		}
 	default:
+		log.Printf("assert false: %s %s", target, valueRefs)
 		return false
 	}
+	log.Printf("assert false: %s %s", target, valueRefs)
 	return false
 }
 
-func (r *Resolver) loadNondecisionOperations(characterLevel int, class *Class) error {
+func (r *Resolver) loadPreOperations(characterLevel int, class *Class) error {
 	var operations []Operation
 
 	// add basic operations for the class
-	operations = append(operations, class.Basics.Operations...)
+	operations = append(operations, class.Basics.PreOperations...)
 
 	// add operations from levels the character has reached
 	for classLevel, classLevelDefn := range class.Levels {
 		if classLevel <= characterLevel {
-			operations = append(operations, classLevelDefn.Operations...)
+			operations = append(operations, classLevelDefn.PreOperations...)
 		}
 	}
 
-	ctx := Context{
-		Values:     make(map[string]any),
-		Operations: make(map[string][]*Operation),
-	}
+	r.ctx.Operations = make(map[string][]*Operation)
 	for _, operation := range operations {
-		ctx.AddOperation(operation)
+		r.ctx.AddOperation(operation)
+	}
+	return nil
+}
+
+func (r *Resolver) loadPostOperations(characterLevel int, class *Class) error {
+	var operations []Operation
+
+	// add basic operations for the class
+	operations = append(operations, class.Basics.PostOperations...)
+
+	// add operations from levels the character has reached
+	for classLevel, classLevelDefn := range class.Levels {
+		if classLevel <= characterLevel {
+			operations = append(operations, classLevelDefn.PostOperations...)
+		}
 	}
 
-	r.ctx = ctx
+	r.ctx.Operations = make(map[string][]*Operation)
+	for _, operation := range operations {
+		r.ctx.AddOperation(operation)
+	}
 	return nil
 }
 

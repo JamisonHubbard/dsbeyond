@@ -21,9 +21,10 @@ type ValueRef struct {
 }
 
 type Operation struct {
-	Type     string   `json:"type"`
-	Target   string   `json:"target"`
-	ValueRef ValueRef `json:"value_ref"`
+	Type     string      `json:"type"`
+	Target   string      `json:"target"`
+	ValueRef ValueRef    `json:"value_ref"`
+	Prereqs  []Assertion `json:"prereqs"`
 }
 
 type Expression struct {
@@ -123,6 +124,7 @@ func (o *Operation) UnmarshalJSON(data []byte) error {
 		Type     string          `json:"type"`
 		Target   string          `json:"target"`
 		ValueRef json.RawMessage `json:"value_ref"`
+		Prereqs  []Assertion     `json:"prereqs"`
 	}
 
 	var tmp rawOperation
@@ -132,6 +134,7 @@ func (o *Operation) UnmarshalJSON(data []byte) error {
 
 	o.Type = tmp.Type
 	o.Target = tmp.Target
+	o.Prereqs = tmp.Prereqs
 	if err := json.Unmarshal(tmp.ValueRef, &o.ValueRef); err != nil {
 		return fmt.Errorf("unmarshalling value_ref: %w", err)
 	}

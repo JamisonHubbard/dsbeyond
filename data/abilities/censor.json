@@ -21,6 +21,29 @@
       {"order":7,"type":"bulleted_text","text":"When a creature judged by you within 10 squares uses an ability with a potency that targets only one creature, the potency is reduced by 1 for that creature."},
       {"order":8,"type":"bulleted_text","text":"If you damage a creature judged by you with a melee ability, the creature is taunted by you until the end of their next turn."},
       {"order":9,"type":"text","text":"You can choose only one free triggered action option at a time, even if multiple options are triggered by the same effect."}
-    ]
+    ],
+    "modifiers":{
+      "order_exorcist":{
+        "id":"order_exorcist",
+        "type":"append",
+        "sections":[
+          {"type":"text","text":"You can teleport up to a number of squares equal to twice your Presence score. This movement must take you closer to the judged creature. You do not need line of effect to your destination."}
+        ]
+      },
+      "order_oracle":{
+        "id":"order_oracle",
+        "type":"append",
+        "sections":[
+          {"type":"text","text":"You can deal holy damage equal to twice your Presence score to the judged creature."}
+        ]
+      },
+      "order_paragon":{
+        "id":"order_paragon",
+        "type":"append",
+        "sections":[
+          {"type":"text","text":"You can vertical pull the judged creature up to a number of squares equal to twice your Presence score."}
+        ]
+      }
+    }
   }
 ]

@@ -8,9 +8,10 @@ type Class struct {
 }
 
 type ClassLevel struct {
-	Operations []Operation `json:"operations"`
-	Choices    []Choice    `json:"choices"`
-	Hooks      []Hook      `json:"hooks"`
+	PreOperations  []Operation `json:"pre_operations"`
+	Choices        []Choice    `json:"choices"`
+	PostOperations []Operation `json:"post_operations"`
+	Hooks          []Hook      `json:"hooks"`
 }
 
 type Skill struct {
@@ -32,15 +33,16 @@ type Domain struct {
 }
 
 type Ability struct {
-	ID                 string           `json:"id"`
-	Name               string           `json:"name"`
-	Description        string           `json:"description"`
-	Keywords           []string         `json:"keywords"`
-	HeroicResourceCost int              `json:"heroic_resource_cost"`
-	ActionType         string           `json:"action_type"`
-	Range              Range            `json:"range"`
-	Target             string           `json:"target"`
-	Sections           []AbilitySection `json:"sections"`
+	ID                 string                     `json:"id"`
+	Name               string                     `json:"name"`
+	Description        string                     `json:"description"`
+	Keywords           []string                   `json:"keywords"`
+	HeroicResourceCost int                        `json:"heroic_resource_cost"`
+	ActionType         string                     `json:"action_type"`
+	Range              Range                      `json:"range"`
+	Target             string                     `json:"target"`
+	Sections           []AbilitySection           `json:"sections"`
+	Modifiers          map[string]AbilityModifier `json:"modifiers"`
 }
 
 type Range struct {
@@ -71,4 +73,10 @@ type PotencyEffect struct {
 	CharacteristicLetter string `json:"characteristic_letter"`
 	PotencyID            string `json:"potency_id"`
 	Effect               string `json:"effect"`
+}
+
+type AbilityModifier struct {
+	ID       string           `json:"id"`
+	Type     string           `json:"type"`
+	Sections []AbilitySection `json:"sections"`
 }

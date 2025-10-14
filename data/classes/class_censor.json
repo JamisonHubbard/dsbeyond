@@ -2,7 +2,7 @@
   "id":"class_censor",
   "name":"Censor",
   "basics":{
-   "operations":[
+   "pre_operations":[
       {"type":"set","target":"heroic_resource","value_ref":{
         "type":"string",
         "value":"wrath"
@@ -204,7 +204,7 @@
   },
   "levels": {
     "1": {
-      "operations":[
+      "pre_operations":[
         {"type":"add_ability","value_ref":{
           "type":"ref_id",
           "value":"judgment",
@@ -249,6 +249,20 @@
         ]},
         {"id":"deity","type":"input"},
         {"id":"domain","type":"ref_select","ref_type":"domain"}
+      ],
+      "post_operations":[
+        {"type":"modify_ability",
+          "value_ref":{
+            "type":"ref_id",
+            "value":"judgment.order_exorcist",
+            "ref_type":"ability_modifier"
+          },
+          "prereqs":[
+            {"id":"order_is_exorcist","target_id":"censor_order","values":[
+              {"type":"string","value":"exorcist"}
+            ]}
+          ]
+        }
       ]
     }
   }
