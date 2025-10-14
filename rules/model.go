@@ -10,6 +10,7 @@ const (
 	RefIDTypeAbility         = "ability"
 	RefIDTypeAbilityModifier = "ability_modifier"
 	RefIDTypeDomain          = "domain"
+	RefIDTypeKit             = "kit"
 	RefIDTypeSkill           = "skill"
 	RefIDTypeSkillGroup      = "skill_group"
 )
@@ -19,6 +20,7 @@ type Reference struct {
 	Abilities   map[string]Ability
 	Classes     map[string]Class
 	Domains     map[string]Domain
+	Kits        map[string]Kit
 	Skills      map[string]Skill
 	SkillGroups map[string]SkillGroup
 }
@@ -43,6 +45,7 @@ const (
 	OperationTypeSet           = "set"
 	OperationTypeAddAbility    = "add_ability"
 	OperationTypeAddDomain     = "add_domain"
+	OperationTypeAddKit        = "add_kit"
 	OperationTypeAddSkill      = "add_skill"
 	OperationTypeModifyAbility = "modify_ability"
 )

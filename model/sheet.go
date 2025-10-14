@@ -7,12 +7,14 @@ type Sheet struct {
 	HeroicResource   string          `json:"heroic_resource"`
 	Characteristics  Characteristics `json:"characteristics"`
 	Health           Health          `json:"health"`
+	Movement         Movement        `json:"movement"`
 	Potencies        Potencies       `json:"potencies"`
-	Skills           []string        `json:"skills"`
 	Abilities        []string        `json:"abilities"`
 	AbilityModifiers []string        `json:"ability_modifiers"`
-	Class            map[string]any  `json:"class"`
 	Domains          []string        `json:"domains"`
+	Kits             []string        `json:"kits"`
+	Skills           []string        `json:"skills"`
+	Class            map[string]any  `json:"class"`
 }
 
 type Characteristics struct {
@@ -26,6 +28,24 @@ type Characteristics struct {
 type Health struct {
 	MaxStamina    int `json:"max_stamina"`
 	MaxRecoveries int `json:"max_recoveries"`
+}
+
+type Movement struct {
+	Size      Size `json:"size"`
+	Speed     int  `json:"speed"`
+	Stability int  `json:"stability"`
+	Disengage int  `json:"disengage"`
+}
+
+const (
+	SizeTypeSmall  = "small"
+	SizeTypeMedium = "medium"
+	SizeTypeLarge  = "large"
+)
+
+type Size struct {
+	Space int    `json:"space"`
+	Type  string `json:"type"`
 }
 
 type Potencies struct {

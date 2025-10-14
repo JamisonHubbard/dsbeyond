@@ -1,0 +1,35 @@
+[
+  {
+    "id":"dual_wielder_kit_double_strike",
+    "name":"Double Strike",
+    "type":"signature",
+    "description":"Why strike once when you could do it twice?",
+    "keywords":[
+      "melee",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"melee",
+      "value":1
+    },
+    "target":"Two creatures or objects",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[
+          {"type":"or","values":[
+            {"type":"id","value":"characteristics.might"},
+            {"type":"id","value":"characteristics.agility"}
+          ]}
+        ],
+        "results":{
+          "tier_i":{"damage_base":4},
+          "tier_ii":{"damage_base":6},
+          "tier_iii":{"damage_base":8}
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"If you use this ability on your turn, you can use it against one target, then use your maneuver and your move action for that turn before using the ability against a second target. You still use the same power roll for both targets."}
+    ]
+  }
+]

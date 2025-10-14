@@ -54,6 +54,11 @@ func main() {
 			Type:     "ref_id",
 			RefID:    "war",
 		},
+		"kit": {
+			ChoiceID: "kit",
+			Type:     "ref_id",
+			RefID:    "dual_wielder",
+		},
 	}
 
 	// load reference data, e.g. skills and abilities
@@ -94,6 +99,16 @@ func loadReference() (rules.Reference, error) {
 		return rules.Reference{}, err
 	}
 
+	domains, err := loadArrayFromFile[rules.Domain]("data/domains.json")
+	if err != nil {
+		return rules.Reference{}, err
+	}
+
+	kits, err := loadArrayFromFile[rules.Kit]("data/kits.json")
+	if err != nil {
+		return rules.Reference{}, err
+	}
+
 	skills, err := loadArrayFromFile[rules.Skill]("data/skills.json")
 	if err != nil {
 		return rules.Reference{}, err
@@ -104,15 +119,11 @@ func loadReference() (rules.Reference, error) {
 		return rules.Reference{}, err
 	}
 
-	domains, err := loadArrayFromFile[rules.Domain]("data/domains.json")
-	if err != nil {
-		return rules.Reference{}, err
-	}
-
 	reference := rules.Reference{
 		Abilities:   abilities,
 		Classes:     classes,
 		Domains:     domains,
+		Kits:        kits,
 		Skills:      skills,
 		SkillGroups: skillGroups,
 	}
@@ -128,7 +139,12 @@ func loadReference() (rules.Reference, error) {
 }
 
 type ItemT interface {
-	rules.Skill | rules.SkillGroup | rules.Class | rules.Domain | rules.Ability
+	rules.Skill |
+		rules.SkillGroup |
+		rules.Class |
+		rules.Domain |
+		rules.Ability |
+		rules.Kit
 }
 
 func loadArrayFromFile[T ItemT](path string) (map[string]T, error) {

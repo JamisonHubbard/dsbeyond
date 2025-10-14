@@ -1,5 +1,9 @@
 package rules
 
+const (
+	DamageTypeUntyped = ""
+)
+
 type Class struct {
 	ID     string             `json:"id"`
 	Name   string             `json:"name"`
@@ -30,9 +34,21 @@ type Domain struct {
 	Name string `json:"name"`
 }
 
+const (
+	AbilityTypeStandard  = ""
+	AbilityTypeSignature = "signature"
+
+	ActionTypeMain          = "main"
+	ActionTypeManeuver      = "maneuver"
+	ActionTypeTriggered     = "triggered"
+	ActionTypeFreeTriggered = "free_triggered"
+	ActionTypeMovement      = "movement"
+)
+
 type Ability struct {
 	ID                 string                     `json:"id"`
 	Name               string                     `json:"name"`
+	Type               string                     `json:"type"`
 	Description        string                     `json:"description"`
 	Keywords           []string                   `json:"keywords"`
 	HeroicResourceCost int                        `json:"heroic_resource_cost"`
@@ -43,10 +59,21 @@ type Ability struct {
 	Modifiers          map[string]AbilityModifier `json:"modifiers"`
 }
 
+const (
+	RangeTypeMelee  = "melee"
+	RangeTypeRanged = "ranged"
+)
+
 type Range struct {
 	Type  string `json:"type"`
 	Value int    `json:"value"`
 }
+
+const (
+	AbilitySectionTypeText         = "text"
+	AbilitySectionTypeBulletedText = "bulleted_text"
+	AbilitySectionTypePowerRoll    = "power_roll"
+)
 
 type AbilitySection struct {
 	Title string      `json:"title"`
@@ -57,14 +84,32 @@ type AbilitySection struct {
 }
 
 type AbilityRoll struct {
-	Modifiers []ValueRef `json:"modifiers"`
+	Modifiers []AbilityRollModifier `json:"modifiers"`
+	Results   AbilityRollResults    `json:"results"`
+}
+
+const (
+	AbilityRollModifierTypeSingle = "single"
+	AbilityRollModifierTypeOr     = "or"
+)
+
+type AbilityRollModifier struct {
+	Type   string     `json:"type"`
+	Values []ValueRef `json:"values"`
+}
+
+type AbilityRollResults struct {
+	TierI   AbilityRollResult `json:"tier_i"`
+	TierII  AbilityRollResult `json:"tier_ii"`
+	TierIII AbilityRollResult `json:"tier_iii"`
 }
 
 type AbilityRollResult struct {
-	DamageModifiers []ValueRef    `json:"damage_modifiers"`
-	DamageType      string        `json:"damage_type"`
-	PotencyEffect   PotencyEffect `json:"potency_effect"`
-	Effect          string        `json:"effect"`
+	DamageBase      int                   `json:"damage_base"`
+	DamageModifiers []AbilityRollModifier `json:"damage_modifiers"`
+	DamageType      string                `json:"damage_type"`
+	PotencyEffect   PotencyEffect         `json:"potency_effect"`
+	Effect          string                `json:"effect"`
 }
 
 type PotencyEffect struct {
@@ -77,4 +122,61 @@ type AbilityModifier struct {
 	ID       string           `json:"id"`
 	Type     string           `json:"type"`
 	Sections []AbilitySection `json:"sections"`
+}
+
+const (
+	ArmorTypeNoArmor = "no_armor"
+	ArmorTypeLight   = "light"
+	ArmorTypeMedium  = "medium"
+	ArmorTypeHeavy   = "heavy"
+
+	WeaponTypeBow       = "bow"
+	WeaponTypeEnsnaring = "ensnaring"
+	WeaponTypeLight     = "light"
+	WeaponTypeMedium    = "medium"
+	WeaponTypeHeavy     = "heavy"
+	WeaponTypePolearm   = "polearm"
+	WeaponTypeUnarmed   = "unarmed"
+	WeaponTypeWhip      = "whip"
+
+	WeaponAmountOne      = "one"
+	WeaponAmountOneOrTwo = "one_or_two"
+	WeaponAmountOnly     = "only"
+	WeaponAmountSeveral  = "several"
+)
+
+type Kit struct {
+	ID          string       `json:"id"`
+	Name        string       `json:"name"`
+	Description string       `json:"description"`
+	Equipment   KitEquipment `json:"equipment"`
+	Bonuses     KitBonuses   `json:"bonuses"`
+	Abilities   []string     `json:"abilities"`
+}
+
+type KitEquipment struct {
+	ArmorType string      `json:"armor_type"`
+	Shield    bool        `json:"shield"`
+	Weapons   []KitWeapon `json:"weapons"`
+}
+
+type KitWeapon struct {
+	Amount string `json:"amount"`
+	Type   string `json:"type"`
+}
+
+type KitBonuses struct {
+	StaminaBonus        int            `json:"stamina_bonus"`
+	SpeedBonus          int            `json:"speed_bonus"`
+	StabilityBonus      int            `json:"stability_bonus"`
+	MeleeDamageBonus    KitDamageBonus `json:"damage_bonus"`
+	RangedDamageBonus   KitDamageBonus `json:"ranged_damage_bonus"`
+	RangedDistanceBonus int            `json:"ranged_distance_bonus"`
+	DisengageBonus      int            `json:"disengage_bonus"`
+}
+
+type KitDamageBonus struct {
+	TierI   int `json:"tier_i"`
+	TierII  int `json:"tier_ii"`
+	TierIII int `json:"tier_iii"`
 }

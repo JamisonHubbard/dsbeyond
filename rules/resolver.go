@@ -30,6 +30,7 @@ const (
 	AbilitiesValueName        = "abilities"
 	AbilityModifiersValueName = "ability_modifiers"
 	DomainsValueName          = "domains"
+	KitsValueName             = "kits"
 	SkillsValueName           = "skills"
 )
 
@@ -264,6 +265,17 @@ func (r *Resolver) reduceRefID(refID string, refIDType string) Operation {
 			Target:   DomainsValueName,
 			ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: refID, RefIDType: refIDType},
 		}
+	case RefIDTypeKit:
+		_, ok := r.reference.Kits[refID]
+		if !ok {
+			r.error = fmt.Errorf("kit \"%s\" not found", refID)
+			return Operation{}
+		}
+		return Operation{
+			Type:     OperationTypeAddKit,
+			Target:   KitsValueName,
+			ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: refID, RefIDType: refIDType},
+		}
 	case RefIDTypeSkill:
 		_, ok := r.reference.Skills[refID]
 		if !ok {
@@ -368,6 +380,25 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 			domains = append(domains, domainID)
 		}
 		r.values[DomainsValueName] = domains
+	case OperationTypeAddKit:
+		kitID := result.(string)
+
+		_, ok := r.values[KitsValueName]
+		if !ok {
+			r.values[KitsValueName] = make([]string, 0)
+		}
+
+		kits := r.values[KitsValueName].([]string)
+		if !slices.Contains(kits, kitID) {
+			kits = append(kits, kitID)
+		}
+		r.values[KitsValueName] = kits
+
+		// process the kit and add its effects
+		r.handleKitOperations(kitID)
+		if r.error != nil {
+			return
+		}
 	case OperationTypeAddAbility:
 		abilityID := result.(string)
 
@@ -400,6 +431,134 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 	}
 }
 
+// TODO: handle melee and ranged damage bonuses, and ranged distance bonus
+func (r *Resolver) handleKitOperations(kitID string) {
+	kit, ok := r.reference.Kits[kitID]
+	if !ok {
+		r.error = fmt.Errorf("kit \"%s\" not found", kitID)
+		return
+	}
+
+	if kit.Bonuses.StaminaBonus != 0 {
+		// prepare an operation to add the bonus
+		operation := Operation{
+			Type:   OperationTypeSet,
+			Target: "health.max_stamina",
+			ValueRef: ValueRef{Type: ValueRefTypeExpression, Value: &Expression{
+				Type: ExprTypeAdd,
+				Args: []ValueRef{
+					{Type: ValueRefTypeID, Value: "health.max_stamina"},
+					{Type: ValueRefTypeInt, Value: kit.Bonuses.StaminaBonus},
+				},
+			}},
+		}
+
+		// if stamina was already calculated, add the bonus now
+		if r.visited["health.max_stamina"] {
+			r.trace.Push(operation)
+			r.EvaluateOperation(&operation)
+			if r.error != nil {
+				return
+			}
+			r.trace.Pop()
+		} else {
+			r.operations["health.max_stamina"] = append(r.operations["health.max_stamina"], &operation)
+		}
+	}
+
+	if kit.Bonuses.SpeedBonus != 0 {
+		// prepare an operation to add the bonus
+		operation := Operation{
+			Type:   OperationTypeSet,
+			Target: "movement.speed",
+			ValueRef: ValueRef{Type: ValueRefTypeExpression, Value: &Expression{
+				Type: ExprTypeAdd,
+				Args: []ValueRef{
+					{Type: ValueRefTypeID, Value: "movement.speed"},
+					{Type: ValueRefTypeInt, Value: kit.Bonuses.SpeedBonus},
+				},
+			}},
+		}
+
+		// if speed was already calculated, add the bonus now
+		if r.visited["movement.speed"] {
+			r.trace.Push(operation)
+			r.EvaluateOperation(&operation)
+			if r.error != nil {
+				return
+			}
+			r.trace.Pop()
+		} else {
+			r.operations["movement.speed"] = append(r.operations["movement.speed"], &operation)
+		}
+	}
+
+	if kit.Bonuses.StabilityBonus != 0 {
+		// prepare an operation to add the bonus
+		operation := Operation{
+			Type:   OperationTypeSet,
+			Target: "movement.stability",
+			ValueRef: ValueRef{Type: ValueRefTypeExpression, Value: &Expression{
+				Type: ExprTypeAdd,
+				Args: []ValueRef{
+					{Type: ValueRefTypeID, Value: "movement.stability"},
+					{Type: ValueRefTypeInt, Value: kit.Bonuses.StabilityBonus},
+				},
+			}},
+		}
+
+		// if stability was already calculated, add the bonus now
+		if r.visited["movement.stability"] {
+			r.trace.Push(operation)
+			r.EvaluateOperation(&operation)
+			if r.error != nil {
+				return
+			}
+			r.trace.Pop()
+		} else {
+			r.operations["movement.stability"] = append(r.operations["movement.stability"], &operation)
+		}
+	}
+
+	if kit.Bonuses.DisengageBonus != 0 {
+		// prepare an operation to add the bonus
+		operation := Operation{
+			Type:   OperationTypeSet,
+			Target: "movement.disengage",
+			ValueRef: ValueRef{Type: ValueRefTypeExpression, Value: &Expression{
+				Type: ExprTypeAdd,
+				Args: []ValueRef{
+					{Type: ValueRefTypeID, Value: "movement.disengage"},
+					{Type: ValueRefTypeInt, Value: kit.Bonuses.DisengageBonus},
+				},
+			}},
+		}
+
+		// if disengage was already calculated, add the bonus now
+		if r.visited["movement.disengage"] {
+			r.trace.Push(operation)
+			r.EvaluateOperation(&operation)
+			if r.error != nil {
+				return
+			}
+			r.trace.Pop()
+		} else {
+			r.operations["movement.disengage"] = append(r.operations["movement.disengage"], &operation)
+		}
+	}
+
+	// add the kit's abilities
+	for _, abilityID := range kit.Abilities {
+		_, ok := r.reference.Abilities[abilityID]
+		if !ok {
+			r.error = fmt.Errorf("ability \"%s\" not found", abilityID)
+			return
+		}
+
+		r.values[AbilitiesValueName] = append(r.values[AbilitiesValueName].([]string), abilityID)
+	}
+}
+
 func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 	switch valueRef.Type {
 	case ValueRefTypeInt:
@@ -419,12 +578,16 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 			return value
 		}
 
-		// if the node has been visited, but not completed
-		// then there is a circular reference
-		if r.visited[id] {
-			r.error = fmt.Errorf("circular reference detected for node \"%s\"", id)
-			return nil
-		}
+		// NOTE: the below is disabled to allow self-referential operations
+		// for example: a = a + 1
+		// may need to revisit this if it becomes an issue
+
+		// // if the node has been visited, but not completed
+		// // then there is a circular reference
+		// if r.visited[id] {
+		// 	r.error = fmt.Errorf("circular reference detected for node \"%s\"", id)
+		// 	return nil
+		// }
 
 		// else the node has not been evaluated, so process it
 		r.trace.Push("node:" + id)

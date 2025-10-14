@@ -15,6 +15,26 @@
         "type":"int",
         "value":2
       }},
+      {"type":"set","target":"movement.size.space","value_ref":{
+        "type":"int",
+        "value":1
+      }},
+      {"type":"set","target":"movement.size.type","value_ref":{
+        "type":"string",
+        "value":"medium"
+      }},
+      {"type":"set","target":"movement.speed","value_ref":{
+        "type":"int",
+        "value":4
+      }},
+      {"type":"set","target":"movement.stability","value_ref":{
+        "type":"int",
+        "value":0
+      }},
+      {"type":"set","target":"movement.disengage","value_ref":{
+        "type":"int",
+        "value":0
+      }},
       {"type":"set","target":"health.max_recoveries","value_ref":{
         "type":"int",
         "value":12
@@ -269,7 +289,8 @@
           ]}
         ]},
         {"id":"deity","type":"input"},
-        {"id":"domain","type":"ref_select","ref_type":"domain"}
+        {"id":"domain","type":"ref_select","ref_type":"domain"},
+        {"id":"kit","type":"ref_select","ref_type":"kit"}
       ]
     }
   }

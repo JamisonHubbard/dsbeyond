@@ -1,0 +1,28 @@
+[
+  {
+    "id":"dual_wielder",
+    "name":"Dual Wielder",
+    "description":"The Dual Wielder kit is for folks who want to excel at using two weapons at the same time. Your fighting style maximizes the power of each weapon you have in hand, making you a whirling dealer of death.",
+    "equipment":{
+      "armor_type":"medium",
+      "shield":false,
+      "weapons":[
+        {"amount":"one","type":"light"},
+        {"amount":"one","type":"medium"}
+      ]
+    },
+    "bonuses":{
+      "stamina_bonus":6,
+      "speed_bonus":2,
+      "melee_damage_bonus":{
+        "tier_i":2,
+        "tier_ii":2,
+        "tier_iii":2
+      },
+      "disengage_bonus":1
+    },
+    "abilities":[
+      "dual_wielder_kit_double_strike"
+    ]
+  }
+]
