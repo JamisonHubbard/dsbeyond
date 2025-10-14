@@ -15,7 +15,7 @@ func main() {
 	// mock character and decision data
 	character := model.Character{
 		ID:      "test_character",
-		ClassID: "class_censor",
+		ClassID: "censor",
 		Name:    "Arjhan",
 		Level:   1,
 	}

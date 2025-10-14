@@ -555,6 +555,11 @@ func (r *Resolver) handleKitOperations(kitID string) {
 			return
 		}
 
+		_, ok = r.values[AbilitiesValueName]
+		if !ok {
+			r.values[AbilitiesValueName] = make([]string, 0)
+		}
+
 		r.values[AbilitiesValueName] = append(r.values[AbilitiesValueName].([]string), abilityID)
 	}
 }

@@ -1,5 +1,5 @@
 {
-  "id":"class_censor",
+  "id":"censor",
   "name":"Censor",
   "basics":{
    "operations":[
@@ -228,6 +228,11 @@
         {"type":"add_ability","value_ref":{
           "type":"refid",
           "value":"judgment",
+          "ref_type":"ability"
+        }},
+        {"type":"add_ability","value_ref":{
+          "type":"refid",
+          "value":"my_life_for_yours",
           "ref_type":"ability"
         }}
       ],

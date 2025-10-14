@@ -44,5 +44,25 @@
         ]
       }
     }
+  },
+  {
+    "id":"my_life_for_yours",
+    "name":"My Life for Yours",
+    "description":"You channel some of your vitality into more resilience for you or an ally.",
+    "keywords":[
+      "magic",
+      "ranged"
+    ],
+    "action_type":"triggered",
+    "range":{
+      "type":"ranged",
+      "value":10
+    },
+    "target":"Self or one ally",
+    "sections":[
+      {"title":"Trigger","order":1,"type":"text","text":"The target starts their turn or takes damage."},
+      {"title":"Effect","order":2,"type":"text","text":"You spend a Recovery and the target regains Stamina equal to your recovery value."},
+      {"title":"Spend 1 Wrath","order":3,"type":"text","text":"You can end one effect on the target that is ended by a saving throw or that ends at the end of their turn, or a prone target can stand up."}
+    ]
   }
 ]
