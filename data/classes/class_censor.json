@@ -2,7 +2,7 @@
   "id":"class_censor",
   "name":"Censor",
   "basics":{
-   "pre_operations":[
+   "operations":[
       {"type":"set","target":"heroic_resource","value_ref":{
         "type":"string",
         "value":"wrath"
@@ -204,9 +204,9 @@
   },
   "levels": {
     "1": {
-      "pre_operations":[
+      "operations":[
         {"type":"add_ability","value_ref":{
-          "type":"ref_id",
+          "type":"refid",
           "value":"judgment",
           "ref_type":"ability"
         }}
@@ -219,10 +219,17 @@
               "value":"exorcist"
             }},
             {"type":"add_skill","value_ref":{
-              "type":"ref_id",
+              "type":"refid",
               "value":"read_person",
               "ref_type":"skill"
-            }}
+            }},
+            {"type":"modify_ability",
+              "value_ref":{
+                "type":"refid",
+                "value":"judgment.order_exorcist",
+                "ref_type":"ability_modifier"
+              }
+            }
           ]},
           {"id":"oracle","operations":[
             {"type":"set","target":"censor_order","value_ref":{
@@ -230,10 +237,17 @@
               "value":"oracle"
             }},
             {"type":"add_skill","value_ref":{
-              "type":"ref_id",
+              "type":"refid",
               "value":"magic",
               "ref_type":"skill"
-            }}
+            }},
+            {"type":"modify_ability",
+              "value_ref":{
+                "type":"refid",
+                "value":"judgment.order_oracle",
+                "ref_type":"ability_modifier"
+              }
+            }
           ]},
           {"id":"paragon","operations":[
             {"type":"set","target":"censor_order","value_ref":{
@@ -241,28 +255,21 @@
               "value":"paragon"
             }},
             {"type":"add_skill","value_ref":{
-              "type":"ref_id",
+              "type":"refid",
               "value":"lead",
               "ref_type":"skill"
-            }}
+            }},
+            {"type":"modify_ability",
+              "value_ref":{
+                "type":"refid",
+                "value":"judgment.order_paragon",
+                "ref_type":"ability_modifier"
+              }
+            }
           ]}
         ]},
         {"id":"deity","type":"input"},
         {"id":"domain","type":"ref_select","ref_type":"domain"}
-      ],
-      "post_operations":[
-        {"type":"modify_ability",
-          "value_ref":{
-            "type":"ref_id",
-            "value":"judgment.order_exorcist",
-            "ref_type":"ability_modifier"
-          },
-          "prereqs":[
-            {"id":"order_is_exorcist","target_id":"censor_order","values":[
-              {"type":"string","value":"exorcist"}
-            ]}
-          ]
-        }
       ]
     }
   }

@@ -38,7 +38,7 @@ func main() {
 		"censor_order": {
 			ChoiceID: "censor_order",
 			Type:     "option_select",
-			OptionID: "exorcist",
+			OptionID: "paragon",
 		},
 		"deity": {
 			ChoiceID: "deity",

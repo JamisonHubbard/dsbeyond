@@ -8,10 +8,8 @@ type Class struct {
 }
 
 type ClassLevel struct {
-	PreOperations  []Operation `json:"pre_operations"`
-	Choices        []Choice    `json:"choices"`
-	PostOperations []Operation `json:"post_operations"`
-	Hooks          []Hook      `json:"hooks"`
+	Operations []Operation `json:"operations"`
+	Choices    []Choice    `json:"choices"`
 }
 
 type Skill struct {

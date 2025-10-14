@@ -6,6 +6,15 @@ import (
 	"fmt"
 )
 
+const (
+	RefIDTypeAbility         = "ability"
+	RefIDTypeAbilityModifier = "ability_modifier"
+	RefIDTypeDomain          = "domain"
+	RefIDTypeSkill           = "skill"
+	RefIDTypeSkillGroup      = "skill_group"
+)
+
+// A Reference contains all the static rules data for the game
 type Reference struct {
 	Abilities   map[string]Ability
 	Classes     map[string]Class
@@ -14,12 +23,30 @@ type Reference struct {
 	SkillGroups map[string]SkillGroup
 }
 
+const (
+	ValueRefTypeExpression = "expression"
+	ValueRefTypeID         = "id"
+	ValueRefTypeInt        = "int"
+	ValueRefTypeRefID      = "refid"
+	ValueRefTypeString     = "string"
+)
+
+// A ValueRef is a reference to a value
+// These values can be resolved at runtime
 type ValueRef struct {
-	Type    string `json:"type"`
-	Value   any    `json:"value"`
-	RefType string `json:"ref_type"`
+	Type      string `json:"type"`
+	Value     any    `json:"value"`
+	RefIDType string `json:"refid_type"`
 }
 
+const (
+	OperationTypeSet           = "set"
+	OperationTypeAddSkill      = "add_skill"
+	OperationTypeAddAbility    = "add_ability"
+	OperationTypeModifyAbility = "modify_ability"
+)
+
+// An Operation is an action taken to set or modify a value in the context
 type Operation struct {
 	Type     string      `json:"type"`
 	Target   string      `json:"target"`
@@ -27,11 +54,32 @@ type Operation struct {
 	Prereqs  []Assertion `json:"prereqs"`
 }
 
+// An Assertion is a condition that is checked at runtime
+type Assertion struct {
+	TargetID string     `json:"target_id"`
+	Values   []ValueRef `json:"values"`
+}
+
+const (
+	ExprTypeAdd      = "add"
+	ExprTypeSubtract = "subtract"
+)
+
+// An Expression is a mathematical statement that is evaluated at runtime to
+// produce a result
 type Expression struct {
 	Type string     `json:"type"`
 	Args []ValueRef `json:"args"`
 }
 
+const (
+	ChoiceTypeOptionSelect = "option_select"
+	ChoiceTypeRefSelect    = "ref_select"
+	ChoiceTypeInput        = "input"
+)
+
+// A Choice represents a decision point during character creation that impacts
+// the final character sheet
 type Choice struct {
 	ID      string      `json:"id"`
 	Type    string      `json:"type"`
@@ -40,17 +88,21 @@ type Choice struct {
 	RefType string      `json:"ref_type"`
 }
 
-type Assertion struct {
-	ID       string     `json:"id"`
-	TargetID string     `json:"target_id"`
-	Values   []ValueRef `json:"values"`
-}
-
+// An Option is a possible decision made to resolve a Choice
 type Option struct {
 	ID         string      `json:"id"`
 	Operations []Operation `json:"operations"`
 }
 
+const (
+	DecisionTypeID        = "id"
+	DecisionTypeRefID     = "refid"
+	DecisionTypeOperation = "operation"
+	DecisionTypeValue     = "value"
+)
+
+// A Decision represents the result of a Choice that was made during character
+// creation
 type Decision struct {
 	ChoiceID string   `json:"choice_id"`
 	Type     string   `json:"type"`
@@ -60,12 +112,7 @@ type Decision struct {
 	Value    ValueRef `json:"value"`
 }
 
-type Hook struct {
-	ID         string      `json:"id"`
-	Event      string      `json:"event"`
-	Operations []Operation `json:"operations"`
-}
-
+// UnmarshalJSON is a custom unmarshaller for ValueRef
 func (v *ValueRef) UnmarshalJSON(data []byte) error {
 	// define an initial lightweight struct for initial decode
 	type rawValueRef struct {
@@ -80,7 +127,7 @@ func (v *ValueRef) UnmarshalJSON(data []byte) error {
 	}
 
 	v.Type = tmp.Type
-	v.RefType = tmp.RefType
+	v.RefIDType = tmp.RefType
 
 	switch tmp.Type {
 	case ValueRefTypeInt:
@@ -107,7 +154,7 @@ func (v *ValueRef) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		v.Value = s
-	case ValueRefTypeExpr:
+	case ValueRefTypeExpression:
 		var expr Expression
 		if err := json.Unmarshal(tmp.Value, &expr); err != nil {
 			return err
@@ -116,28 +163,5 @@ func (v *ValueRef) UnmarshalJSON(data []byte) error {
 	default:
 		return fmt.Errorf("invalid ValueRef type: %s", v.Type)
 	}
-	return nil
-}
-
-func (o *Operation) UnmarshalJSON(data []byte) error {
-	type rawOperation struct {
-		Type     string          `json:"type"`
-		Target   string          `json:"target"`
-		ValueRef json.RawMessage `json:"value_ref"`
-		Prereqs  []Assertion     `json:"prereqs"`
-	}
-
-	var tmp rawOperation
-	if err := json.Unmarshal(data, &tmp); err != nil {
-		return err
-	}
-
-	o.Type = tmp.Type
-	o.Target = tmp.Target
-	o.Prereqs = tmp.Prereqs
-	if err := json.Unmarshal(tmp.ValueRef, &o.ValueRef); err != nil {
-		return fmt.Errorf("unmarshalling value_ref: %w", err)
-	}
-
 	return nil
 }
