@@ -41,8 +41,9 @@ type ValueRef struct {
 
 const (
 	OperationTypeSet           = "set"
-	OperationTypeAddSkill      = "add_skill"
 	OperationTypeAddAbility    = "add_ability"
+	OperationTypeAddDomain     = "add_domain"
+	OperationTypeAddSkill      = "add_skill"
 	OperationTypeModifyAbility = "modify_ability"
 )
 

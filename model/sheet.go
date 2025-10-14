@@ -12,6 +12,7 @@ type Sheet struct {
 	Abilities        []string        `json:"abilities"`
 	AbilityModifiers []string        `json:"ability_modifiers"`
 	Class            map[string]any  `json:"class"`
+	Domains          []string        `json:"domains"`
 }
 
 type Characteristics struct {

@@ -260,7 +260,7 @@ func (r *Resolver) reduceRefID(refID string, refIDType string) Operation {
 			return Operation{}
 		}
 		return Operation{
-			Type:     OperationTypeSet,
+			Type:     OperationTypeAddDomain,
 			Target:   DomainsValueName,
 			ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: refID, RefIDType: refIDType},
 		}
@@ -355,6 +355,19 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 			skills = append(skills, skillID)
 		}
 		r.values[SkillsValueName] = skills
+	case OperationTypeAddDomain:
+		domainID := result.(string)
+
+		_, ok := r.values[DomainsValueName]
+		if !ok {
+			r.values[DomainsValueName] = make([]string, 0)
+		}
+
+		domains := r.values[DomainsValueName].([]string)
+		if !slices.Contains(domains, domainID) {
+			domains = append(domains, domainID)
+		}
+		r.values[DomainsValueName] = domains
 	case OperationTypeAddAbility:
 		abilityID := result.(string)
 
