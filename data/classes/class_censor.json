@@ -214,7 +214,7 @@
       "choices":[
         {"id":"censor_order","type":"option_select","options":[
           {"id":"exorcist","operations":[
-            {"type":"set","target":"censor_order","value_ref":{
+            {"type":"set","target":"class.order","value_ref":{
               "type":"string",
               "value":"exorcist"
             }},
@@ -232,7 +232,7 @@
             }
           ]},
           {"id":"oracle","operations":[
-            {"type":"set","target":"censor_order","value_ref":{
+            {"type":"set","target":"class.order","value_ref":{
               "type":"string",
               "value":"oracle"
             }},
@@ -250,7 +250,7 @@
             }
           ]},
           {"id":"paragon","operations":[
-            {"type":"set","target":"censor_order","value_ref":{
+            {"type":"set","target":"class.order","value_ref":{
               "type":"string",
               "value":"paragon"
             }},

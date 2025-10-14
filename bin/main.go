@@ -64,20 +64,23 @@ func main() {
 	}
 
 	resolver := rules.NewResolver(character, decisions, &reference)
-	_, err = resolver.Resolve()
+	sheet, err := resolver.Resolve()
 	if err != nil {
 		fmt.Println("ERROR failed to resolve: " + err.Error())
 		return
 	}
+	sheet.CharacterID = character.ID
+	sheet.ClassID = character.ClassID
+	sheet.Level = character.Level
 
-	// sheetPretty, err := json.MarshalIndent(sheet, "", "  ")
-	// if err != nil {
-	// 	fmt.Println("ERROR " + err.Error())
-	// 	fmt.Println(character)
-	// 	return
-	// }
-	//
-	// fmt.Println(string(sheetPretty))
+	sheetPretty, err := json.MarshalIndent(sheet, "", "  ")
+	if err != nil {
+		fmt.Println("ERROR " + err.Error())
+		fmt.Println(character)
+		return
+	}
+
+	fmt.Println(string(sheetPretty))
 }
 
 func loadReference() (rules.Reference, error) {

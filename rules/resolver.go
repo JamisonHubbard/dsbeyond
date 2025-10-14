@@ -71,46 +71,43 @@ func (r *Resolver) Resolve() (model.Sheet, error) {
 		r.trace.Pop()
 	}
 
-	// pretty print context values
-	prettyContext, err := json.MarshalIndent(r.values, "", "  ")
-	if err != nil {
-		log.Println("WARNING failed to pretty print context")
-	} else {
-		log.Println(string(prettyContext))
-	}
-
-	skills, ok := r.values["skills"]
-	if !ok {
-		skills = []string{}
+	// process values to unflatten them
+	r.unflattenValues()
+	if r.error != nil {
+		return model.Sheet{}, r.error
 	}
 
 	// create sheet
-	sheet := model.Sheet{
-		ClassID: r.character.ClassID,
-		Level:   r.character.Level,
-		Core: model.SheetCore{
-			HeroicResource: expectString("heroic_resource", r.values["heroic_resource"]),
-			Characteristics: model.Characteristics{
-				Might:     expectInt("characteristics.might", r.values["characteristics.might"]),
-				Agility:   expectInt("characteristics.agility", r.values["characteristics.agility"]),
-				Reason:    expectInt("characteristics.reason", r.values["characteristics.reason"]),
-				Intuition: expectInt("characteristics.intuition", r.values["characteristics.intuition"]),
-				Presence:  expectInt("characteristics.presence", r.values["characteristics.presence"]),
-			},
-			Health: model.Health{
-				MaxStamina:    expectInt("health.max_stamina", r.values["health.max_stamina"]),
-				MaxRecoveries: expectInt("health.max_recoveries", r.values["health.max_recoveries"]),
-			},
-			Potencies: model.Potencies{
-				Strong:  expectInt("potencies.strong", r.values["potencies.strong"]),
-				Average: expectInt("potencies.average", r.values["potencies.average"]),
-				Weak:    expectInt("potencies.weak", r.values["potencies.weak"]),
-			},
-		},
-		Skills: skills.([]string),
+	data, err := json.Marshal(r.values)
+	if err != nil {
+		return model.Sheet{}, fmt.Errorf("failed to marshal sheet: %w", err)
+	}
+	var sheet model.Sheet
+	err = json.Unmarshal(data, &sheet)
+	if err != nil {
+		return model.Sheet{}, fmt.Errorf("failed to unmarshal sheet: %w", err)
 	}
 
 	return sheet, nil
+}
+
+func (r *Resolver) unflattenValues() {
+	unflattened := make(map[string]any)
+	for key, value := range r.values {
+		parts := strings.Split(key, ".")
+		current := unflattened
+		for i, part := range parts {
+			if i == len(parts)-1 {
+				current[part] = value
+				break
+			}
+			if _, ok := current[part]; !ok {
+				current[part] = make(map[string]any)
+			}
+			current = current[part].(map[string]any)
+		}
+	}
+	r.values = unflattened
 }
 
 // setup parses the class and decisions to generate the Operations that must be

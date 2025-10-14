@@ -1,18 +1,17 @@
 package model
 
 type Sheet struct {
-	CharacterID string    `json:"character_id"`
-	ClassID     string    `json:"class_id"`
-	Level       int       `json:"level"`
-	Core        SheetCore `json:"core"`
-	Skills      []string  `json:"skills"`
-}
-
-type SheetCore struct {
-	HeroicResource  string          `json:"heroic_resource"`
-	Characteristics Characteristics `json:"characteristics"`
-	Health          Health          `json:"health"`
-	Potencies       Potencies       `json:"potencies"`
+	CharacterID      string          `json:"character_id"`
+	ClassID          string          `json:"class_id"`
+	Level            int             `json:"level"`
+	HeroicResource   string          `json:"heroic_resource"`
+	Characteristics  Characteristics `json:"characteristics"`
+	Health           Health          `json:"health"`
+	Potencies        Potencies       `json:"potencies"`
+	Skills           []string        `json:"skills"`
+	Abilities        []string        `json:"abilities"`
+	AbilityModifiers []string        `json:"ability_modifiers"`
+	Class            map[string]any  `json:"class"`
 }
 
 type Characteristics struct {
