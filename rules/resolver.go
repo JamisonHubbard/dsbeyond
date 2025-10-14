@@ -562,6 +562,40 @@ func (r *Resolver) checkAssertion(assertion *Assertion) bool {
 				return true
 			}
 		}
+	case []int:
+		for _, valueRef := range valueRefs {
+			value := r.EvaluateValueRef(&valueRef)
+			if r.error != nil {
+				continue
+			}
+
+			valueInt, ok := value.(int)
+			if !ok {
+				continue
+			}
+
+			if slices.Contains(targetValue, valueInt) {
+				log.Printf("assert true: %s %s", target, valueRefs)
+				return true
+			}
+		}
+	case []string:
+		for _, valueRef := range valueRefs {
+			value := r.EvaluateValueRef(&valueRef)
+			if r.error != nil {
+				continue
+			}
+
+			valueString, ok := value.(string)
+			if !ok {
+				continue
+			}
+
+			if slices.Contains(targetValue, valueString) {
+				log.Printf("assert true: %s %s", target, valueRefs)
+				return true
+			}
+		}
 	default:
 		log.Printf("assert false: %s %s", target, valueRefs)
 		return false
