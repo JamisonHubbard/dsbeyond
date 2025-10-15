@@ -34,9 +34,15 @@ type Domain struct {
 	Name string `json:"name"`
 }
 
+const (
+	FeatureTypeBasic = ""
+	FeatureTypePerk  = "perk"
+)
+
 type Feature struct {
 	ID           string   `json:"id"`
 	Name         string   `json:"name"`
+	Type         string   `json:"type"`
 	TextSections []string `json:"text_sections"`
 	Abilities    []string `json:"abilities"`
 }

@@ -357,6 +357,12 @@
           ]}
         ]}
       ]
+    },
+    "2": {
+      "operations":[],
+      "choices":[
+        {"id":"level_two_perk","type":"ref_select","target":"features","ref_type":"feature"}
+      ]
     }
   }
 }
