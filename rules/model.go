@@ -97,6 +97,7 @@ const (
 type Choice struct {
 	ID      string      `json:"id"`
 	Type    string      `json:"type"`
+	Target  string      `json:"target"`
 	Prereqs []Assertion `json:"prereqs"`
 	Options []Option    `json:"options"`
 	RefType string      `json:"ref_type"`
@@ -108,21 +109,12 @@ type Option struct {
 	Operations []Operation `json:"operations"`
 }
 
-const (
-	DecisionTypeID        = "id"
-	DecisionTypeRefID     = "refid"
-	DecisionTypeOperation = "operation"
-	DecisionTypeValue     = "value"
-)
-
 // A Decision represents the result of a Choice that was made during character
 // creation
 type Decision struct {
 	ChoiceID string   `json:"choice_id"`
-	Type     string   `json:"type"`
 	OptionID string   `json:"option_id"`
 	RefID    string   `json:"ref_id"`
-	Target   string   `json:"target"`
 	Value    ValueRef `json:"value"`
 }
 

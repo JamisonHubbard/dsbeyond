@@ -2,11 +2,13 @@
   {
     "id":"judgment",
     "name":"Judgment",
+    "type":"basic",
     "description":"You utter a prayer that outlines your foe in holy energy.",
     "keywords":["magic","ranged"],
     "action_type":"maneuver",
     "range":{
-      "type":"ranged",
+      "type":"distance",
+      "subtype":"ranged",
       "value":10
     },
     "target":"One enemy",
@@ -48,6 +50,7 @@
   {
     "id":"my_life_for_yours",
     "name":"My Life for Yours",
+    "type":"basic",
     "description":"You channel some of your vitality into more resilience for you or an ally.",
     "keywords":[
       "magic",
@@ -55,7 +58,8 @@
     ],
     "action_type":"triggered",
     "range":{
-      "type":"ranged",
+      "type":"distance",
+      "subtype":"ranged",
       "value":10
     },
     "target":"Self or one ally",
@@ -63,6 +67,241 @@
       {"title":"Trigger","order":1,"type":"text","text":"The target starts their turn or takes damage."},
       {"title":"Effect","order":2,"type":"text","text":"You spend a Recovery and the target regains Stamina equal to your recovery value."},
       {"title":"Spend 1 Wrath","order":3,"type":"text","text":"You can end one effect on the target that is ended by a saving throw or that ends at the end of their turn, or a prone target can stand up."}
+    ]
+  },
+  {
+    "id":"back_blasphemer",
+    "name":"Back Blasphemer!",
+    "type":"signature",
+    "description":"You channel power through your weapon to repel foes.",
+    "keywords":[
+      "area",
+      "magic",
+      "melee",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"area",
+      "subtype":"cube",
+      "value":2,
+      "within":1
+    },
+    "target":"Each enemy in the area",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[
+          {"type":"single","value":{
+            "type":"id",
+            "value":"characteristics.presence"
+          }}
+        ],
+        "results":{
+          "tier_i":{
+            "damage_base":2,
+            "damage_type":"holy",
+            "effect":"push 1"
+          },
+          "tier_ii":{
+            "damage_base":4,
+            "damage_type":"holy",
+            "effect":"push 2"
+          },
+          "tier_iii":{
+            "damage_base":6,
+            "damage_type":"holy",
+            "effect":"push 3"
+          }
+        }
+      }}
+    ]
+  },
+  {
+    "id":"every_step_death",
+    "name":"Every Step... Death!",
+    "type":"signature",
+    "description":"You show your foe a glimpse of their fate after death.",
+    "keywords":[
+      "magic",
+      "ranged",
+      "strike"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[
+          {"type":"single","value":{
+            "type":"id",
+            "value":"characteristics.presence"
+          }}
+        ],
+        "results":{
+          "tier_i":{
+            "damage_base":5,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.presence"
+              }}
+            ],
+            "damage_type":"psychic"
+          },
+          "tier_ii":{
+            "damage_base":7,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.presence"
+              }}
+            ],
+            "damage_type":"psychic"
+          },
+          "tier_iii":{
+            "damage_base":10,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.presence"
+              }}
+            ],
+            "damage_type":"psychic"
+          }
+        }
+      }}
+    ]
+  },
+  {
+    "id":"behold_a_shield_of_faith",
+    "name":"Behold a Shield of Faith!",
+    "type":"heroic",
+    "heroic_resource_cost":3,
+    "description":"A mighty blow turns your foe’s vitality into a holy light that envelops you and an ally, discouraging enemies who might attack you.",
+    "keywords":[
+      "melee",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"melee",
+      "value":1
+    },
+    "target":"One creature or object",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[
+          {"type":"single","value":{
+            "type":"id",
+            "value":"characteristics.might"
+          }}
+        ],
+        "results":{
+          "tier_i":{
+            "damage_base":3,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.might"
+              }}
+            ],
+            "damage_type":"holy"
+          },
+          "tier_ii":{
+            "damage_base":6,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.might"
+              }}
+            ],
+            "damage_type":"holy"
+          },
+          "tier_iii":{
+            "damage_base":9,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.might"
+              }}
+            ],
+            "damage_type":"holy"
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"Until the start of your next turn, enemies take a bane on ability rolls made against you or any ally adjacent to you."}
+    ]
+  },
+  {
+    "id":"arrest",
+    "name":"Arrest",
+    "type":"heroic",
+    "heroic_resource_cost":5,
+    "description":"I got you, you son of a bitch.",
+    "keywords":[
+      "magic",
+      "melee",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"melee",
+      "value":1
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[
+          {"type":"single","value":{
+            "type":"id",
+            "value":"characteristics.might"
+          }}
+        ],
+        "results":{
+          "tier_i":{
+            "damage_base":6,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.might"
+              }}
+            ],
+            "damage_type":"holy",
+            "effect":"grabbed"
+          },
+          "tier_ii":{
+            "damage_base":9,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.might"
+              }}
+            ],
+            "damage_type":"holy",
+            "effect":"grabbed"
+          },
+          "tier_iii":{
+            "damage_base":13,
+            "damage_modifiers":[
+              {"type":"single","value":{
+                "type":"id",
+                "value":"characteristics.might"
+              }}
+            ],
+            "damage_type":"holy",
+            "effect":"grabbed"
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"If the target makes a strike against a creature while grabbed this way, you can spend 3 wrath to deal holy damage to them equal to your Presence score, then change the target of the strike to another target within the strike’s distance."}
     ]
   }
 ]

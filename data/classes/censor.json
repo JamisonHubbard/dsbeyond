@@ -319,9 +319,43 @@
             }
           ]}
         ]},
-        {"id":"deity","type":"input"},
+        {"id":"deity","type":"input","target":"deity"},
         {"id":"domain","type":"ref_select","ref_type":"domain"},
-        {"id":"kit","type":"ref_select","ref_type":"kit"}
+        {"id":"kit","type":"ref_select","ref_type":"kit"},
+        {"id":"level_one_signature_ability","type":"option_select","options":[
+          {"id":"back_blasphemer","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"back_blasphemer",
+              "ref_type":"ability"
+            }}
+          ]},
+          {"id":"every_step_death","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"every_step_death",
+              "ref_type":"ability"
+            }}
+          ]}
+        ]},
+        {"id":"level_one_3_wrath_ability","type":"option_select","options":[
+          {"id":"behold_a_shield_of_faith","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"behold_a_shield_of_faith",
+              "ref_type":"ability"
+            }}
+          ]}
+        ]},
+        {"id":"level_one_5_wrath_ability","type":"option_select","options":[
+          {"id":"arrest","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"arrest",
+              "ref_type":"ability"
+            }}
+          ]}
+        ]}
       ]
     }
   }

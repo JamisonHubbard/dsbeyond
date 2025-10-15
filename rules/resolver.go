@@ -192,14 +192,9 @@ func (r *Resolver) reduceChoice(choice *Choice) []Operation {
 		}
 		operations = append(operations, operation)
 	case ChoiceTypeInput:
-		if decision.Type != DecisionTypeValue {
-			r.error = fmt.Errorf("invalid decision type for choice \"%s\", decision type must be \"%s\" for choices with type \"%s\"", choice.ID, decision.Type, choice.Type)
-			return nil
-		}
-
 		operations = append(operations, Operation{
 			Type:     OperationTypeSet,
-			Target:   decision.Target,
+			Target:   choice.Target,
 			ValueRef: decision.Value,
 		})
 	default:

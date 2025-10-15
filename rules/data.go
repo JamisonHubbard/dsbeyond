@@ -42,7 +42,8 @@ type Feature struct {
 }
 
 const (
-	AbilityTypeStandard  = ""
+	AbilityTypeStandard  = "basic"
+	AbilityTypeHeroic    = "heroic"
 	AbilityTypeSignature = "signature"
 
 	ActionTypeMain          = "main"
@@ -56,9 +57,9 @@ type Ability struct {
 	ID                 string                     `json:"id"`
 	Name               string                     `json:"name"`
 	Type               string                     `json:"type"`
+	HeroicResourceCost int                        `json:"heroic_resource_cost"`
 	Description        string                     `json:"description"`
 	Keywords           []string                   `json:"keywords"`
-	HeroicResourceCost int                        `json:"heroic_resource_cost"`
 	ActionType         string                     `json:"action_type"`
 	Range              Range                      `json:"range"`
 	Target             string                     `json:"target"`
@@ -67,13 +68,26 @@ type Ability struct {
 }
 
 const (
-	RangeTypeMelee  = "melee"
-	RangeTypeRanged = "ranged"
+	RangeTypeDistance = "distance"
+	RangeTypeArea     = "area"
+
+	DistanceTypeMelee         = "melee"
+	DistanceTypeRanged        = "ranged"
+	DistanceTypeMeleeOrRanged = "melee_or_ranged"
+	DistanceTypeSelf          = "self"
+
+	AreaTypeAura  = "aura"
+	AreaTypeBurst = "burst"
+	AreaTypeCube  = "cube"
+	AreaTypeLine  = "line"
+	AreaTypeWall  = "wall"
 )
 
 type Range struct {
-	Type  string `json:"type"`
-	Value int    `json:"value"`
+	Type    string `json:"type"`
+	Subtype string `json:"subtype"`
+	Value   int    `json:"value"`
+	Within  int    `json:"within"`
 }
 
 const (
@@ -102,6 +116,7 @@ const (
 
 type AbilityRollModifier struct {
 	Type   string     `json:"type"`
+	Value  ValueRef   `json:"value"`
 	Values []ValueRef `json:"values"`
 }
 

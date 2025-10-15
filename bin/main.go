@@ -22,28 +22,22 @@ func main() {
 	decisions := map[string]rules.Decision{
 		"starting_characteristics": {
 			ChoiceID: "starting_characteristics",
-			Type:     "id",
 			OptionID: "an1r2in1",
 		},
 		"basic_skill_1": {
 			ChoiceID: "basic_skill_1",
-			Type:     "ref_id",
 			RefID:    "brag",
 		},
 		"basic_skill_2": {
 			ChoiceID: "basic_skill_2",
-			Type:     "ref_id",
 			RefID:    "history",
 		},
 		"censor_order": {
 			ChoiceID: "censor_order",
-			Type:     "option_select",
 			OptionID: "paragon",
 		},
 		"deity": {
 			ChoiceID: "deity",
-			Type:     "value",
-			Target:   "deity",
 			Value: rules.ValueRef{
 				Type:  rules.ValueRefTypeString,
 				Value: "Kurtulmak",
@@ -51,13 +45,23 @@ func main() {
 		},
 		"domain": {
 			ChoiceID: "domain",
-			Type:     "ref_id",
 			RefID:    "war",
 		},
 		"kit": {
 			ChoiceID: "kit",
-			Type:     "ref_id",
 			RefID:    "dual_wielder",
+		},
+		"level_one_signature_ability": {
+			ChoiceID: "level_one_signature_ability",
+			OptionID: "every_step_death",
+		},
+		"level_one_3_wrath_ability": {
+			ChoiceID: "level_one_3_wrath_ability",
+			OptionID: "behold_a_shield_of_faith",
+		},
+		"level_one_5_wrath_ability": {
+			ChoiceID: "level_one_5_wrath_ability",
+			OptionID: "arrest",
 		},
 	}
 
