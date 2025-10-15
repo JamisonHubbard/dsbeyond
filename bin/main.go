@@ -104,6 +104,11 @@ func loadReference() (rules.Reference, error) {
 		return rules.Reference{}, err
 	}
 
+	features, err := loadArraysFromFolder[rules.Feature]("data/features")
+	if err != nil {
+		return rules.Reference{}, err
+	}
+
 	kits, err := loadArrayFromFile[rules.Kit]("data/kits.json")
 	if err != nil {
 		return rules.Reference{}, err
@@ -123,6 +128,7 @@ func loadReference() (rules.Reference, error) {
 		Abilities:   abilities,
 		Classes:     classes,
 		Domains:     domains,
+		Features:    features,
 		Kits:        kits,
 		Skills:      skills,
 		SkillGroups: skillGroups,
@@ -144,7 +150,8 @@ type ItemT interface {
 		rules.Class |
 		rules.Domain |
 		rules.Ability |
-		rules.Kit
+		rules.Kit |
+		rules.Feature
 }
 
 func loadArrayFromFile[T ItemT](path string) (map[string]T, error) {

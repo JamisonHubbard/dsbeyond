@@ -234,7 +234,33 @@
           "type":"refid",
           "value":"my_life_for_yours",
           "ref_type":"ability"
-        }}
+        }},
+        {
+          "type":"add_feature",
+          "value_ref":{
+            "type":"refid",
+            "value":"blessing_of_compassion",
+            "ref_type":"feature"
+          },
+          "prereqs":[
+            {"type":"ref_array","ref_type":"domain","values":[
+              {"type":"string","value":"love"}
+            ]}
+          ]
+        },
+        {
+          "type":"add_feature",
+          "value_ref":{
+            "type":"refid",
+            "value":"sanctified_weapon",
+            "ref_type":"feature"
+          },
+          "prereqs":[
+            {"type":"ref_array","ref_type":"domain","values":[
+              {"type":"string","value":"war"}
+            ]}
+          ]
+        }
       ],
       "choices":[
         {"id":"censor_order","type":"option_select","options":[

@@ -30,6 +30,7 @@ const (
 	AbilitiesValueName        = "abilities"
 	AbilityModifiersValueName = "ability_modifiers"
 	DomainsValueName          = "domains"
+	FeaturesValueName         = "features"
 	KitsValueName             = "kits"
 	SkillsValueName           = "skills"
 )
@@ -160,7 +161,6 @@ func (r *Resolver) reduceChoice(choice *Choice) []Operation {
 
 	decision, ok := r.decisions[choice.ID]
 	if !ok {
-		log.Printf("no decision for choice %s\n", choice.ID)
 		return nil
 	}
 
@@ -265,6 +265,17 @@ func (r *Resolver) reduceRefID(refID string, refIDType string) Operation {
 			Target:   DomainsValueName,
 			ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: refID, RefIDType: refIDType},
 		}
+	case RefIDTypeFeature:
+		_, ok := r.reference.Features[refID]
+		if !ok {
+			r.error = fmt.Errorf("feature \"%s\" not found", refID)
+			return Operation{}
+		}
+		return Operation{
+			Type:     OperationTypeAddFeature,
+			Target:   FeaturesValueName,
+			ValueRef: ValueRef{Type: ValueRefTypeRefID, Value: refID, RefIDType: refIDType},
+		}
 	case RefIDTypeKit:
 		_, ok := r.reference.Kits[refID]
 		if !ok {
@@ -336,9 +347,6 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 	// evaluate prereqs
 	for _, assertion := range operation.Prereqs {
 		if !r.checkAssertion(&assertion) {
-			log.Println("skipping operation due to failed assertion")
-			log.Println(operation)
-			log.Println(assertion)
 			return
 		}
 	}
@@ -380,6 +388,19 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 			domains = append(domains, domainID)
 		}
 		r.values[DomainsValueName] = domains
+	case OperationTypeAddFeature:
+		featureID := result.(string)
+
+		_, ok := r.values[FeaturesValueName]
+		if !ok {
+			r.values[FeaturesValueName] = make([]string, 0)
+		}
+
+		features := r.values[FeaturesValueName].([]string)
+		if !slices.Contains(features, featureID) {
+			features = append(features, featureID)
+		}
+		r.values[FeaturesValueName] = features
 	case OperationTypeAddKit:
 		kitID := result.(string)
 
@@ -686,88 +707,131 @@ func (r *Resolver) EvaluateExpression(expression *Expression) int {
 
 func (r *Resolver) checkAssertion(assertion *Assertion) bool {
 	log.Printf("checking assertion: %s\n", assertion)
-	target := assertion.TargetID
-	valueRefs := assertion.Values
 
-	targetValue, ok := r.values[target]
-	if !ok {
-		log.Printf("assert false: %s %s", target, valueRefs)
+	switch assertion.Type {
+	// the value indicated by `target` should match one of the supplied values
+	case AssertionTypeValue:
+		actualValue, ok := r.values[assertion.Target]
+		if !ok {
+			log.Println("assertion false: target not found")
+			return false
+		}
+
+		for _, valueRef := range assertion.Values {
+			value := r.EvaluateValueRef(&valueRef)
+			if r.error != nil {
+				log.Println("WARNING failed to evaluate value ref")
+				r.error = nil
+				continue
+			}
+
+			switch value := value.(type) {
+			case int:
+				actualInt, ok := actualValue.(int)
+				if !ok {
+					continue
+				}
+
+				if value == actualInt {
+					log.Println("assertion true")
+					return true
+				}
+			case string:
+				actualString, ok := actualValue.(string)
+				if !ok {
+					continue
+				}
+
+				if value == actualString {
+					log.Println("assertion true")
+					return true
+				}
+			default:
+				log.Println("WARNING encountered unexpected value type")
+				continue
+			}
+		}
+
+		log.Println("assertion false, target does not match any values")
 		return false
-	}
-
-	switch targetValue := targetValue.(type) {
-	case int:
-		for _, valueRef := range valueRefs {
-			value := r.EvaluateValueRef(&valueRef)
-			if r.error != nil {
-				continue
-			}
-
-			valueInt, ok := value.(int)
-			if !ok {
-				continue
-			}
-
-			if valueInt == targetValue {
-				log.Printf("assert true: %s %s", target, valueRefs)
-				return true
-			}
-		}
-	case string:
-		for _, valueRef := range valueRefs {
-			value := r.EvaluateValueRef(&valueRef)
-			if r.error != nil {
-				continue
-			}
-
-			valueString, ok := value.(string)
-			if !ok {
-				continue
-			}
-
-			if valueString == targetValue {
-				log.Printf("assert true: %s %s", target, valueRefs)
-				return true
-			}
-		}
-	case []int:
-		for _, valueRef := range valueRefs {
-			value := r.EvaluateValueRef(&valueRef)
-			if r.error != nil {
-				continue
-			}
-
-			valueInt, ok := value.(int)
-			if !ok {
-				continue
-			}
-
-			if slices.Contains(targetValue, valueInt) {
-				log.Printf("assert true: %s %s", target, valueRefs)
-				return true
-			}
-		}
-	case []string:
-		for _, valueRef := range valueRefs {
-			value := r.EvaluateValueRef(&valueRef)
-			if r.error != nil {
-				continue
-			}
-
-			valueString, ok := value.(string)
-			if !ok {
-				continue
-			}
-
-			if slices.Contains(targetValue, valueString) {
-				log.Printf("assert true: %s %s", target, valueRefs)
-				return true
-			}
+	// each value should be an id for one of the referenced values of the given
+	// type
+	case AssertionTypeRefArray:
+		switch assertion.RefType {
+		case RefIDTypeAbility:
+			return r.checkArrayForIDs(AbilitiesValueName, &assertion.Values)
+		case RefIDTypeAbilityModifier:
+			return r.checkArrayForIDs(AbilityModifiersValueName, &assertion.Values)
+		case RefIDTypeDomain:
+			return r.checkArrayForIDs(DomainsValueName, &assertion.Values)
+		case RefIDTypeFeature:
+			return r.checkArrayForIDs(FeaturesValueName, &assertion.Values)
+		case RefIDTypeKit:
+			return r.checkArrayForIDs(KitsValueName, &assertion.Values)
+		case RefIDTypeSkill:
+			return r.checkArrayForIDs(SkillsValueName, &assertion.Values)
+		default:
+			log.Println("WARNING assertion false: unknown ref type")
+			return false
 		}
 	default:
-		log.Printf("assert false: %s %s", target, valueRefs)
+		log.Println("WARNING assertion false: unknown assertion type")
 		return false
 	}
-	log.Printf("assert false: %s %s", target, valueRefs)
-	return false
+}
+
+func (r *Resolver) checkArrayForIDs(arrayID string, valueRefs *[]ValueRef) bool {
+	refArray, ok := r.values[arrayID]
+	if !ok {
+		// check for pending operations
+		ops, ok := r.operations[arrayID]
+		if !ok {
+			log.Printf("assertion false: %s array not found and no pending operations\n", arrayID)
+			return false
+		}
+
+		// evaluate the node, then proceed
+		for _, op := range ops {
+			log.Println(*op)
+		}
+		r.trace.Push("node:" + arrayID)
+		r.EvaluateNode(arrayID)
+		if r.error != nil {
+			log.Printf("WARNING assertion false: failed to evaluate %s array\n", arrayID)
+			r.error = nil
+			return false
+		}
+		r.trace.Pop()
+
+		refArray, ok = r.values[arrayID]
+		if !ok {
+			log.Printf("assertion false: %s array not found after evaluation\n", arrayID)
+			return false
+		}
+	}
+
+	for _, valueRef := range *valueRefs {
+		value := r.EvaluateValueRef(&valueRef)
+		if r.error != nil {
+			r.error = nil
+			log.Println("assertion false: failed to evaluate value ref")
+			return false
+		}
+
+		valueID, ok := value.(string)
+		if !ok {
+			log.Println("assertion false: value id is not a string")
+			return false
+		}
+
+		if slices.Contains(refArray.([]string), valueID) {
+			continue
+		}
+
+		log.Println("assertion false, value not found in ref array")
+		return false
+	}
+
+	log.Println("assertion true")
+	return true
 }

@@ -10,6 +10,7 @@ const (
 	RefIDTypeAbility         = "ability"
 	RefIDTypeAbilityModifier = "ability_modifier"
 	RefIDTypeDomain          = "domain"
+	RefIDTypeFeature         = "feature"
 	RefIDTypeKit             = "kit"
 	RefIDTypeSkill           = "skill"
 	RefIDTypeSkillGroup      = "skill_group"
@@ -20,6 +21,7 @@ type Reference struct {
 	Abilities   map[string]Ability
 	Classes     map[string]Class
 	Domains     map[string]Domain
+	Features    map[string]Feature
 	Kits        map[string]Kit
 	Skills      map[string]Skill
 	SkillGroups map[string]SkillGroup
@@ -45,6 +47,7 @@ const (
 	OperationTypeSet           = "set"
 	OperationTypeAddAbility    = "add_ability"
 	OperationTypeAddDomain     = "add_domain"
+	OperationTypeAddFeature    = "add_feature"
 	OperationTypeAddKit        = "add_kit"
 	OperationTypeAddSkill      = "add_skill"
 	OperationTypeModifyAbility = "modify_ability"
@@ -58,10 +61,17 @@ type Operation struct {
 	Prereqs  []Assertion `json:"prereqs"`
 }
 
+const (
+	AssertionTypeValue    = "value"
+	AssertionTypeRefArray = "ref_array"
+)
+
 // An Assertion is a condition that is checked at runtime
 type Assertion struct {
-	TargetID string     `json:"target_id"`
-	Values   []ValueRef `json:"values"`
+	Type    string     `json:"type"`
+	Target  string     `json:"target"`
+	RefType string     `json:"ref_type"`
+	Values  []ValueRef `json:"values"`
 }
 
 const (
