@@ -15,13 +15,9 @@
         "type":"int",
         "value":2
       }},
-      {"type":"set","target":"movement.size.space","value_ref":{
-        "type":"int",
-        "value":1
-      }},
-      {"type":"set","target":"movement.size.type","value_ref":{
+      {"type":"set","target":"movement.size","value_ref":{
         "type":"string",
-        "value":"medium"
+        "value":"1M"
       }},
       {"type":"set","target":"movement.speed","value_ref":{
         "type":"int",

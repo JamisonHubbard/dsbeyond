@@ -32,21 +32,10 @@ type Health struct {
 }
 
 type Movement struct {
-	Size      Size `json:"size"`
-	Speed     int  `json:"speed"`
-	Stability int  `json:"stability"`
-	Disengage int  `json:"disengage"`
-}
-
-const (
-	SizeTypeSmall  = "small"
-	SizeTypeMedium = "medium"
-	SizeTypeLarge  = "large"
-)
-
-type Size struct {
-	Space int    `json:"space"`
-	Type  string `json:"type"`
+	Size      string `json:"size"`
+	Speed     int    `json:"speed"`
+	Stability int    `json:"stability"`
+	Disengage int    `json:"disengage"`
 }
 
 type Potencies struct {
