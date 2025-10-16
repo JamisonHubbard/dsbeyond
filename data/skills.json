@@ -2,66 +2,343 @@
   {
     "id":"alchemy",
     "name":"Alchemy",
-    "description":"Make bombs and potions"
+    "description":"Make bombs and potions",
+    "group":"crafting"
+  },
+  {
+    "id":"alertness",
+    "name":"Alertness",
+    "description":"Intuitively sense the details of your surroundings",
+    "group":"intrigue"
   },
   {
     "id":"architecture",
     "name":"Architecture",
-    "description":"Create buildings and vehicles"
+    "description":"Create buildings and vehicles",
+    "group":"crafting"
   },
   {
     "id":"blacksmithing",
     "name":"Blacksmithing",
-    "description":"Forge metal armor and weapons"
+    "description":"Forge metal armor and weapons",
+    "group":"crafting"
   },
   {
-    "id": "brag",
-    "name": "Brag",
-    "description": "Impress others with stories of your deeds"
+    "id":"brag",
+    "name":"Brag",
+    "description":"Impress others with stories of your deeds",
+    "group":"interpersonal"
   },
   {
     "id":"carpentry",
     "name":"Carpentry",
-    "description":"Create items out of wood"
+    "description":"Create items out of wood",
+    "group":"crafting"
   },
   {
-    "id": "criminal_underworld",
-    "name": "Criminal Underworld",
-    "description": "Knowing about criminal organizations, their crimes, their relationships, and their leaders"
+    "id":"climb",
+    "name":"Climb",
+    "description":"Move up vertical surfaces",
+    "group":"exploration"
   },
   {
-    "id": "culture",
-    "name": "Culture",
-    "description": "Knowing about a culture's customs, folktales, and taboos"
+    "id":"conceal_object",
+    "name":"Conceal Object",
+    "description":"Hide an object on your person or in your environment",
+    "group":"intrigue"
   },
   {
-    "id": "empathize",
-    "name": "Empathize",
-    "description": "Relate to someone on a personal level"
+    "id":"cooking",
+    "name":"Cooking",
+    "description":"Create delicious dishes",
+    "group":"crafting"
   },
   {
-    "id": "flirt",
-    "name": "Flirt",
-    "description": "Attract romantic attention from someone"
+    "id":"criminal_underworld",
+    "name":"Criminal Underworld",
+    "description":"Knowing about criminal organizations, their crimes, their relationships, and their leaders",
+    "group":"lore"
   },
   {
-    "id": "history",
-    "name": "History",
-    "description": "Knowing about significant past events"
+    "id":"culture",
+    "name":"Culture",
+    "description":"Knowing about a culture's customs, folktales, and taboos",
+    "group":"lore"
   },
   {
-    "id": "lead",
-    "name": "Lead",
-    "description": "Inspire people to action"
+    "id":"disguise",
+    "name":"Disguise",
+    "description":"Change your appearance to look like a different person",
+    "group":"intrigue"
   },
   {
-    "id": "magic",
-    "name": "Magic",
-    "description": "Knowing about magical places, spells, rituals, items, and phenomena"
+    "id":"drive",
+    "name":"Drive",
+    "description":"Control vehicles",
+    "group":"exploration"
   },
   {
-    "id": "read_person",
-    "name": "Read Person",
-    "description": "Read the emotions and body language of other creatures"
+    "id":"eavesdrop",
+    "name":"Eavesdrop",
+    "description":"Actively listen to something that is hard to hear, such as a whispered conversation through a door",
+    "group":"intrigue"
+  },
+  {
+    "id":"empathize",
+    "name":"Empathize",
+    "description":"Relate to someone on a personal level",
+    "group":"interpersonal"
+  },
+  {
+    "id":"endurance",
+    "name":"Endurance",
+    "description":"Remain engaged in strenuous activity over a long period of time",
+    "group":"exploration"
+  },
+  {
+    "id":"escape_artist",
+    "name":"Escape Artist",
+    "description":"Escape from bonds such as rope or manacles",
+    "group":"intrigue"
+  },
+  {
+    "id":"fletching",
+    "name":"Fletching",
+    "description":"Make ranged weapons and ammunition",
+    "group":"crafting"
+  },
+  {
+    "id":"flirt",
+    "name":"Flirt",
+    "description":"Attract romantic attention from someone",
+    "group":"interpersonal"
+  },
+  {
+    "id":"forgery",
+    "name":"Forgery",
+    "description":"Create false badges, documents, and other items",
+    "group":"crafting"
+  },
+  {
+    "id":"gamble",
+    "name":"Gamble",
+    "description":"Make bets with others",
+    "group":"interpersonal"
+  },
+  {
+    "id":"gymnastics",
+    "name":"Gymnastics",
+    "description":"Move across unsteady or narrow surfaces; tumble",
+    "group":"exploration"
+  },
+  {
+    "id":"handle_animals",
+    "name":"Handle Animals",
+    "description":"Interact with nonsapient animal wildlife",
+    "group":"interpersonal"
+  },
+  {
+    "id":"heal",
+    "name":"Heal",
+    "description":"Use mundane first aid",
+    "group":"exploration"
+  },
+  {
+    "id":"hide",
+    "name":"Hide",
+    "description":"Conceal yourself from others' observations",
+    "group":"intrigue"
+  },
+  {
+    "id":"history",
+    "name":"History",
+    "description":"Knowing about significant past events",
+    "group":"lore"
+  },
+  {
+    "id":"interrogate",
+    "name":"Interrogate",
+    "description":"Obtain information from a creature withholding it",
+    "group":"interpersonal"
+  },
+  {
+    "id":"intimidate",
+    "name":"Intimidate",
+    "description":"Awe or scare a creature",
+    "group":"interpersonal"
+  },
+  {
+    "id":"jewelry",
+    "name":"Jewelry",
+    "description":"Create bracelets, crowns, rings, and other jewelry",
+    "group":"crafting"
+  },
+  {
+    "id":"jump",
+    "name":"Jump",
+    "description":"Leap vertical and horizontal distances",
+    "group":"exploration"
+  },
+  {
+    "id":"lead",
+    "name":"Lead",
+    "description":"Inspire people to action",
+    "group":"interpersonal"
+  },
+  {
+    "id":"lie",
+    "name":"Lie",
+    "description":"Convince someone that a falsehood is true",
+    "group":"interpersonal"
+  },
+  {
+    "id":"lift",
+    "name":"Lift",
+    "description":"Pick up, carry, and throw heavy objects",
+    "group":"exploration"
+  },
+  {
+    "id":"magic",
+    "name":"Magic",
+    "description":"Knowing about magical places, spells, rituals, items, and phenomena",
+    "group":"lore"
+  },
+  {
+    "id":"mechanics",
+    "name":"Mechanics",
+    "description":"Build machines and clockwork items",
+    "group":"crafting"
+  },
+  {
+    "id":"monsters",
+    "name":"Monsters",
+    "description":"Knowing monster ecology, strengths, and weaknesses",
+    "group":"lore"
+  },
+  {
+    "id":"music",
+    "name":"Music",
+    "description":"Perform music vocally or with an instrument",
+    "group":"interpersonal"
+  },
+  {
+    "id":"nature",
+    "name":"Nature",
+    "description":"Knowing about natural flora, fauna, and weather",
+    "group":"lore"
+  },
+  {
+    "id":"navigate",
+    "name":"Navigate",
+    "description":"Read a map and travel without becoming lost",
+    "group":"exploration"
+  },
+  {
+    "id":"perform",
+    "name":"Perform",
+    "description":"Engage in dance, oratory, acting, or some other physical performance",
+    "group":"interpersonal"
+  },
+  {
+    "id":"persuade",
+    "name":"Persuade",
+    "description":"Convince someone to agree with you through use of your charms and grace",
+    "group":"interpersonal"
+  },
+  {
+    "id":"pick_lock",
+    "name":"Pick Lock",
+    "description":"Open a lock without using the key",
+    "group":"intrigue"
+  },
+  {
+    "id":"pick_pocket",
+    "name":"Pick Pocket",
+    "description":"Steal an item that another person wears or carries without them noticing",
+    "group":"intrigue"
+  },
+  {
+    "id":"psionics",
+    "name":"Psionics",
+    "description":"Knowing about psionic places, spells, rituals, items, and phenomena",
+    "group":"lore"
+  },
+  {
+    "id":"read_person",
+    "name":"Read Person",
+    "description":"Read the emotions and body language of other creatures",
+    "group":"interpersonal"
+  },
+  {
+    "id":"religion",
+    "name":"Religion",
+    "description":"Knowing about religious mythology, practices, and rituals",
+    "group":"lore"
+  },
+  {
+    "id":"ride",
+    "name":"Ride",
+    "description":"Ride and control a nonsapient mount, such as a horse",
+    "group":"exploration"
+  },
+  {
+    "id":"rumors",
+    "name":"Rumors",
+    "description":"Knowing gossip, legends, and uncertain truths",
+    "group":"lore"
+  },
+  {
+    "id":"sabotage",
+    "name":"Sabotage",
+    "description":"Disable a mechanical device such as a trap",
+    "group":"intrigue"
+  },
+  {
+    "id":"search",
+    "name":"Search",
+    "description":"Actively search an environment for important details and items",
+    "group":"intrigue"
+  },
+  {
+    "id":"sneak",
+    "name":"Sneak",
+    "description":"Move silently",
+    "group":"intrigue"
+  },
+  {
+    "id":"society",
+    "name":"Society",
+    "description":"Knowing noble etiquette and the leadership and power dynamics of noble society",
+    "group":"lore"
+  },
+  {
+    "id":"strategy",
+    "name":"Strategy",
+    "description":"Knowing about battle tactics and logistics",
+    "group":"lore"
+  },
+  {
+    "id":"swim",
+    "name":"Swim",
+    "description":"Move through deep liquid",
+    "group":"exploration"
+  },
+  {
+    "id":"tailoring",
+    "name":"Tailoring",
+    "description":"Craft clothing of cloth or leather",
+    "group":"crafting"
+  },
+  {
+    "id":"timescape",
+    "name":"Timescape",
+    "description":"Knowing about the many worlds of the timescape",
+    "group":"lore"
+  },
+  {
+    "id":"track",
+    "name":"Track",
+    "description":"Follow a trail that another creature has left behind",
+    "group":"intrigue"
   }
 ]
