@@ -1,8 +1,28 @@
 [
   {
+    "id":"alchemy",
+    "name":"Alchemy",
+    "description":"Make bombs and potions"
+  },
+  {
+    "id":"architecture",
+    "name":"Architecture",
+    "description":"Create buildings and vehicles"
+  },
+  {
+    "id":"blacksmithing",
+    "name":"Blacksmithing",
+    "description":"Forge metal armor and weapons"
+  },
+  {
     "id": "brag",
     "name": "Brag",
     "description": "Impress others with stories of your deeds"
+  },
+  {
+    "id":"carpentry",
+    "name":"Carpentry",
+    "description":"Create items out of wood"
   },
   {
     "id": "criminal_underworld",
