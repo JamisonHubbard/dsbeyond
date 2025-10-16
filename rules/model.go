@@ -18,13 +18,12 @@ const (
 
 // A Reference contains all the static rules data for the game
 type Reference struct {
-	Abilities   map[string]Ability
-	Classes     map[string]Class
-	Domains     map[string]Domain
-	Features    map[string]Feature
-	Kits        map[string]Kit
-	Skills      map[string]Skill
-	SkillGroups map[string]SkillGroup
+	Abilities map[string]Ability
+	Classes   map[string]Class
+	Domains   map[string]Domain
+	Features  map[string]Feature
+	Kits      map[string]Kit
+	Skills    map[string]Skill
 }
 
 const (

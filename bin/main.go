@@ -127,19 +127,13 @@ func loadReference() (rules.Reference, error) {
 		return rules.Reference{}, err
 	}
 
-	skillGroups, err := loadArrayFromFile[rules.SkillGroup]("data/skill_groups.json")
-	if err != nil {
-		return rules.Reference{}, err
-	}
-
 	reference := rules.Reference{
-		Abilities:   abilities,
-		Classes:     classes,
-		Domains:     domains,
-		Features:    features,
-		Kits:        kits,
-		Skills:      skills,
-		SkillGroups: skillGroups,
+		Abilities: abilities,
+		Classes:   classes,
+		Domains:   domains,
+		Features:  features,
+		Kits:      kits,
+		Skills:    skills,
 	}
 
 	// referencePretty, err := json.MarshalIndent(reference, "", "  ")
@@ -154,7 +148,6 @@ func loadReference() (rules.Reference, error) {
 
 type ItemT interface {
 	rules.Skill |
-		rules.SkillGroup |
 		rules.Class |
 		rules.Domain |
 		rules.Ability |
