@@ -654,9 +654,61 @@
               {"type":"int","value":9}
             ]
           }
-        }}
+        }},
+        {
+          "type":"add_feature",
+          "target":"features",
+          "value_ref":{
+            "type":"refid",
+            "value":"evil_revealed",
+            "ref_type":"feature"
+          },
+          "prereqs":[
+            {"type":"value","target":"class.order","values":[
+              {"type":"string","value":"exorcist"}
+            ]}
+          ]
+        },
+        {
+          "type":"add_feature",
+          "target":"features",
+          "value_ref":{
+            "type":"refid",
+            "value":"prophecy",
+            "ref_type":"feature"
+          },
+          "prereqs":[
+            {"type":"value","target":"class.order","values":[
+              {"type":"string","value":"oracle"}
+            ]}
+          ]
+        },
+        {
+          "type":"add_feature",
+          "target":"features",
+          "value_ref":{
+            "type":"refid",
+            "value":"stand_fast",
+            "ref_type":"feature"
+          },
+          "prereqs":[
+            {"type":"value","target":"class.order","values":[
+              {"type":"string","value":"paragon"}
+            ]}
+          ]
+        }
       ],
-      "choices":[]
+      "choices":[
+        {"id":"level_five_9_wrath_ability","type":"option_select","target":"abilities","options":[
+          {"id":"gods_grant_thee_strength","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"gods_grant_thee_strength",
+              "ref_type":"ability"
+            }}
+          ]}
+        ]}
+      ]
     },
     "6": {
       "operations":[
