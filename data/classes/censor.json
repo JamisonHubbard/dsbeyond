@@ -595,9 +595,53 @@
               {"type":"int","value":9}
             ]
           }
-        }}
+        }},
+        {"type":"set","target":"characteristics.might","value_ref":{
+          "type":"int",
+          "value":3
+        }},
+        {"type":"set","target":"characteristics.presence","value_ref":{
+          "type":"int",
+          "value":3
+        }},
+        {"type":"add_feature","target":"features","value_ref":{
+          "type":"refid",
+          "value":"wrath_beyond_wrath",
+          "ref_type":"feature"
+        }},
+        {
+          "type":"add_feature",
+          "target":"features",
+          "value_ref":{
+            "type":"refid",
+            "value":"invocation_of_the_heart",
+            "ref_type":"feature"
+          },
+          "prereqs":[
+            {"type":"ref_array","ref_type":"domain","values":[
+              {"type":"string","value":"love"}
+            ]}
+          ]
+        },
+        {
+          "type":"add_feature",
+          "target":"features",
+          "value_ref":{
+            "type":"refid",
+            "value":"improved_sanctified_weapon",
+            "ref_type":"feature"
+          },
+          "prereqs":[
+            {"type":"ref_array","ref_type":"domain","values":[
+              {"type":"string","value":"war"}
+            ]}
+          ]
+        }
       ],
-      "choices":[]
+      "choices":[
+        {"id":"level_four_perk","type":"ref_select","target":"features","ref_type":"feature"},
+        {"id":"level_four_skill","type":"ref_select","target":"skills","ref_type":"skill"}
+      ]
     },
     "5": {
       "operations":[

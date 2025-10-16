@@ -47,5 +47,12 @@
     "text_sections":[
       "Your judgment has grown in divine power, instilling fear in those you condemn. Whenever you use your Judgment ability, you can spend 1 wrath, and if the target has P<AVERAGE , they are frightened of you (save ends). Additionally, whenever a creature judged by you is reduced to 0 Stamina and you use Judgment as a free triggered action, if the new target has P<STRONG , they are frightened of you (save ends). If the target is already frightened of you, they instead take holy damage equal to twice your Presence score."
     ]
+  },
+  {
+    "id":"wrath_beyond_wrath",
+    "name":"Wrath Beyond Wrath",
+    "text_sections":[
+      "The first time each combat round that you deal damage to a creature judged by you, you gain 2 wrath instead of 1."
+    ]
   }
 ]
