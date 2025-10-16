@@ -53,7 +53,7 @@
     "type":"basic",
     "description":"You channel some of your vitality into more resilience for you or an ally.",
     "keywords":[
-      "magic",
+ "magic",
       "ranged"
     ],
     "action_type":"triggered",
@@ -68,7 +68,7 @@
       {"title":"Effect","order":2,"type":"text","text":"You spend a Recovery and the target regains Stamina equal to your recovery value."},
       {"title":"Spend 1 Wrath","order":3,"type":"text","text":"You can end one effect on the target that is ended by a saving throw or that ends at the end of their turn, or a prone target can stand up."}
     ]
-  },
+},
   {
     "id":"back_blasphemer",
     "name":"Back Blasphemer!",
@@ -302,6 +302,214 @@
         }
       }},
       {"title":"Effect","order":2,"type":"text","text":"If the target makes a strike against a creature while grabbed this way, you can spend 3 wrath to deal holy damage to them equal to your Presence score, then change the target of the strike to another target within the strike’s distance."}
+    ]
+  },
+  {
+    "id":"it_is_justice_you_fear",
+    "name":"It Is Justice You Fear",
+    "type":"heroic",
+    "heroic_resource_cost":5,
+    "description":"I am but a vessel. Your own deeds weigh upon you.",
+    "keywords":[
+      "magic",
+      "ranged",
+      "strike"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":8,
+            "damage_modifiers":[
+              {"type":"single","value":{"type":"id","value":"characteristic.might"}}
+            ],
+            "damage_type":"holy",
+            "potency_effect":{
+              "characteristic_letter":"P",
+              "potency_id":"weak",
+              "effect":"frightened (save ends)"
+            }
+          },
+          "tier_ii":{
+            "damage_base":12,
+            "damage_modifiers":[
+              {"type":"single","value":{"type":"id","value":"characteristic.might"}}
+            ],
+            "damage_type":"holy",
+            "potency_effect":{
+              "characteristic_letter":"P",
+              "potency_id":"average",
+              "effect":"frightened (save ends)"
+            }
+          },
+          "tier_iii":{
+            "damage_base":15,
+            "damage_modifiers":[
+              {"type":"single","value":{"type":"id","value":"characteristic.might"}}
+            ],
+            "damage_type":"holy",
+            "potency_effect":{
+              "characteristic_letter":"P",
+              "potency_id":"strong",
+              "effect":"frightened (save ends)"
+            }
+          }
+        }
+      }}
+    ]
+  },
+  {
+    "id":"revelator",
+    "name":"Revelator",
+    "type":"heroic",
+    "heroic_resource_cost":5,
+    "description":"You channel holy energy to harm unbelievers and reveal those hidden from your judgment.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"area",
+      "subtype":"burst",
+      "value":3
+    },
+    "target":"Each enemy in the area",
+    "sections":[
+      {"title":"Effect","order":1,"type":"text","text":"Each target takes holy damage equal to twice your Presence score. Additionally, each hidden target is automatically revealed and can't become hidden again until the start of your next turn. You can then use your Judgment ability against one target as a free triggered action."}
+    ]
+  },
+  {
+    "id":"prescient_grace",
+    "name":"Prescient Grace",
+    "type":"heroic",
+    "heroic_resource_cost":5,
+    "description":"Gifted by a prescient vision, you warn an ally of an impending attack.",
+    "keywords":[
+      "magic",
+      "ranged"
+    ],
+    "action_type":"triggered",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"Self or one ally",
+    "sections":[
+      {"title":"Trigger","order":1,"type":"text","text":"An enemy within 10 squares starts their turn"},
+      {"title":"Effect","order":2,"type":"text","text":"You can spend a Recovery to allow the target to regain Stamina equal to your recovery value. The target can then take their turn immediately before the triggering enemy."}
+    ]
+  },
+  {
+    "id":"with_my_blessing",
+    "name":"With My Blessing",
+    "type":"heroic",
+    "heroic_resource_cost":5,
+    "description":"A word in prayer, and the gods show the way.",
+    "keywords":[
+      "magic",
+      "ranged"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"Self or one ally",
+    "sections":[
+      {"title":"Effect","order":1,"type":"text","text":"The target can use a free triggered action to use a strike signature ability or a strike heroic ability, and has a double edge on that ability. If a heroic ability is chosen, reduce its Heroic Resource cost by 3 (to a minimum cost of 0)."}
+    ]
+  },
+  {
+    "id":"blessing_of_the_faithful",
+    "name":"Blessing of the Faithful",
+    "type":"heroic",
+    "heroic_resource_cost":5,
+    "description":"The gods reward your faith.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"area",
+      "subtype":"aura",
+      "value":3
+    },
+    "target":"Self and each ally in the area",
+    "sections":[
+      {"title":"Effect","order":1,"type":"text","text":"Until the end of the encounter or until you are dying, each target gains 1 surge at the end of each of your turns."}
+    ]
+  },
+  {
+    "id":"sentenced",
+    "name":"Sentenced",
+    "type":"heroic",
+    "heroic_resource_cost":5,
+    "description":"The shock of your condemnation freezes your enemy in their boots.",
+    "keywords":[
+      "magic",
+      "melee",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"melee",
+      "value":1
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.presence"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":5,
+            "damage_modifiers":[
+              {"type":"single","value":{"type":"id","value":"characteristic.presence"}}
+            ],
+            "potency_effect":{
+              "characteristic_letter":"P",
+              "potency_id":"weak",
+              "effect":"restrained (save ends)"
+            }
+          },
+          "tier_ii":{
+            "damage_base":9,
+            "damage_modifiers":[
+              {"type":"single","value":{"type":"id","value":"characteristic.presence"}}
+            ],
+            "potency_effect":{
+              "characteristic_letter":"P",
+              "potency_id":"average",
+              "effect":"restrained (save ends)"
+            }
+          },
+          "tier_iii":{
+            "damage_base":12,
+            "damage_modifiers":[
+              {"type":"single","value":{"type":"id","value":"characteristic.presence"}}
+            ],
+            "potency_effect":{
+              "characteristic_letter":"P",
+              "potency_id":"strong",
+              "effect":"restrained (save ends)"
+            }
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"While the target is restrained this way, your abilities that impose forced movement can still move them."}
     ]
   }
 ]

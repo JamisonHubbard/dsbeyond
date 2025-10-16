@@ -13,7 +13,6 @@ const (
 	RefIDTypeFeature         = "feature"
 	RefIDTypeKit             = "kit"
 	RefIDTypeSkill           = "skill"
-	RefIDTypeSkillGroup      = "skill_group"
 )
 
 // A Reference contains all the static rules data for the game

@@ -346,7 +346,7 @@ func (r *Resolver) EvaluateOperation(operation *Operation) {
 		}
 	}
 
-	// evaluate the value of the oepration
+	// evaluate the value of the operation
 	r.trace.Push(operation.ValueRef)
 	result := r.EvaluateValueRef(&operation.ValueRef)
 	if r.error != nil {
@@ -635,7 +635,69 @@ func (r *Resolver) EvaluateValueRef(valueRef *ValueRef) any {
 
 		return exprValue
 	case ValueRefTypeRefID:
-		return valueRef.Value.(string)
+		// verify the referenced entity exists
+		switch valueRef.RefIDType {
+		case RefIDTypeAbility:
+			_, ok := r.reference.Abilities[valueRef.Value.(string)]
+			if !ok {
+				r.error = fmt.Errorf("ability \"%s\" not found", valueRef.Value.(string))
+				return nil
+			}
+			return valueRef.Value.(string)
+		case RefIDTypeAbilityModifier:
+			ids := strings.Split(valueRef.Value.(string), ".")
+			if len(ids) != 2 {
+				r.error = fmt.Errorf("invalid ability modifier id: %s", valueRef.Value.(string))
+				return nil
+			}
+
+			abilityID := ids[0]
+			modifierID := ids[1]
+
+			ability, ok := r.reference.Abilities[abilityID]
+			if !ok {
+				r.error = fmt.Errorf("ability \"%s\" not found", valueRef.Value.(string))
+				return nil
+			}
+
+			_, ok = ability.Modifiers[modifierID]
+			if !ok {
+				r.error = fmt.Errorf("modifier \"%s\" not found for ability \"%s\"", modifierID, abilityID)
+				return nil
+			}
+			return valueRef.Value.(string)
+		case RefIDTypeDomain:
+			_, ok := r.reference.Domains[valueRef.Value.(string)]
+			if !ok {
+				r.error = fmt.Errorf("domain \"%s\" not found", valueRef.Value.(string))
+				return nil
+			}
+			return valueRef.Value.(string)
+		case RefIDTypeFeature:
+			_, ok := r.reference.Features[valueRef.Value.(string)]
+			if !ok {
+				r.error = fmt.Errorf("feature \"%s\" not found", valueRef.Value.(string))
+				return nil
+			}
+			return valueRef.Value.(string)
+		case RefIDTypeKit:
+			_, ok := r.reference.Kits[valueRef.Value.(string)]
+			if !ok {
+				r.error = fmt.Errorf("kit \"%s\" not found", valueRef.Value.(string))
+				return nil
+			}
+			return valueRef.Value.(string)
+		case RefIDTypeSkill:
+			_, ok := r.reference.Skills[valueRef.Value.(string)]
+			if !ok {
+				r.error = fmt.Errorf("skill \"%s\" not found", valueRef.Value.(string))
+				return nil
+			}
+			return valueRef.Value.(string)
+		default:
+			r.error = fmt.Errorf("invalid refid type: %s", valueRef.RefIDType)
+			return nil
+		}
 	default:
 		r.error = fmt.Errorf("invalid ValueRef type: %s", valueRef.Type)
 		return nil
@@ -708,8 +770,28 @@ func (r *Resolver) checkAssertion(assertion *Assertion) bool {
 	case AssertionTypeValue:
 		actualValue, ok := r.values[assertion.Target]
 		if !ok {
-			log.Println("assertion false: target not found")
-			return false
+			// check if there's pending operations for the target
+			_, ok = r.operations[assertion.Target]
+			if !ok {
+				log.Println("assertion false: target not found")
+				return false
+			}
+
+			// evaluate the node, then proceed
+			r.trace.Push("node:" + assertion.Target)
+			r.EvaluateNode(assertion.Target)
+			if r.error != nil {
+				log.Printf("WARNING assertion false: failed to evaluate %s\n", assertion.Target)
+				r.error = nil
+				return false
+			}
+			r.trace.Pop()
+
+			actualValue, ok = r.values[assertion.Target]
+			if !ok {
+				log.Println("assertion false: target not found after evaluation")
+				return false
+			}
 		}
 
 		for _, valueRef := range assertion.Values {

@@ -34,7 +34,7 @@ func main() {
 		},
 		"censor_order": {
 			ChoiceID: "censor_order",
-			OptionID: "paragon",
+			OptionID: "exorcist",
 		},
 		"deity": {
 			ChoiceID: "deity",
@@ -66,6 +66,10 @@ func main() {
 		"level_two_perk": {
 			ChoiceID: "level_two_perk",
 			RefID:    "brawny",
+		},
+		"level_two_exorcist_order_ability": {
+			ChoiceID: "level_two_exorcist_order_ability",
+			OptionID: "it_is_justice_you_fear",
 		},
 	}
 

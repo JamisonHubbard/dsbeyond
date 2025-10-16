@@ -2,6 +2,7 @@ package rules
 
 const (
 	DamageTypeUntyped = ""
+	DamageTypeHoly    = "holy"
 )
 
 type Class struct {
