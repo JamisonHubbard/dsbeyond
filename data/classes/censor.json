@@ -544,9 +544,45 @@
               {"type":"int","value":9}
             ]
           }
+        }},
+        {"type":"add_feature","target":"features","value_ref":{
+          "type":"refid",
+          "value":"look_on_my_work_and_despair",
+          "ref_type":"feature"
         }}
       ],
-      "choices":[]
+      "choices":[
+        {"id":"level_three_7_wrath_ability","type":"option_select","target":"abilities","options":[
+          {"id":"edict_of_disruptive_isolation","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"edict_of_disruptive_isolation",
+              "ref_type":"ability"
+            }}
+          ]},
+          {"id":"edict_of_perfect_order","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"edict_of_perfect_order",
+              "ref_type":"ability"
+            }}
+          ]},
+          {"id":"edict_of_purifying_pacifism","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"edict_of_purifying_pacifism",
+              "ref_type":"ability"
+            }}
+          ]},
+          {"id":"edict_of_stillness","operations":[
+            {"type":"add_ability","target":"abilities","value_ref":{
+              "type":"refid",
+              "value":"edict_of_stillness",
+              "ref_type":"ability"
+            }}
+          ]}
+        ]}
+      ]
     },
     "4": {
       "operations":[

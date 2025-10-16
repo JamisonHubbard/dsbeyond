@@ -511,5 +511,89 @@
       }},
       {"title":"Effect","order":2,"type":"text","text":"While the target is restrained this way, your abilities that impose forced movement can still move them."}
     ]
+  },
+  {
+    "id":"edict_of_disruptive_isolation",
+    "name":"Edict of Disruptive Isolation",
+    "type":"heroic",
+    "heroic_resource_cost":7,
+    "description":"The evil within your foes detonates with holy fire that burns only the guilty.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"area",
+      "subtype":"aura",
+      "value":2
+    },
+    "target":"Each enemy in the area",
+    "sections": [
+      {"title":"Effect","order":1,"type":"text","text":"Until the end of the encounter or until you are dying, each target takes holy damage equal to your Presence score at the end of each of your turns. A target takes an extra 2d6 holy damage if they are judged by you or if they are adjacent to any enemy."}
+    ]
+  },
+  {
+    "id":"edict_of_perfect_order",
+    "name":"Edict of Perfect Order",
+    "type":"heroic",
+    "heroic_resource_cost":7,
+    "description":"Within the area of your divine presence, your enemies will regret using their fell abilities.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"area",
+      "subtype":"aura",
+      "value":2
+    },
+    "target":"Each enemy in the area",
+    "sections": [
+      {"title":"Effect","order":1,"type":"text","text":"Until the end of the encounter or until you are dying, whenever a target uses an ability that costs Malice, they take holy damage equal to three times your Presence score. A target judged by you takes an extra 2d6 holy damage."}
+    ]
+  },
+  {
+    "id":"edict_of_purifying_pacifism",
+    "name":"Edict of Purifying Pacifism",
+    "type":"heroic",
+    "heroic_resource_cost":7,
+    "description":"You shed a righteous energy that punishes enemies who would harm you or your allies.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"area",
+      "subtype":"aura",
+      "value":2
+    },
+    "target":"Each enemy in the area",
+    "sections": [
+      {"title":"Effect","order":1,"type":"text","text":"Until the end of the encounter or until you are dying, whenever a target makes a strike, they take holy damage equal to twice your Presence score. A target judged by you takes an extra 2d6 holy damage."}
+    ]
+  },
+  {
+    "id":"edict_of_stillness",
+    "name":"Edict of Stillness",
+    "type":"heroic",
+    "heroic_resource_cost":7,
+    "description":"The holy aura you project makes it painful for evil-doers to leave your reach.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"area",
+      "subtype":"aura",
+      "value":2
+    },
+    "target":"Each enemy in the area",
+    "sections": [
+      {"title":"Effect","order":1,"type":"text","text":"Until the end of the encounter or until you are dying, whenever a target moves or is force moved out of the area, they take holy damage equal to twice your Presence score. A target judged by you who moves willingly takes an extra 2d6 holy damage."}
+    ]
   }
 ]
