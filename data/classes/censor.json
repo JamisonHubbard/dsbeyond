@@ -355,10 +355,141 @@
       ]
     },
     "2": {
-      "operations":[],
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
       "choices":[
         {"id":"level_two_perk","type":"ref_select","target":"features","ref_type":"feature"}
       ]
+    },
+    "3": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
+    },
+    "4": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
+    },
+    "5": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
+    },
+    "6": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
+    },
+    "7": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
+    },
+    "8": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
+    },
+    "9": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
+    },
+    "10": {
+      "operations":[
+        {"type":"set","target":"health.max_stamina","value_ref":{
+          "type":"expression",
+          "value":{
+            "type":"add",
+            "args":[
+              {"type":"id","value":"health.max_stamina"},
+              {"type":"int","value":9}
+            ]
+          }
+        }}
+      ],
+      "choices":[]
     }
   }
 }
