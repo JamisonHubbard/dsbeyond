@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"slices"
+	"sort"
 	"strings"
 
 	"github.com/JamisonHubbard/dsbeyond/model"
@@ -116,36 +117,34 @@ func (r *Resolver) unflattenValues() {
 // evaluated to resolve the character sheet
 func (r *Resolver) setup(class *Class) {
 	var operations []Operation
-	var choices []Choice
 
-	// collect non-decision operations from the class
-	operations = append(operations, class.Basics.Operations...)
-	for level, levelDefinition := range class.Levels {
-		if level <= r.character.Level {
-			operations = append(operations, levelDefinition.Operations...)
-		}
+	// iterate through levels map in order
+	levels := make([]int, len(class.Levels))
+	for l := range class.Levels {
+		levels = append(levels, l)
 	}
 
-	// collect choices from the class
-	choices = append(choices, class.Basics.Choices...)
-	for level, levelDefinition := range class.Levels {
-		if level <= r.character.Level {
-			choices = append(choices, levelDefinition.Choices...)
-		}
-	}
+	sort.Ints(levels)
 
-	// for each choice, use decicions to resolve the choice into a set of
-	// operations
-	// note: this doesn't mean the operations are executed. Assertions from the
-	// choice are applied to the operations meaning some will be filtered out at
-	// runtime
-	for _, choice := range choices {
-		choiceOperations := r.reduceChoice(&choice)
-		if r.error != nil {
-			return
+	for _, level := range levels {
+		levelDefinition := class.Levels[level]
+
+		if level > r.character.Level {
+			break
 		}
-		if choiceOperations != nil {
-			operations = append(operations, choiceOperations...)
+
+		// add non-choice operations
+		operations = append(operations, levelDefinition.Operations...)
+
+		// use decisions to convert choices into operations
+		for _, choice := range levelDefinition.Choices {
+			choiceOperations := r.reduceChoice(&choice)
+			if r.error != nil {
+				return
+			}
+			if choiceOperations != nil {
+				operations = append(operations, choiceOperations...)
+			}
 		}
 	}
 
@@ -153,6 +152,13 @@ func (r *Resolver) setup(class *Class) {
 	for _, operation := range operations {
 		r.operations[operation.Target] = append(r.operations[operation.Target], &operation)
 	}
+
+	// pretty print operations
+	var pretty string
+	for value := range r.operations {
+		pretty += fmt.Sprintf("%s\n", value)
+	}
+	log.Println(pretty)
 }
 
 // reduceChoice converts a Choice into a set of Operations
@@ -849,6 +855,70 @@ func (r *Resolver) checkAssertion(assertion *Assertion) bool {
 			return r.checkArrayForIDs(SkillsValueName, &assertion.Values)
 		default:
 			log.Println("WARNING assertion false: unknown ref type")
+			return false
+		}
+	case AssertionTypeComparison:
+		actualValue, ok := r.values[assertion.Target]
+		if !ok {
+			// check if there's pending operations for the target
+			_, ok = r.operations[assertion.Target]
+			if !ok {
+				log.Println("assertion false: target not found")
+				return false
+			}
+
+			// evaluate the node, then proceed
+			r.trace.Push("node:" + assertion.Target)
+			r.EvaluateNode(assertion.Target)
+			if r.error != nil {
+				log.Printf("WARNING assertion false: failed to evaluate %s\n", assertion.Target)
+				r.error = nil
+				return false
+			}
+			r.trace.Pop()
+
+			actualValue, ok = r.values[assertion.Target]
+			if !ok {
+				log.Println("assertion false: target not found after evaluation")
+				return false
+			}
+		}
+
+		value := r.EvaluateValueRef(&assertion.Values[0])
+		if r.error != nil {
+			log.Println("assertion false: failed to evaluate value ref")
+			return false
+		}
+
+		switch actualValue := actualValue.(type) {
+		case int:
+			switch value := value.(type) {
+			case int:
+				switch assertion.ComparisonType {
+				case ComparisonTypeLessThan:
+					if actualValue < value {
+						log.Println("assertion true")
+						return true
+					}
+					log.Println("assertion false: not less than")
+					return false
+				case ComparisonTypeGreaterThan:
+					if actualValue > value {
+						log.Println("assertion true")
+						return true
+					}
+					log.Println("assertion false: not greater than")
+					return false
+				default:
+					log.Println("WARNING assertion false: unknown comparison type")
+					return false
+				}
+			default:
+				log.Println("WARNING assertion false: cannot compare non-int")
+				return false
+			}
+		default:
+			log.Println("WARNING assertion false: cannot perform comparison with non-int")
 			return false
 		}
 	default:

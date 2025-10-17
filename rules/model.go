@@ -60,16 +60,21 @@ type Operation struct {
 }
 
 const (
-	AssertionTypeValue    = "value"
-	AssertionTypeRefArray = "ref_array"
+	AssertionTypeValue      = "value"
+	AssertionTypeRefArray   = "ref_array"
+	AssertionTypeComparison = "comparison"
+
+	ComparisonTypeLessThan    = "less_than"
+	ComparisonTypeGreaterThan = "greater_than"
 )
 
 // An Assertion is a condition that is checked at runtime
 type Assertion struct {
-	Type    string     `json:"type"`
-	Target  string     `json:"target"`
-	RefType string     `json:"ref_type"`
-	Values  []ValueRef `json:"values"`
+	Type           string     `json:"type"`
+	Target         string     `json:"target"`
+	RefType        string     `json:"ref_type"`
+	Values         []ValueRef `json:"values"`
+	ComparisonType string     `json:"comparison_type"`
 }
 
 const (

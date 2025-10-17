@@ -8,7 +8,6 @@ const (
 type Class struct {
 	ID     string             `json:"id"`
 	Name   string             `json:"name"`
-	Basics ClassLevel         `json:"basics"`
 	Levels map[int]ClassLevel `json:"levels"`
 }
 

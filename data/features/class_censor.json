@@ -87,5 +87,12 @@
       {"type":"bulleted_text","text":"Any minion targeted by a strike using the weapon dies. That minion’s Stamina maximum is removed from the minion Stamina pool before any damage is applied to the rest of the squad."},
       {"type":"bulleted_text","text":"The weapon’s wielder can’t be made frightened."}
     ]
+  },
+  {
+    "id":"focused_wrath",
+    "name":"Focused Wrath",
+    "sections":[
+      {"type":"text","text":"When you gain wrath at the start of each of your turns during combat, you gain 3 wrath instead of 2."}
+    ]
   }
 ]

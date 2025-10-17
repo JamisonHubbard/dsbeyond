@@ -27,5 +27,20 @@
     "sections":[
       {"type":"text","text":"The weapon improved by your Sanctified Weapon feature gains a +3 bonus to rolled damage instead of +1."}
     ]
+  },
+  {
+    "id":"covenant_of_the_heart",
+    "name":"Covenant of the Heart",
+    "sections":[
+      {"type":"text","text":"You can maintain bonds with up to three willing creatures using your Invocation of the Heart feature. Additionally, you have the following ability."}
+    ],
+    "abilities":["guided_to_your_side"]
+  },
+  {
+    "id":"your_triumphs_are_remembered",
+    "name":"Your Triumphs Are Remembered",
+    "sections":[
+      {"type":"text","text":"The gods allow you and your companions to bask in the glory of past successes. Whenever you finish a respite, you and any other heroes who rested with you regain 1 Victory after your Victories are converted to XP. This Victory isn’t converted into XP at the end of a subsequent respite."}
+    ]
   }
 ]
