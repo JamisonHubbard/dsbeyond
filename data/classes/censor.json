@@ -1150,9 +1150,57 @@
               {"type":"int","value":9}
             ]
           }
+        }},
+        {
+          "type":"set",
+          "target":"characteristics.might",
+          "value_ref":{
+            "type":"int",
+            "value":5
+          },
+          "prereqs":[
+            {
+              "type":"comparison",
+              "comparison_type":"less_than",
+              "target":"characteristics.might",
+              "values":[{"type":"int","value":5}]}
+          ]
+        },
+        {
+          "type":"set",
+          "target":"characteristics.presence",
+          "value_ref":{
+            "type":"int",
+            "value":5
+          },
+          "prereqs":[
+            {
+              "type":"comparison",
+              "comparison_type":"less_than",
+              "target":"characteristics.presence",
+              "values":[{"type":"int","value":5}]}
+          ]
+        },
+        {"type":"add_feature","target":"features","value_ref":{
+          "type":"refid",
+          "value":"templar",
+          "ref_type":"feature"
+        }},
+        {"type":"add_feature","target":"features","value_ref":{
+          "type":"refid",
+          "value":"virtue",
+          "ref_type":"feature"
+        }},
+        {"type":"add_feature","target":"features","value_ref":{
+          "type":"refid",
+          "value":"wrath_of_the_gods",
+          "ref_type":"feature"
         }}
       ],
-      "choices":[]
+      "choices":[
+        {"id":"level_ten_perk","type":"ref_select","ref_type":"feature"},
+        {"id":"level_ten_skill","type":"ref_select","ref_type":"skill"}
+      ]
     }
   }
 }
