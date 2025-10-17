@@ -746,5 +746,69 @@
     "sections":[
       {"title":"Effect","order":1,"type":"text","text":"Until the end of the encounter or until you are dying, whenever any target takes a triggered action or a free triggered action, that action is negated and the target takes holy damage equal to your Presence score."}
     ]
+  },
+  {
+    "id":"congregation",
+    "name":"Congregation",
+    "type":"heroic",
+    "heroic_resource_cost":9,
+    "description":"You focus your allies' wrath on a chosen foe.",
+    "keywords":[
+      "melee",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"melee",
+      "value":1
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":8,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "effect":"as a free triggered action, one ally within 10 squares of the target can use a strike signature ability against the target"
+          },
+          "tier_ii":{
+            "damage_base":12,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "effect":"as a free triggered action, one ally within 10 squares of the target can use a strike signature ability against the target"
+          },
+          "tier_iii":{
+            "damage_base":16,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "effect":"as a free triggered action, one ally within 10 squares of the target can use a strike signature ability against the target"
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"Each ally can shift up to 2 squares and gains 2 surges before making the strike."}
+    ]
+  },
+  {
+    "id":"intercede",
+    "name":"Intercede",
+    "type":"heroic",
+    "heroic_resource_cost":9,
+    "description":"You take your ally's place.",
+    "keywords":[
+      "magic",
+      "ranged"
+    ],
+    "action_type":"free_triggered",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"One ally",
+    "sections":[
+      {"title":"Trigger","order":1,"type":"text","text":"A creature makes a strike against the target."},
+      {"title":"Effect","order":2,"type":"text","text":"The target is unaffected by the strike and you become the target instead, even if you aren't a valid target for it. You take half the damage from the strike, and the taraget gains 3 surges."}
+    ]
   }
 ]
