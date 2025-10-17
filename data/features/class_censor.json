@@ -115,5 +115,15 @@
     "sections":[
       {"type":"text","text":"Your words take on the power of your deity, with all the authority that entails. If you convince a creature to take an oath, they can’t break it for 7 days. If you take an oath, you can’t break it for 7 days."}
     ]
+  },
+  {
+    "id":"improved_implement_of_wrath",
+    "name":"Improved Implement of Wrath",
+    "sections":[
+      {"type":"text","text":"The weapon you target with your Implement of Wrath feature gains the following additional benefits:"},
+      {"type":"bulleted_text","text":"The weapon’s wielder and each ally adjacent to them gain a +2 bonus to saving throws."},
+      {"type":"bulleted_text","text":"At the end of each of the weapon wielder’s turns, each ally adjacent to the wielder makes a saving throw against each effect on them that is ended by a saving throw."},
+      {"type":"bulleted_text","text":"The weapon’s wielder has corruption immunity 10."}
+    ]
   }
 ]
