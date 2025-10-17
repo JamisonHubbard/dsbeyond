@@ -2,79 +2,90 @@
   {
     "id":"it_was_foretold",
     "name":"It Was Foretold",
-    "text_sections":[
-      "Your order has trained you to understand fragments of the visions granted to you by your deity, giving you a momentary advantage in challenging situations. At the start of an encounter, you can take one main action before any other creature and before your first turn. Additionally, whenever the Directory calls for a montage test, you can make one free test before the montage begins, which counts as an earned success or failure as usual."
+    "sections":[
+      {"type":"text","text":"Your order has trained you to understand fragments of the visions granted to you by your deity, giving you a momentary advantage in challenging situations. At the start of an encounter, you can take one main action before any other creature and before your first turn. Additionally, whenever the Directory calls for a montage test, you can make one free test before the montage begins, which counts as an earned success or failure as usual."}
     ]
   },
   {
     "id":"judge_of_character",
     "name":"Judge of Character",
-    "text_sections":[
-      "Your focus on your fragmentary visions grants divine insight into the world and its creatures beyond your usual senses. Whenever you would make an Intuition test, you can make a Presence test instead."
+    "sections":[
+      {"type":"text","text":"Your focus on your fragmentary visions grants divine insight into the world and its creatures beyond your usual senses. Whenever you would make an Intuition test, you can make a Presence test instead."}
     ]
   },
   {
     "id":"lead_by_example",
     "name":"Lead by Example",
-    "text_sections":[
-      "Your devotion to your deity allows you to take command of the battlefield, letting your allies benefit from your wisdom. While you are adjacent to a creature, your allies gain the benefits of flanking against that creature. Additionally, your allies gain an edge on tests made to aid other creatures with their tests."
+    "sections":[
+      {"type":"text","text":"Your devotion to your deity allows you to take command of the battlefield, letting your allies benefit from your wisdom. While you are adjacent to a creature, your allies gain the benefits of flanking against that creature. Additionally, your allies gain an edge on tests made to aid other creatures with their tests."}
     ]
   },
   {
     "id":"saints_vigilance",
     "name":"Saint's Vigilance",
-    "text_sections":[
-      "You have honed your ability to detect sin and can use it to find those who hide from justice. Any creature judged by you can't use the Hide maneuver. Additionally, you gain an edge when searching for hidden creatures. If you find a hidden creature, you can use your Judgment ability against them as a free triggered action."
+    "sections":[
+      {"type":"text","text":"You have honed your ability to detect sin and can use it to find those who hide from justice. Any creature judged by you can't use the Hide maneuver. Additionally, you gain an edge when searching for hidden creatures. If you find a hidden creature, you can use your Judgment ability against them as a free triggered action."}
     ]
   },
   {
     "id":"a_sense_for_truth",
     "name":"A Sense for Truth",
-    "text_sections":[
-      "You are trained in secret techniques from your order that allow you to discern the truth with supernatural precision. If a creature is of a lower level than you, you automatically know when they are lying, though you don't necessarily know the actual truth behind their lie. Additionally, you gain an edge on tests made to detect lies or hidden motives."
+    "sections":[
+      {"type":"text","text":"You are trained in secret techniques from your order that allow you to discern the truth with supernatural precision. If a creature is of a lower level than you, you automatically know when they are lying, though you don't necessarily know the actual truth behind their lie. Additionally, you gain an edge on tests made to detect lies or hidden motives."}
     ]
   },
   {
     "id":"stalwart_icon",
     "name":"Stalwart Icon",
-    "text_sections":[
-      "You exhibit a small spark of your deity's power, causing creatures to trust or fear you, depending on what you need. You gain an edge on tests made to intimidate or persuade others."
+    "sections":[
+      {"type":"text","text":"You exhibit a small spark of your deity's power, causing creatures to trust or fear you, depending on what you need. You gain an edge on tests made to intimidate or persuade others."}
     ]
   },
   {
     "id":"look_on_my_work_and_despair",
     "name":"Look on My Work and Despair",
-    "text_sections":[
-      "Your judgment has grown in divine power, instilling fear in those you condemn. Whenever you use your Judgment ability, you can spend 1 wrath, and if the target has P<AVERAGE , they are frightened of you (save ends). Additionally, whenever a creature judged by you is reduced to 0 Stamina and you use Judgment as a free triggered action, if the new target has P<STRONG , they are frightened of you (save ends). If the target is already frightened of you, they instead take holy damage equal to twice your Presence score."
+    "sections":[
+      {"type":"text","text":"Your judgment has grown in divine power, instilling fear in those you condemn. Whenever you use your Judgment ability, you can spend 1 wrath, and if the target has P<AVERAGE , they are frightened of you (save ends). Additionally, whenever a creature judged by you is reduced to 0 Stamina and you use Judgment as a free triggered action, if the new target has P<STRONG , they are frightened of you (save ends). If the target is already frightened of you, they instead take holy damage equal to twice your Presence score."}
     ]
   },
   {
     "id":"wrath_beyond_wrath",
     "name":"Wrath Beyond Wrath",
-    "text_sections":[
-      "The first time each combat round that you deal damage to a creature judged by you, you gain 2 wrath instead of 1."
+    "sections":[
+      {"type":"text","text":"The first time each combat round that you deal damage to a creature judged by you, you gain 2 wrath instead of 1."}
     ]
   },
   {
     "id":"evil_revealed",
     "name":"Evil Revealed",
-    "text_sections":[
-      "Your order has taught you methods to discern the disguises of both mortals and monsters. You automatically see through disguises and illusions created by creatures of your level or lower, and you gain an edge on tests made to see through the disguises and illusions of more powerful creatures. Whenever you see through a creature’s disguise or illusion, you can use your Judgment ability against them as a free triggered action."
+    "sections":[
+      {"type":"text","text":"Your order has taught you methods to discern the disguises of both mortals and monsters. You automatically see through disguises and illusions created by creatures of your level or lower, and you gain an edge on tests made to see through the disguises and illusions of more powerful creatures. Whenever you see through a creature’s disguise or illusion, you can use your Judgment ability against them as a free triggered action."}
     ]
   },
   {
     "id":"prophecy",
     "name":"Prophecy",
-    "text_sections":[
-      "You can better sift through the constant fragmentary visions from your deity and act to make them manifest. Each time you earn 1 or more Victories, you can make a number of 2d10 rolls equal to the number of Victories you earned. Record each roll in order. Then whenever you or a creature within 10 squares makes a power roll, you can use a free triggered action to replace the total on the dice with your first recorded roll.",
-      "You discard each roll as it is used, and each time you earn Victories, you add new rolls to the bottom of the list. Any unused rolls are discarded when you finish a respite."
+    "sections":[
+      {"type":"text","text":"You can better sift through the constant fragmentary visions from your deity and act to make them manifest. Each time you earn 1 or more Victories, you can make a number of 2d10 rolls equal to the number of Victories you earned. Record each roll in order. Then whenever you or a creature within 10 squares makes a power roll, you can use a free triggered action to replace the total on the dice with your first recorded roll."},
+      {"type":"text","text":"You discard each roll as it is used, and each time you earn Victories, you add new rolls to the bottom of the list. Any unused rolls are discarded when you finish a respite."}
     ]
   },
   {
     "id":"stand_fast",
     "name":"Stand Fast",
-    "text_sections":[
-      "Your divine spark grows in power, allowing you and your allies to focus and endure. At the start of each of your turns, you can spend 1d6 Stamina to end one effect on you that is ended by a saving throw or that ends at the end of your turn. Any ally who starts their turn within 5 squares of you can also spend Stamina to gain this benefit."
+    "sections":[
+      {"type":"text","text":"Your divine spark grows in power, allowing you and your allies to focus and endure. At the start of each of your turns, you can spend 1d6 Stamina to end one effect on you that is ended by a saving throw or that ends at the end of your turn. Any ally who starts their turn within 5 squares of you can also spend Stamina to gain this benefit."}
+    ]
+  },
+  {
+    "id":"implement_of_wrath",
+    "name":"Implement of Wrath",
+    "sections":[
+      {"type":"text","text":"Each time you finish a respite, you can choose one hero’s weapon, including your own, to channel supernatural power as an implement of your god’s wrath. The weapon becomes magic and gains the following benefits until your next respite:"},
+      {"type":"bulleted_text","text":"Strikes with the weapon deal extra holy damage equal to the wielder’s highest characteristic score."},
+      {"type":"bulleted_text","text":"Any creature struck by the weapon who has holy weakness and has P<STRONG is frightened and weakened (save ends)."},
+      {"type":"bulleted_text","text":"Any minion targeted by a strike using the weapon dies. That minion’s Stamina maximum is removed from the minion Stamina pool before any damage is applied to the rest of the squad."},
+      {"type":"bulleted_text","text":"The weapon’s wielder can’t be made frightened."}
     ]
   }
 ]

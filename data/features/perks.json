@@ -3,16 +3,24 @@
     "id":"brawny",
     "name":"Brawny",
     "type":"perk",
-    "text_sections":[
-      "Whenever you fail a Might test, you can lose Stamina equal to 1d6 + your level to improve the outcome of the test by one tier. You can use this perk only once per test."
+    "sections":[
+      {"type":"text","text":"Whenever you fail a Might test, you can lose Stamina equal to 1d6 + your level to improve the outcome of the test by one tier. You can use this perk only once per test."}
     ]
   },
   {
     "id":"camoflauge_hunter",
     "name":"Camoflauge Hunter",
     "type":"perk",
-    "text_sections":[
-      "Whenever you are in the wilderness, once you are hidden from a creature, you don't need cover or concealment to stay hidden from them."
+    "sections":[
+      {"type":"text","text":"Whenever you are in the wilderness, once you are hidden from a creature, you don't need cover or concealment to stay hidden from them."}
+    ]
+  },
+  {
+    "id":"danger_sense",
+    "name":"Danger Sense",
+    "type":"perk",
+    "sections":[
+      {"type":"text","text":"Whenever you are in a natural environment (but not in a settlement including that environment), you gain an edge on tests made using the Alertness skill, and you can’t be surprised. Additionally, you have a connection to nature that warns you if any natural disaster is imminent within the next 72 hours, though you don’t know exactly what it will entail (an earthquake, a wildfire, and so forth)."}
     ]
   }
 ]

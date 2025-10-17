@@ -613,5 +613,138 @@
     "sections":[
       {"title":"Effect","order":1,"type":"text","text":"The target ends any condition or effect on them that is ended by a saving throw or that ends at the end of their turn, or a prone target can stand up. The target then gains 2 surges, can shift up to their speed while ignoring difficult terrain, and can use a strike signature ability as a free triggered action."}
     ]
+  },
+  {
+    "id":"begone",
+    "name":"Begone!",
+    "type":"heroic",
+    "heroic_resource_cost":9,
+    "description":"You terrify your enemies into retreating, creating chaos in their ranks.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"area",
+      "subtype":"burst",
+      "value":3
+    },
+    "target":"Each enemy in the area",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.presence"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":4,
+            "damage_type":"psychic",
+            "effect":"slide 3"
+          },
+          "tier_ii":{
+            "damage_base":6,
+            "damage_type":"psychic",
+            "effect":"slide 5"
+          },
+          "tier_iii":{
+            "damage_base":8,
+            "damage_type":"psychic",
+            "effect":"slide 7"
+          }
+        }
+      }}
+    ]
+  },
+  {
+    "id":"pain_of_your_own_making",
+    "name":"Pain of Your Own Making",
+    "type":"heroic",
+    "heroic_resource_cost":9,
+    "description":"You reverse the effects from an evildoer.",
+    "keywords":[
+      "magic",
+      "ranged"
+    ],
+    "action_type":"free_triggered",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"Self or one ally",
+    "sections":[
+      {"title":"Trigger","order":1,"type":"text","text":"The target gains a condition or effect that is ended by a saving throw or that ends at the end of their turn."},
+      {"title":"Effect","order":2,"type":"text","text":"The effect ends on the target and is applied to the creature who imposed the effect on them. That creature also takes damage equal to three times your Presence score."}
+    ]
+  },
+  {
+    "id":"burden_of_evil",
+    "name":"Burden of Evil",
+    "type":"heroic",
+    "heroic_resource_cost":9,
+    "description":"You reveal a vision of your enemies’ fate that causes them to scramble as it staggers them.",
+    "keywords":[
+      "magic",
+      "ranged",
+      "strike"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"Three enemies",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.presence"}}],
+        "results":{
+          "tier_i":{
+            "effect":"Slide 3",
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"weak",
+              "effect":"dazed (save ends)"
+            }
+          },
+          "tier_ii":{
+            "effect":"Slide 5",
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"average",
+              "effect":"dazed (save ends)"
+            }
+          },
+          "tier_iii":{
+            "effect":"Slide 7",
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"strong",
+              "effect":"dazed (save ends)"
+            }
+          }
+        }
+      }}
+    ]
+  },
+  {
+    "id":"edict_of_peace",
+    "name":"Edict of Peace",
+    "type":"heroic",
+    "heroic_resource_cost":9,
+    "description":"You anticipate your foes’ moves and deny them.",
+    "keywords":[
+      "area",
+      "magic"
+    ],
+    "action_type":"maneuver",
+    "range":{
+      "type":"area",
+      "subtype":"aura",
+      "value":3
+    },
+    "target":"Each enemy in the area",
+    "sections":[
+      {"title":"Effect","order":1,"type":"text","text":"Until the end of the encounter or until you are dying, whenever any target takes a triggered action or a free triggered action, that action is negated and the target takes holy damage equal to your Presence score."}
+    ]
   }
 ]

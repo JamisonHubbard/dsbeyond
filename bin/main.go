@@ -17,7 +17,7 @@ func main() {
 		ID:      "test_character",
 		ClassID: "censor",
 		Name:    "Arjhan",
-		Level:   5,
+		Level:   6,
 	}
 	decisions := map[string]rules.Decision{
 		"starting_characteristics": {
@@ -86,6 +86,14 @@ func main() {
 		"level_five_9_wrath_ability": {
 			ChoiceID: "level_five_9_wrath_ability",
 			OptionID: "gods_grant_thee_strength",
+		},
+		"level_six_perk": {
+			ChoiceID: "level_four_perk",
+			RefID:    "danger_sense",
+		},
+		"level_six_exorcist_order_ability": {
+			ChoiceID: "level_six_perk",
+			OptionID: "pain_of_your_own_making",
 		},
 	}
 
