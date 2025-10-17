@@ -830,5 +830,206 @@
     "sections":[
       {"title":"Effect","order":1,"type":"text","text":"Each target is teleported to unoccupied spaces within 5 squares of a willing creature who you are bonded to with your Invocation of the Heart feature. You don’t need line of effect to the bonded creature but you must be on the same world."}
     ]
+  },
+  {
+    "id":"excommunication",
+    "name":"Excommunication",
+    "type":"heroic",
+    "heirocric_resource_cost":11,
+    "description":"You curse your foe to become a bane to their allies.",
+    "keywords":[
+      "melee",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"melee",
+      "value":1
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifier":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":9,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"weak",
+              "effect":"weakened (save ends)"
+            }
+          },
+          "tier_ii":{
+            "damage_base":13,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"average",
+              "effect":"weakened (save ends)"
+            }
+          },
+          "tier_iii":{
+            "damage_base":18,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"strong",
+              "effect":"weakened (save ends)"
+            }
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"At the end of each of your turns, a target weakened this way deals holy damage equal to twice your Presence score to each enemy within 2 squares of them. Additionally, a target weakened this way can’t be targeted by their allies’ abilities."}
+    ]
+  },
+  {
+    "id":"hand_of_the_gods",
+    "name":"Hand of the Gods",
+    "type":"heroic",
+    "heirocric_resource_cost":11,
+    "description":"You use your foe as a tool against your enemies.",
+    "keywords":[
+      "ranged",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifier":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":10,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}]
+          },
+          "tier_ii":{
+            "damage_base":15,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}]
+          },
+          "tier_iii":{
+            "damage_base":21,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}]
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"Until the end of the encounter, while the target is judged by you, you can choose to make them the source of any of your abilities. Additionally, the target counts as an ally for the purpose of flanking."}
+    ]
+  },
+  {
+    "id":"pillar_of_holy_fire",
+    "name":"Pillar of Holy Fire",
+    "type":"heroic",
+    "heirocric_resource_cost":11,
+    "description":"Your enemy's guilt fuels a holy flame that burns your foes.",
+    "keywords":[
+      "melee",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"melee",
+      "value":1
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifier":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":9,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"weak",
+              "effect":"dazed (save ends)"
+            }
+          },
+          "tier_ii":{
+            "damage_base":13,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"average",
+              "effect":"dazed (save ends)"
+            }
+          },
+          "tier_iii":{
+            "damage_base":18,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.might"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"strong",
+              "effect":"dazed (save ends)"
+            }
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"At the end of each of your turns, a target dazed this way deals holy damage equal to twice your Presence score to each enemy within 2 squares of them."}
+    ]
+  },
+  {
+    "id":"your_allies_turn_on_you",
+    "name":"Your Allies Turn On You!",
+    "type":"heroic",
+    "heirocric_resource_cost":11,
+    "description":"You turn your enemies' ire to the target.",
+    "keywords":[
+      "ranged",
+      "strike",
+      "weapon"
+    ],
+    "action_type":"main",
+    "range":{
+      "type":"distance",
+      "subtype":"ranged",
+      "value":10
+    },
+    "target":"One creature",
+    "sections":[
+      {"order":1,"type":"power_roll","roll":{
+        "modifier":[{"type":"single","value":{"type":"id","value":"characteristic.presence"}}],
+        "results":{
+          "tier_i":{
+            "damage_base":5,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.presence"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"weak",
+              "effect":"slowed (save ends)"
+            }
+          },
+          "tier_ii":{
+            "damage_base":9,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.presence"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"average",
+              "effect":"slowed (save ends)"
+            }
+          },
+          "tier_iii":{
+            "damage_base":12,
+            "damage_modifiers":[{"type":"single","value":{"type":"id","value":"characteristic.presence"}}],
+            "potency_effect":{
+              "characteristic_letter":"I",
+              "potency_id":"strong",
+              "effect":"slowed (save ends)"
+            }
+          }
+        }
+      }},
+      {"title":"Effect","order":2,"type":"text","text":"While the target is slowed this way, each ally who starts their turn within 5 squares of them must use a free maneuver to make a free strike against the target. Additionally, while the target is slowed this way, each ally within 5 squares of them who can make a triggered free strike against a different creature must make the free strike against the target instead."}
+    ]
   }
 ]

@@ -22,5 +22,13 @@
     "sections":[
       {"type":"text","text":"Whenever you are in a natural environment (but not in a settlement including that environment), you gain an edge on tests made using the Alertness skill, and you can’t be surprised. Additionally, you have a connection to nature that warns you if any natural disaster is imminent within the next 72 hours, though you don’t know exactly what it will entail (an earthquake, a wildfire, and so forth)."}
     ]
+  },
+  {
+    "id":"friend_catapult",
+    "name":"Friend Catapult",
+    "type":"perk",
+    "sections":[
+      {"type":"text","text":"As a maneuver, you grab a willing adjacent ally or object of your size or smaller, then vertical push that target up to a number of squares equal to twice your Might score. If a creature you push falls as a result of this movement, the effective distance of the fall is reduced by a number of squares equal to twice your Might score. When you use this perk, you can’t use it again until you earn 1 or more Victories."}
+    ]
   }
 ]
